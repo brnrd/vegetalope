@@ -8,6 +8,18 @@ html {
 	color: #ffffff;
 }
 
+header,
+footer {
+	text-align: center;
+}
+
+header,
+footer,
+section {
+	position: relative;
+	overflow: hidden;
+}
+
 a {
 	color: #fd83b5;
 }
