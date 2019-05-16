@@ -16,8 +16,8 @@ footer {
 header,
 footer,
 section {
-	position: relative;
-	overflow: hidden;
+	display: flex;
+	justify-content: center;
 }
 
 a {
@@ -31,6 +31,7 @@ a:hover {
 
 ul {
 	display: inline-flex;
+	flex-wrap: wrap;
 }
 
 li::after {
