@@ -4,8 +4,8 @@
 
 body,
 html {
-	background-color: #171717;
-	color: #ffffff;
+	background-color: #ffffff;
+	color: #171717;
 	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
@@ -22,12 +22,12 @@ section {
 }
 
 a {
-	color: #fd83b5;
+	color: #171717;
 }
 
 a:focus,
 a:hover {
-	color: #83fdcb;
+	background-color: #fd83b5;
 }
 
 ul {
@@ -61,4 +61,13 @@ li::after {
 	height: 1px;
 	white-space: nowrap;
 	overflow: hidden;
+}
+
+#logo {
+	width: 320px; 
+	height: 320px;
+}
+
+#logo:hover {
+	fill: #fd83b5;
 }
