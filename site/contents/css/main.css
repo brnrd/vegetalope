@@ -1,0 +1,67 @@
+*:focus {
+  outline: 0.0625em solid #83ecfc;
+}
+
+*,
+body,
+html {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  background-color: #ffffff;
+  color: #171717;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+header,
+footer {
+  text-align: center;
+}
+
+header,
+footer,
+section {
+  display: flex;
+  justify-content: center;
+}
+
+section,
+footer {
+  flex-direction: column;
+}
+
+a:focus,
+a:hover {
+  background-color: #fd83b5;
+  color: #171717;
+}
+
+.hidden {
+  position: absolute;
+  top: auto;
+  left: -999em;
+  width: 1px;
+  height: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#logo {
+  width: 320px;
+  height: 320px;
+}
+
+#logo:hover {
+  fill: #fd83b5;
+}
+
+#home:hover,
+#home:focus {
+  background-color: transparent;
+}
+
+.nav > a {
+  margin: 0 2px;
+}
