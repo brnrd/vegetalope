@@ -5,5 +5,5 @@ author: brnrd
 template: article.pug
 ----
 
-It works! (article to come eventually)
+Hello from Netlify build content
 
