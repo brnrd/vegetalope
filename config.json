@@ -3,10 +3,16 @@
     "url": "https://www.vegetalope.com",
     "name": "vegetalope",
     "owner": "brnrd",
-    "description": "Stuff and things"
+    "description": "Stuff and things",
+    "sitemap": "sitemap.xml",
+    "url": "http://www.vegetalope.com"
   },
   "plugins": [
-    "./plugins/paginator.coffee"
+    "./plugins/paginator.coffee",
+    "wintersmith-stylus",
+    "wintersmith-livereload",
+    "wintersmith-contents",
+    "wintersmith-sitemap"
   ],
   "require": {
     "moment": "moment",

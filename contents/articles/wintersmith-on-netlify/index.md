@@ -42,5 +42,3 @@ Save, (delete your local `\build` directory), commit your changes and push. Netl
 
 [netlify]: <https://www.netlify.com/>
 [wintersmith]: <https://github.com/jnordberg/wintersmith>
-
-

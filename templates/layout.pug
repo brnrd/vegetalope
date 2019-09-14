@@ -11,14 +11,16 @@ html(lang='en')
         block title
           = locals.name
       link(rel='alternate', href=locals.url+'/feed.xml', type='application/rss+xml', title=locals.description)
-      link(rel='stylesheet', href=contents.css['main.css'].url)
+      link(rel='stylesheet', href=contents.css['main.styl'].url)
       // favicon
-      link(rel='apple-touch-icon', sizes='180x180', href=contents['apple-touch-icon.png'].url)
-      link(rel='icon', type='image/png', sizes='32x32', href=contents['favicon-32x32.png'].url)
-      link(rel='icon', type='image/png', sizes='16x16', href=contents['favicon-16x16.png'].url)
-      link(rel='manifest', href=contents['site.webmanifest'].url)
-      link(rel='mask-icon', href=contents['safari-pinned-tab.svg'].url, color='#fc83b5')
-      link(rel='shortcut icon' href=contents['favicon.ico'].url)
+      link(rel='apple-touch-icon', sizes='180x180', href='/apple-touch-icon.png')
+      link(rel='icon', type='image/png', sizes='32x32', href='/favicon-32x32.png')
+      link(rel='icon', type='image/png', sizes='16x16', href='/favicon-16x16.png')
+      link(rel='manifest', href='site.webmanifest')
+      link(rel='mask-icon', href='/safari-pinned-tab.svg', color='#000000')
+      meta(name='msapplication-TileColor', content='#97e9c2')
+      meta(name='theme-color', content='#ffffff')
+      // meta stuff
       meta(name='description' content='vegetalope')
       meta(name='msvalidate.01', content='C26C7601A7BC06EDD0773BD8B09723CF' )
       meta(name='google-site-verification', content='t3A204_5LvJETIroUbNAgzYzsK2_dgb1wn6qNpBuQY0' )
