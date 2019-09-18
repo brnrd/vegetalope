@@ -100,3 +100,22 @@ p code
   background-color vg-green
   white-space nowrap
 
+blockquote
+  background vg-green
+  border-left 10px solid #vg-pink
+  margin 1.5em 10px
+  padding 0.5em 10px
+  quotes "\201C""\201D""\2018""\2019"
+
+  &:before
+    color vg-black
+    content open-quote
+    font-size 4em
+    line-height 0.1em
+    margin-right 0.25em
+    vertical-align -0.4em
+
+blockquote p
+  display inline
+  font-style italic
+
