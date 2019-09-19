@@ -3,15 +3,12 @@
     "url": "https://www.vegetalope.com",
     "name": "vegetalope",
     "owner": "brnrd",
-    "description": "vegetalope",
-    "sitemap": "sitemap.xml"
+    "description": "vegetalope"
   },
   "plugins": [
     "./plugins/paginator.coffee",
     "wintersmith-stylus",
-    "wintersmith-livereload",
-    "wintersmith-contents",
-    "wintersmith-sitemap"
+    "wintersmith-livereload"
   ],
   "require": {
     "moment": "moment",

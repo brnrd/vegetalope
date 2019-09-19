@@ -3,9 +3,7 @@
     "moment": "^2.22.2",
     "typogr": "0.6.x",
     "underscore": "^1.9.1",
-    "wintersmith-contents": "^1.0.0",
     "wintersmith-livereload": "^1.0.1",
-    "wintersmith-sitemap": "^1.0.0",
     "wintersmith-stylus": "^0.5.1"
   },
   "private": true,
