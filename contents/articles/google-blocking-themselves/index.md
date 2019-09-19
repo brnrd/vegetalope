@@ -16,7 +16,7 @@ Now you got me interested. Just to think that there was a hidden thing somewhere
 > Google Analytics Opt-out Browser Add-on
 
 What now? A browser extension? Supported by Chrome, Internet Explorer 11, Safari, Firefox and Opera?
-I have to admit I'm a bit disappointed. I was expecting a setting on my Google account, but a browser extension is a bit lazy Google.
+I have to admit I'm a bit disappointed. I was expecting a setting on my Google account, a browser extension is a bit lazy Google.
 
 But let's check this out: last updated April 2019, 4 out of 5 stars, 1M+ users. Wow, just wow. I mean, you have to be pretty motivated to just block GA and that's it. And by blocking I mean, loading the script, running it, just not pushing the data to Google.
 
