@@ -4,8 +4,7 @@
     "name": "vegetalope",
     "owner": "brnrd",
     "description": "vegetalope",
-    "sitemap": "sitemap.xml",
-    "url": "http://www.vegetalope.com"
+    "sitemap": "sitemap.xml"
   },
   "plugins": [
     "./plugins/paginator.coffee",
