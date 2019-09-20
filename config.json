@@ -15,9 +15,6 @@
     "_": "underscore",
     "typogr": "typogr"
   },
-  "pug": {
-    "pretty": true
-  },
   "markdown": {
     "smartLists": true,
     "smartypants": true

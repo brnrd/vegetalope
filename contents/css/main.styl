@@ -3,7 +3,7 @@ vg-green = #97e9c2
 vg-blue = #83ecfc
 vg-white = #ffffff
 vg-black = #171717
-vg-font = Helvetica Neue, Helvetica, Arial, sans-serif
+vg-font = sans-serif
 
 base-font-size = 2.4em
 base-line-height = 1.5em
@@ -19,8 +19,13 @@ html
 body,
 html
   background-color vg-white
-  color #171717
+  color vg-black
   font-family vg-font
+
+  @media (prefers-color-scheme: dark)
+    background-color vg-black
+    color vg-white
+    font-weight lighter
 
 body
   padding 0 16px
@@ -29,19 +34,36 @@ header,
 footer
   text-align center
 
+article
+  header
+    text-align left
+
+    @media (max-width: 640px)
+      text-align center
+
 body
-  section
+  > section
     max-width 50em
-    margin auto
+    margin 2em auto 6em
+
+    @media (max-width: 640px)
+      margin-bottom 2em
 
 a
   @media print
     color vg-black
 
+  @media (prefers-color-scheme: dark)
+    color vg-pink
+
 a:focus,
 a:hover
   background-color lighten(vg-pink, 50%)
-  color #171717
+  color vg-black
+
+  @media (prefers-color-scheme: dark)
+    background-color darken(vg-black, 50%)
+    color lighten(vg-pink, 50%)
 
 .hidden
   @media screen
@@ -63,6 +85,9 @@ a:hover
   @media (max-width: 640px)
     width 160px
     height 160px
+
+  @media (prefers-color-scheme: dark)
+    fill vg-white
 
 
 #logo-hidden
@@ -104,7 +129,13 @@ code
   font-family  monospace
   line-height 140%
   white-space pre
+  font-size 110%
   background lighten(vg-green, 50%)
+  padding-left 0.0625em
+  padding-top 0.0625em
+
+  @media (prefers-color-scheme: dark)
+    color vg-black
 
 
 blockquote
