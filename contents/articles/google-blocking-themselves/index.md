@@ -1,5 +1,5 @@
 ---
-title: Google blocking themselves?
+title: Google blocking itself?
 date: 2019-09-18 22:00
 author: brnrd
 template: article.pug
@@ -29,24 +29,24 @@ The only thing it does is make the page run an extra bit of JS through a content
 window["_gaUserPrefs"] = { ioo : function() { return true; } }
 ```
 
-So it does not communicated with Google or anything, but my guess is that when GA excutes, it checks the existence of this key on the window object, calls the function and doesn't send the data or doesn't run if the `ioo` function returns true.
+It does not communicate with Google or anything. My guess is that when GA executes, it checks the existence of this `_gaUserPrefs` key on the window object, calls the function and doesn't send the data or doesn't run if the `ioo` function returns true.
 
-That something I guess right? RIGHT?
+That's something I guess right? RIGHT!
 
 Oh wait, what do I see now?
 
-[IBA Opt-out (by Google)](https://addons.mozilla.org/en-US/firefox/addon/interest-advertising-opt-out/)! An extension, made by Google, to opt-out the Interest Based Advertising. Only half a million users for the Chrome version (3365 for the Firefox one), 3 out of 5 stars. Ouch.
+[IBA Opt-out (by Google)](https://addons.mozilla.org/en-US/firefox/addon/interest-advertising-opt-out/)! Another extension, also made by Google, to opt-out the Interest Based Advertising. Only half a million users for the Chrome version, 3365 for the Firefox one, 3 out of 5 stars. Ouch!
 
-Does it mean you're not going to get ads? No of course not. They just won't be "pertinent", not be based on your activity. And it apparently breaks the web too, since it was last updated in August 2013 for Chrome, but updated in December 2018 for Firefox (it seems it broke when Firefox Quantum was released), and people dropping reviews are not too happy about it (but who leaves positive feedback amirite?).
-That might be nice if you don't want to block ads on your favourite websites and still block Google from knowing everything about you.
+Does it mean I'm not going to get ads? No, of course not. They just won't be "pertinent", not be based on my activity. And it apparently breaks the web too: it seems that some website don't work too well if doubleclick is not allowed to perform. Since it was last updated in August 2013 for Chrome, and in December 2018 for Firefox (it broke when Firefox Quantum was released) people dropping reviews are not too happy about it. But who leaves positive feedback amirite?
+That might be nice if I don't want to block ads on my favourite websites and still block Google from knowing everything about me.
 
 How does this one work?
 
-Google was a bit kidner for that one, as the code is open-source on [Google Code](https://code.google.com/archive/p/google-opt-out-plugin/source/default/source).
+Google was a bit kinder for that one, as the code is open-source on [Google Code](https://code.google.com/archive/p/google-opt-out-plugin/source/default/source).
 
-It asks us for permission for `http://doubleclick.net/` and the cookies.
+It asks me for permission for `http://doubleclick.net/` and the cookies.
 
-The solution was a cookie
+The solution was a cookie.
 
 ```javascript
 {
@@ -58,6 +58,8 @@ The solution was a cookie
 }
 ```
 
-What happens after 1920499146/Sat, 09 Nov 2030 23:59:06 GMT? I'll let you know when we get there.
+What happens after 1920499146/Sat, 09 Nov 2030 23:59:06 GMT? I'll let you know when I get there.
 
-Thank you Google, I'll stick with [uBlock Origin](https://github.com/gorhill/uBlock) and [Pi-hole](https://pi-hole.net/).
+Thank you Google but I'll stick with [uBlock Origin](https://github.com/gorhill/uBlock) and [Pi-hole](https://pi-hole.net/).
+
+Why you ask? That's a story for another time.
