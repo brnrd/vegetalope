@@ -1,7 +1,9 @@
 vg-pink = #fd83b5
 vg-green = #97e9c2
+vg-dark-green = #adffd9
 vg-blue = #83ecfc
 vg-white = #ffffff
+vg-grey = #bdbdbd
 vg-black = #171717
 vg-font = sans-serif
 
@@ -24,15 +26,20 @@ html
 
   @media (prefers-color-scheme: dark)
     background-color vg-black
-    color vg-white
+    color vg-grey
     font-weight lighter
 
 body
-  padding 0 16px
+  line-height 1.5
+  padding 4em 1em
 
 header,
 footer
   text-align center
+
+h2
+  margin-top 1em
+  padding-top 1em
 
 article
   header
@@ -130,7 +137,7 @@ code
   line-height 140%
   white-space pre
   font-size 110%
-  background lighten(vg-green, 50%)
+  background vg-green
   padding-left 0.0625em
   padding-top 0.0625em
 
