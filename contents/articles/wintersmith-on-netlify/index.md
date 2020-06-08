@@ -12,12 +12,12 @@ But how to make it play nicely on Netlify?
 
 Admittedly I chose Wintersmith mostly because the CLI generated site that wintersmith provides is not a skeleton, but a working template. It thus means that you have nothing to do except updating your styling and writing some content (almost).
 
-My static single page website was already hosted on [Netlify][netlify] because it's simple and it's free.
+My static single page website was already hosted on [Netlify][netlify] because it's free.
 But now I find myself with a globally installed tool to generate a site, but I can't globally install npm packages on Netlify.
 
 - Option 1: run `wintersmith build` locally, commit the `/build` folder and push the whole thing and point the Netlify build setting to only point at the said folder. Nasty. (That said, it works, I tried)
 
-- Option 2: add `wintersmith` as a dev dependency on the project and add a simple build npm script.
+- Option 2: add `wintersmith` as a dev dependency on the project and add a build npm script.
 
 So in `package.json`, I added:
 
