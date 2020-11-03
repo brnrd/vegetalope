@@ -17,16 +17,15 @@ block content
       - var yearsK = _.chain(archives).keys().reverse().value();
       each yearK in yearsK
         - var months = archives[yearK];
-        - var yearHeight = lineHeight * _.reduce(months, function(memo,month) { return memo + month.length; }, 0);
         li
-          span.year-label(style='line-height:' + yearHeight + 'em')= yearK
-          ul(style='margin-left:4em')
+          span.year-label= yearK
+          ul
             - var monthsK = _.chain(months).keys().reverse().value();
             each monthK in monthsK
               - var monthHeight = lineHeight * months[monthK].length;
               li
-                span.month-label(style='line-height:' + monthHeight + 'em')= month_names[monthK]
-                ul(style='margin-left:7em')
+                span.month-label= month_names[monthK]
+                ul
                   each item in months[monthK]
-                    li(style='height:'+ lineHeight + 'em;line-height:' + lineHeight + 'em')
+                    li
                       a(href=item.url)= item.title
