@@ -5,7 +5,7 @@ author: brnrd
 template: article.pug
 ---
 
-A non-exhaustive list of TV shows we liked.
+A raw, non-exhaustive, list of TV shows we liked.
 
 The list:
 
