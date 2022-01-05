@@ -1,6 +1,6 @@
 ---
 title: Good movies
-date: 2022-01-15 08:36
+date: 2022-01-05 08:36
 author: brnrd
 template: article.pug
 ---
