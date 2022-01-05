@@ -27,6 +27,7 @@ html(lang='en')
       meta(name='google-site-verification', content='t3A204_5LvJETIroUbNAgzYzsK2_dgb1wn6qNpBuQY0' )
       <script>let FF_FOUC_FIX; // FOUC fix</script>
   body
+    block background
     header
       h1.hidden
         a(href=locals.url)= locals.name
@@ -36,3 +37,4 @@ html(lang='en')
       block footer
           section.about
             !=contents['about.md'].html
+    block script
