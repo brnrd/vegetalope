@@ -1,8 +1,7 @@
 ---
 title: Google blocking itself?
-date: 2019-09-18 22:00
+date: 2019-09-18
 author: brnrd
-template: article.pug
 ---
 
 As a good concerned netcitizen here I was reading the cookies policy on a website I was on, as you do, living my best life when I noticed a footnote that said:
@@ -24,10 +23,10 @@ I had to extract the code from the `.xpi` (which is just a renamed `.zip`) and h
 The only thing it does is make the page run an extra bit of JS through a content script applied on all pages:
 
 ```javascript
-window["_gaUserPrefs"] = {
-  ioo: function () {
-    return true;
-  },
+window['_gaUserPrefs'] = {
+	ioo: function () {
+		return true;
+	}
 };
 ```
 
