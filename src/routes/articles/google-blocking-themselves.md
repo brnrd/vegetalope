@@ -25,9 +25,9 @@ The only thing it does is make the page run an extra bit of JS through a content
 ```javascript
 window['_gaUserPrefs'] = {
 	ioo: function () {
-		return true;
-	}
-};
+		return true
+	},
+}
 ```
 
 It does not communicate with Google or anything. My guess is that when GA executes, it checks the existence of this `_gaUserPrefs` key on the window object, calls the function and doesn't send the data or doesn't run if the `ioo` function returns true.

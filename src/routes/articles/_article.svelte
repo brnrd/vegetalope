@@ -1,5 +1,5 @@
 <script>
-export let title;
+	export let title
 </script>
 
 <svelte:head>
@@ -7,9 +7,8 @@ export let title;
 	<meta property="og:title" content={title} />
 </svelte:head>
 
-
 <article class="article">
-    <h2>{title}</h2>
+	<h2>{title}</h2>
 	<section class="content">
 		<slot />
 	</section>

@@ -1,18 +1,18 @@
 <script context="module">
 	export const load = async ({ fetch }) => {
-		const articles = await fetch('/api/articles.json');
-		const allArticles = await articles.json();
+		const articles = await fetch('/api/articles.json')
+		const allArticles = await articles.json()
 
 		return {
 			props: {
-				articles: allArticles
-			}
-		};
-	};
+				articles: allArticles,
+			},
+		}
+	}
 </script>
 
 <script>
-	export let articles;
+	export let articles
 </script>
 
 <!-- <main>
@@ -29,7 +29,6 @@
         {/each}
         </ul>
 </main> -->
-
 <style lang="stylus">
 
 </style>

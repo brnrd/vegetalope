@@ -1,6 +1,6 @@
-import adapter from '@sveltejs/adapter-static';
-import { mdsvex } from 'mdsvex';
-import sveltePreprocess from 'svelte-preprocess';
+import adapter from '@sveltejs/adapter-static'
+import { mdsvex } from 'mdsvex'
+import sveltePreprocess from 'svelte-preprocess'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -12,17 +12,17 @@ const config = {
 		mdsvex({
 			extensions: ['.md'],
 			layout: {
-				articles: 'src/routes/articles/_article.svelte'
-			}
-		})
+				articles: 'src/routes/articles/_article.svelte',
+			},
+		}),
 	],
 
 	kit: {
 		adapter: adapter(),
 
 		// hydrate the <div id="svelte"> element in src/app.html
-		target: '#svelte'
-	}
-};
+		target: '#svelte',
+	},
+}
 
-export default config;
+export default config

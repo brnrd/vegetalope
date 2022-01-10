@@ -1,24 +1,25 @@
 export const get = async () => {
-	const allPostFiles = import.meta.glob('../articles/*.md');
-	const iterablePostFiles = Object.entries(allPostFiles);
+	const allArticleFiles = import.meta.glob('../articles/*.md')
+	const iterablePostFiles = Object.entries(allArticleFiles)
 
-	const allPosts = await Promise.all(
+	const allArticles = await Promise.all(
 		iterablePostFiles.map(async ([path, resolver]) => {
-			const { metadata } = await resolver();
-			const postPath = path.slice(2, -3);
+			const article = await resolver()
+			const postPath = path.slice(2, -3)
 
 			return {
-				meta: metadata,
+				meta: article.metadata,
 				path: postPath,
-			};
+				article: article.default.render(),
+			}
 		}),
-	);
+	)
 
-	const sortedPosts = allPosts.sort((a, b) => {
-		return new Date(b.meta.date) - new Date(a.meta.date);
-	});
+	const sortedPosts = allArticles.sort((a, b) => {
+		return new Date(b.meta.date) - new Date(a.meta.date)
+	})
 
 	return {
 		body: sortedPosts,
-	};
-};
+	}
+}

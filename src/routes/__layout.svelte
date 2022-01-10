@@ -1,25 +1,25 @@
 <script context="module">
 	export const load = ({ url }) => {
-		const currentRoute = url.pathname;
+		const currentRoute = url.pathname
 
 		return {
 			props: {
-				currentRoute
-			}
-		};
-	};
+				currentRoute,
+			},
+		}
+	}
 </script>
 
 <script>
-	import Header from '$lib/components/Header.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/Header.svelte'
+	import Footer from '$lib/components/Footer.svelte'
 
-    import '$lib/styles/style.styl';
-	
-    import { scale } from 'svelte/transition';
-    import { quadInOut } from "svelte/easing";
+	import '$lib/styles/style.styl'
 
-	export let currentRoute;
+	import { scale } from 'svelte/transition'
+	import { quadInOut } from 'svelte/easing'
+
+	export let currentRoute
 </script>
 
 <svelte:head>
@@ -40,15 +40,14 @@
 	<meta name="description" content="vegetalope" />
 	<meta name="msvalidate.01" content="C26C7601A7BC06EDD0773BD8B09723CF" />
 	<script>
-		let FF_FOUC_FIX; // FOUC fix
+		let FF_FOUC_FIX // FOUC fix
 	</script>
 </svelte:head>
 
 <Header />
 
 {#key currentRoute}
-	<main in:scale={{ duration: 150, delay: 150, easing: 
-        quadInOut }} out:scale={{ duration: 150 }}>
+	<main in:scale={{ duration: 150, delay: 150, easing: quadInOut }} out:scale={{ duration: 150 }}>
 		<slot />
 	</main>
 {/key}

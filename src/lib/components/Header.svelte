@@ -1,10 +1,14 @@
+<script>
+	import '$lib/styles/style.styl'
+</script>
+
 <header>
 	<a id="home" href="/">
 		<svg
 			id="logo"
 			alt="vegetalope logo"
 			title="vegetalope logo, looks like a inverted triangle but really is a capital V"
-			>
+		>
 			<title>vegetalope logo, looks like a inverted triangle but really is a capital V</title>
 			<use xlink:href="#vegetalope-logo" />
 		</svg>
@@ -26,7 +30,3 @@
 		</symbol>
 	</svg>
 </header>
-
-<script>
-	import '$lib/styles/style.styl';
-</script>
