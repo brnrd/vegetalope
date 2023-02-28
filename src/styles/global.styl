@@ -32,6 +32,11 @@ html
   height 100%
   margin 0
 
+  @media (prefers-color-scheme: dark)
+    background-color vg-black
+    color vg-white
+    font-weight lighter
+
 body
   line-height 1.5
   padding 1em
@@ -77,9 +82,15 @@ body
 a
   color vg-black
 
+  @media (prefers-color-scheme: dark)
+    color lighten(vg-white, 50%)
+
 a:focus,
 a:hover
   color vg-blue
+
+  @media (prefers-color-scheme: dark)
+    color lighten(vg-green, 50%)
 
 .hidden
   @media screen
@@ -120,24 +131,25 @@ a:hover
     background-color vg-white
     padding 1.2em 0
 
-#logo-hidden
-  display none
+#home
+  width 400px
+  height 200px
+  display block
+  margin 1rem auto 0
 
-  :hover
-    animation glitch 1s linear infinite
-
-  @media (max-width: 640px)
-    width 160px
-    height 160px
-
-#logo:hover
-  fill vg-pink
-
-
-#home:hover,
-#home:focus
-  background-color transparent
-
+  picture 
+    width 100%
+    height 100%
+    display flex
+    
+    img
+      object-fit cover
+      height auto
+      width 100%
+      
+      @media (prefers-color-scheme: dark)
+        filter: invert(1);
+  
 ul
   margin 0
   padding 0
@@ -176,10 +188,16 @@ table
   border-collapse collapse
   border 1px solid vg-black
 
+  @media (prefers-color-scheme: dark)
+    border-color vg-white
+
 table th,
 table td
   border 1px solid vg-black
   padding 0.25em
+
+  @media (prefers-color-scheme: dark)
+    border-color vg-white
 
 pre
   font-family monospace
@@ -194,6 +212,9 @@ code
   white-space pre
   font-size 110%
   padding 0.0625em 0.125em 0
+
+  @media (prefers-color-scheme: dark)
+    color vg-white
 
 blockquote
   padding-left 1em

@@ -1,9 +1,9 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../config';
-import { Image } from '@astrojs/image/components';
+import { Picture } from '@astrojs/image/components';
 
-import logoImage from '../images/vegetalope.webp';
+import logoImage from '../images/vegetalope-transparent.png';
 ---
 
 <header>
@@ -25,9 +25,9 @@ import logoImage from '../images/vegetalope.webp';
 				<HeaderLink href="https://github.com/brnrd" target="_blank" title="GitHub">GitHub</HeaderLink>
 			</li>
 		</ul>
+		<a id="home" href="/">
+			<Picture src={logoImage} aspectRatio="2:1" fit="contain" formats={['webp', 'avif']} widths={[100, 200, 400]} alt="vegetalope written with a black Sharpie on white paper" />
+		</a>
 	</nav>
 
-	<a id="home" href="/">
-		<Image src={logoImage} height={200} width={400} alt="vegetalope written with a black Sharpie on white paper" />
-	</a>
 </header>
