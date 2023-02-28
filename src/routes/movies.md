@@ -118,6 +118,7 @@ The good movies:
 - One Hour Photo
 - Paper Moon
 - Pierrot le Fou
+- Playtime
 - Rabbit Hole
 - Rear Window
 - Roma
