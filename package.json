@@ -14,7 +14,7 @@
     "@astrojs/mdx": "^0.11.6",
     "@astrojs/rss": "^1.0.3",
     "@astrojs/sitemap": "^1.0.0",
-    "astro": "^1.6.10"
+    "astro": "^2.0.0"
   },
   "devDependencies": {
     "stylus": "^0.59.0"
