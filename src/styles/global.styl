@@ -7,8 +7,15 @@ vg-grey = #c7cadbff // Light Periwinkle
 vg-black = #0a0a0aff // Rich Black FOGRA 39
 vg-font = sans-serif
 
-base-font-size = 2.4em
-base-line-height = 1.5em
+base-font-size = 1rem
+font-xs = base-font-size * 0.5
+font-s = base-font-size * 0.75
+font-m = base-font-size
+font-l = base-font-size * 1.5
+font-xl = base-font-size * 2
+
+
+base-line-height = 1.5rem
 
 *:focus
   outline 0.0625em solid vg-blue
@@ -36,6 +43,8 @@ body
   padding 1em
   display flex
   flex-direction column
+  font-size base-font-size
+  line-height base-line-height
 
 main
   flex 1 0 auto
@@ -45,6 +54,7 @@ footer
   flex-shrink 0
   padding 2em
   padding-bottom 0
+  line-height 1rem
 
 header,
 footer
@@ -161,6 +171,9 @@ nav
     li
       display inline-block
       position relative
+      font-size font-l
+      margin 0 0.25rem
+
 
     > a
       @media print
@@ -169,7 +182,7 @@ nav
 .blog
   ul
     list-style none
-    text-align center
+    text-align left
 
 h1
   text-align center
@@ -228,6 +241,7 @@ blockquote
       content attr(title)
       position absolute
       left 0
+      top 0
 
     &:before
       animation: glitchTop linear infinite
@@ -236,8 +250,8 @@ blockquote
 
     &:after
       animation: glitchBottom linear infinite
-      clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
-      -webkit-clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+      clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+      -webkit-clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
 
 
   &--1,
