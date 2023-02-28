@@ -15,21 +15,13 @@ html {
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
+body {
+  padding: 0 16px;
+}
+
 header,
 footer {
   text-align: center;
-}
-
-header,
-footer,
-section {
-  display: flex;
-  justify-content: center;
-}
-
-section,
-footer {
-  flex-direction: column;
 }
 
 a:focus,
@@ -64,4 +56,39 @@ a:hover {
 
 .nav > a {
   margin: 0 2px;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid #171717;
+}
+
+table th,
+table td {
+  border: 1px solid #171717;
+  padding: 4px;
+}
+/* code styling */
+
+code {
+  font-family:  monospace;
+  font-size: 0.95em;
+  color: #000;
+}
+
+pre code {
+  display: block;
+}
+
+p code {
+  padding: 0.1em 0.3em 0.1em;
+  position: relative;
+  background: #97e9c2;
+  white-space: nowrap;
+}
+
+/* syntax hl stuff */
+
+code.lang-json {
+
 }
