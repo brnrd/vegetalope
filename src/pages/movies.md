@@ -1,6 +1,6 @@
 ---
 layout: "../layouts/BlogPost.astro"
-title: "Good movies"
+title: "movies"
 pubDate: "2022-01-05"
 ---
 

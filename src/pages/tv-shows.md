@@ -1,6 +1,6 @@
 ---
 layout: "../layouts/BlogPost.astro"
-title: "TV shows"
+title: "tv shows"
 pubDate: "2022-01-05"
 ---
 
