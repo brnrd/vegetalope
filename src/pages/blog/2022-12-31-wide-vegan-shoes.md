@@ -1,7 +1,7 @@
 ---
 layout: "../../layouts/BlogPost.astro"
 title: "Having wide feet no longer sucks!"
-description: "Even if you're vegan and you have wide feet, you can find comfortable shoes that matche your style are actually comfortable to wear"
+description: "Even if you're vegan and you have wide feet, you can find comfortable shoes that matche your style are actually comfortable to wear."
 pubDate: "2022-12-31"
 ---
 
