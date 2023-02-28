@@ -1,6 +1,6 @@
 ---
 title: Wintersmith on Netlify
-date: 2019-09-12
+date: 2019-09-12 08:06
 author: brnrd
 ---
 
