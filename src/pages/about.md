@@ -4,9 +4,12 @@ title: "about"
 description: "What's a vegetalope anyway?"
 ---
 
-LARGE
-FANCY
-SITE
-FILLED
-WITH
-CRAP
+<div class="hello">
+<div class="top">
+<div>Hello</div>
+my name is
+</div>
+<div class="name" contenteditable="true">
+vegetalope
+</div>
+</div>
