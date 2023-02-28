@@ -1,15 +1,12 @@
 ---
 layout: "../layouts/BlogPost.astro"
-title: "About"
-description: "What's a vegetalope?"
-updatedDate: "2022-11-24"
+title: "about"
+description: "What's a vegetalope anyway?"
 ---
 
-## LARGE
-## FANCY
-## SITE
-## FILLED
-## WITH
-## CRAP
-
-<style >
+LARGE
+FANCY
+SITE
+FILLED
+WITH
+CRAP
