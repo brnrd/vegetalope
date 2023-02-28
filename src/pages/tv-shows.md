@@ -10,6 +10,7 @@ The list:
 
 - Äkta människor
 - Band of Brothers
+- Battlestar Galactica
 - Betwitched
 - Black Mirror
 - Carnivàle
@@ -17,6 +18,7 @@ The list:
 - Escape at Dannemora
 - Fargo
 - Freaks and Geeks
+- Lost
 - Love On The Spectrum
 - Mad Men
 - Misfits
