@@ -1,10 +1,10 @@
-vg-pink = #fd83b5
-vg-green = #97e9c2
-vg-dark-green = #adffd9
-vg-blue = #83ecfc
-vg-white = #ffffff
-vg-grey = #bdbdbd
-vg-black = #171717
+vg-pink = #ff4400ff // Red Orange Color Wheel
+vg-green = #256539ff // Cadmium Green
+vg-dark-green = #112D19ff // Phtalo Green
+vg-blue = #131c4eff // Space Cadet
+vg-white = #fef8ecff // Floral White
+vg-grey = #c7cadbff // Light Periwinkle
+vg-black = #0a0a0aff // Rich Black FOGRA 39
 vg-font = sans-serif
 
 base-font-size = 2.4em
@@ -21,17 +21,30 @@ html
 body,
 html
   background-color vg-white
-  color vg-black
+  color vg-blue
   font-family vg-font
+  height 100%
+  margin 0
 
   @media (prefers-color-scheme: dark)
-    background-color vg-black
-    color vg-grey
+    background-color vg-blue
+    color vg-white
     font-weight lighter
 
 body
   line-height 1.5
-  padding 4em 1em
+  padding 1em
+  display flex
+  flex-direction column
+
+main
+  flex 1 0 auto
+  padding 2em 1em
+
+footer
+  flex-shrink 0
+  padding 2em
+  padding-bottom 0
 
 header,
 footer
@@ -56,21 +69,28 @@ body
     @media (max-width: 640px)
       margin-bottom 2em
 
+
 a
+  color vg-green
+
   @media print
     color vg-black
 
   @media (prefers-color-scheme: dark)
-    color vg-pink
+    color lighten(vg-green, 50%)
 
 a:focus,
 a:hover
-  background-color lighten(vg-pink, 50%)
-  color vg-black
+  color vg-dark-green
 
   @media (prefers-color-scheme: dark)
-    background-color darken(vg-black, 50%)
-    color lighten(vg-pink, 50%)
+    color lighten(vg-green, 50%)
+
+a:visited
+  color vg-green
+
+  @media (prefers-color-scheme: dark)
+    color lighten(vg-green, 50%)
 
 .hidden
   @media screen
@@ -107,13 +127,30 @@ a:hover
 #logo:hover
   fill vg-pink
 
+
 #home:hover,
 #home:focus
   background-color transparent
 
-.nav > a
-  @media print
-    display none
+ul
+  margin 0
+  padding 0
+  
+nav 
+  ul
+    list-style none
+
+    li
+      display inline-block
+
+  > a
+    @media print
+      display none
+
+.blog
+  ul
+    list-style none
+    text-align center
 
 h1
   text-align center
@@ -153,7 +190,6 @@ code
 
   @media (prefers-color-scheme: dark)
     color vg-white
-
 
 blockquote
   padding-left 1em

@@ -4,13 +4,6 @@ import { SITE_TITLE } from '../config';
 ---
 
 <header>
-	<nav>
-		<HeaderLink href="/">Home</HeaderLink>
-		<HeaderLink href="/blog">Blog</HeaderLink>
-		<HeaderLink href="/about">About</HeaderLink>
-		<HeaderLink href="https://twitter.com/vegetalope" target="_blank">Twitter</HeaderLink>
-		<HeaderLink href="https://github.com/brnrd" target="_blank">GitHub</HeaderLink>
-	</nav>
 	<a id="home" href="/">
 		<svg
 			id="logo"
@@ -21,6 +14,25 @@ import { SITE_TITLE } from '../config';
 			<use xlink:href="#vegetalope-logo" />
 		</svg>
 	</a>
+	<nav>
+		<ul>
+			<li>
+				<HeaderLink href="/">Home</HeaderLink>
+			</li>
+			<li>
+				<HeaderLink href="/blog">Blog</HeaderLink>
+			</li>
+			<li>
+				<HeaderLink href="/about">About</HeaderLink>
+			</li>
+			<li>
+				<HeaderLink href="https://twitter.com/vegetalope" target="_blank">Twitter</HeaderLink>
+			</li>
+			<li>
+				<HeaderLink href="https://github.com/brnrd" target="_blank">GitHub</HeaderLink>
+			</li>
+		</ul>
+	</nav>
 
 	<!-- Logo SVG trick: https://css-tricks.com/change-color-of-svg-on-hover/#article-header-id-1 -->
 	<svg
