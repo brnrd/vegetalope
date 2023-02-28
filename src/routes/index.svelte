@@ -1,4 +1,4 @@
-<script context="module">
+<!-- <script context="module">
 	export const load = async ({ fetch }) => {
 		const articles = await fetch('/api/articles.json')
 		const allArticles = await articles.json()
@@ -13,7 +13,7 @@
 
 <script>
 	export let articles
-</script>
+</script> -->
 
 <!-- <main>
     <ul>
