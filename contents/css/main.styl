@@ -1,0 +1,103 @@
+vg-pink = #fd83b5
+vg-green = #97e9c2
+vg-blue = #83ecfc
+vg-white = #ffffff
+vg-black = #171717
+vg-font = Helvetica Neue, Helvetica, Arial, sans-serif
+
+*:focus
+  outline 0.0625em solid vg-blue
+
+*,
+body,
+html
+  box-sizing border-box
+
+body,
+html
+  background-color vg-white
+  color #171717
+  font-family vg-font
+
+body
+  padding 0 16px
+
+header,
+footer
+  text-align center
+
+a
+  @media print
+    color vg-black
+
+a:focus,
+a:hover
+  background-color vg-pink
+  color #171717
+
+.hidden
+  @media screen
+    position absolute
+    top auto
+    left -999em
+    width 1px
+    height 1px
+    white-space nowrap
+    overflow hidden
+
+#logo
+  width 320px
+  height 320px
+
+  @media print
+    display none
+
+  @media (max-width: 640px)
+    width 160px
+    height 160px
+
+
+#logo-hidden
+  display none
+
+  @media (max-width: 640px)
+    width 160px
+    height 160px
+
+#logo:hover
+  fill vg-pink
+
+#home:hover,
+#home:focus
+  background-color transparent
+
+.nav > a
+  margin 0 2px
+
+  @media print
+    display none
+
+table
+  border-collapse collapse
+  border 1px solid #171717
+
+table th,
+table td
+  border 1px solid #171717
+  padding 4px
+/* code styling */
+
+code
+  font-family  monospace
+  font-size 0.95em
+  color #000
+
+pre code
+  display block
+
+p code
+  padding 0.1em 0.3em 0.1em
+  position relative
+  background-color vg-green
+  white-space nowrap
+
