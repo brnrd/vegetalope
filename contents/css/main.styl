@@ -83,15 +83,15 @@ a:hover
     overflow hidden
 
 #logo
-  width 320px
-  height 320px
+  width 20em
+  height 20em
 
   @media print
     display none
 
   @media (max-width: 640px)
-    width 160px
-    height 160px
+    width 10em
+    height 10em
 
   @media (prefers-color-scheme: dark)
     fill vg-white
@@ -112,10 +112,12 @@ a:hover
   background-color transparent
 
 .nav > a
-  margin 0 2px
-
   @media print
     display none
+
+article
+  max-width 35em
+  margin auto
 
 table
   border-collapse collapse
@@ -124,7 +126,7 @@ table
 table th,
 table td
   border 1px solid #171717
-  padding 4px
+  padding 0.25em
 
 pre
   font-family monospace
@@ -139,8 +141,7 @@ code
   white-space pre
   font-size 110%
   background vg-green
-  padding-left 0.0625em
-  padding-top 0.0625em
+  padding 0.0625em 0.125em 0
 
   @media (prefers-color-scheme: dark)
     color vg-black
