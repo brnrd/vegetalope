@@ -11,6 +11,7 @@
     "wintersmith": "^2.5.0"
   },
   "scripts": {
-    "build": "wintersmith build"
+    "build": "wintersmith build",
+    "start": "wintersmith preview"
   }
 }
