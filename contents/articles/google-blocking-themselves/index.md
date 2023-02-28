@@ -5,7 +5,7 @@ author: brnrd
 template: article.pug
 ---
 
-As a good concerned netcitizen here I was reading the cookies policy on a website I was on, as you do, living my best life when I noticed a footnote at the bottom that said:
+As a good concerned netcitizen here I was reading the cookies policy on a website I was on, as you do, living my best life when I noticed a footnote that said:
 
 > We also use Google Analytics Advertising Features. Read more about it and how you can opt out here: [https://tools.google.com/dlpage/gaoptout/](https://tools.google.com/dlpage/gaoptout/)
 
