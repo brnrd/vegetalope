@@ -1,9 +1,8 @@
 ---
-layout: "../../layouts/BlogPost.astro"
-title: "Wintersmith on Netlify"
-description: "Who uses Wintersmith anymore?"
-pubDate: "2019-09-12"
-
+layout: '../../layouts/BlogPost.astro'
+title: 'Wintersmith on Netlify'
+description: 'Who uses Wintersmith anymore?'
+pubDate: '2019-09-12'
 ---
 
 I was looking for a static site generator with no fancy features, that took Markdown files as an input and finally settled on [Wintersmith][wintersmith].

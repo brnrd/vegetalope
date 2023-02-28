@@ -1,8 +1,8 @@
 ---
-layout: "../../layouts/BlogPost.astro"
-title: "What are the benefits of working remotely as a parent?"
-description: "According to ChatGPT..."
-pubDate: "2022-12-10"
+layout: '../../layouts/BlogPost.astro'
+title: 'What are the benefits of working remotely as a parent?'
+description: 'According to ChatGPT...'
+pubDate: '2022-12-10'
 ---
 
 Like everyone, I wanted to play with ChatGPT.
