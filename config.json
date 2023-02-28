@@ -11,7 +11,6 @@
     "wintersmith-livereload"
   ],
   "require": {
-    "moment": "moment",
     "_": "underscore",
     "typogr": "typogr"
   },
