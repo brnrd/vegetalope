@@ -8,8 +8,6 @@ template: article.pug
 I was looking for a static site generator with no fancy features, that took Markdown files as an input and finally settled on [Wintersmith][wintersmith].
 But how to make it play nicely on Netlify?
 
-<span class="more"></span>
-
 Admittedly I chose Wintersmith mostly because the CLI generated site that wintersmith provides is not a skeleton, but a working template. It thus means that you have nothing to do except updating your styling and writing some content (almost).
 
 My static single page website was already hosted on [Netlify][netlify] because it's free.
@@ -29,16 +27,16 @@ So in `package.json`, I added:
     "build": "wintersmith build"
 }
 ```
+
 The only thing left to do now was to update the Netifly build settings as such:
 
-| Setting | Value |
-| - | - |
-| Base directory | |
-| Build command | npm run build |
-| Publish directory | build |
+| Setting           | Value         |
+| ----------------- | ------------- |
+| Base directory    |               |
+| Build command     | npm run build |
+| Publish directory | build         |
 
 Save, (delete your local `\build` directory), commit your changes and push. Netlify will do the rest.
 
-
-[netlify]: <https://www.netlify.com/>
-[wintersmith]: <https://github.com/jnordberg/wintersmith>
+[netlify]: https://www.netlify.com/
+[wintersmith]: https://github.com/jnordberg/wintersmith

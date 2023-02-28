@@ -9,8 +9,6 @@ As a good concerned netcitizen here I was reading the cookies policy on a websit
 
 > We also use Google Analytics Advertising Features. Read more about it and how you can opt out here: [https://tools.google.com/dlpage/gaoptout/](https://tools.google.com/dlpage/gaoptout/)
 
-<span class="more"></span>
-
 Now you got me interested. Just to think that there was a hidden thing somewhere to completely opt-out of Google Analytics got me all reved up.
 
 > Google Analytics Opt-out Browser Add-on
@@ -26,7 +24,11 @@ I had to extract the code from the `.xpi` (which is just a renamed `.zip`) and h
 The only thing it does is make the page run an extra bit of JS through a content script applied on all pages:
 
 ```javascript
-window["_gaUserPrefs"] = { ioo : function() { return true; } }
+window["_gaUserPrefs"] = {
+  ioo: function () {
+    return true;
+  },
+};
 ```
 
 It does not communicate with Google or anything. My guess is that when GA executes, it checks the existence of this `_gaUserPrefs` key on the window object, calls the function and doesn't send the data or doesn't run if the `ioo` function returns true.
