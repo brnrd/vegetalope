@@ -1,6 +1,9 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../config';
+import { Image } from '@astrojs/image/components';
+
+import logoImage from '../images/vegetalope.webp';
 ---
 
 <header>
@@ -25,14 +28,16 @@ import { SITE_TITLE } from '../config';
 	</nav>
 
 	<a id="home" href="/">
-		<svg
+		<!-- <svg
 			id="logo"
 			alt="vegetalope logo"
 			title="vegetalope logo, looks like a inverted triangle but really is a capital V"
 		>
 			<title>vegetalope logo, looks like a inverted triangle but really is a capital V</title>
 			<use xlink:href="#vegetalope-logo" />
-		</svg>
+		</svg> -->
+
+		<Image src={logoImage} height={200} width={400} alt="vegetalope written with a black Sharpie on white paper" />
 	</a>
 
 	<!-- Logo SVG trick: https://css-tricks.com/change-color-of-svg-on-hover/#article-header-id-1 -->

@@ -1,10 +1,9 @@
 vg-pink = #ff4400ff // Red Orange Color Wheel
 vg-green = #256539ff // Cadmium Green
-vg-dark-green = #112D19ff // Phtalo Green
 vg-blue = #131c4eff // Space Cadet
-vg-white = #fef8ecff // Floral White
+vg-white = #fefefeff
 vg-grey = #c7cadbff // Light Periwinkle
-vg-black = #0a0a0aff // Rich Black FOGRA 39
+vg-black = #000000ff
 vg-font = sans-serif
 
 base-font-size = 1rem
@@ -28,15 +27,10 @@ html
 body,
 html
   background-color vg-white
-  color vg-blue
+  color vg-black
   font-family vg-font
   height 100%
   margin 0
-
-  @media (prefers-color-scheme: dark)
-    background-color vg-blue
-    color vg-white
-    font-weight lighter
 
 body
   line-height 1.5
@@ -81,26 +75,11 @@ body
 
 
 a
-  color vg-green
-
-  @media print
-    color vg-black
-
-  @media (prefers-color-scheme: dark)
-    color lighten(vg-green, 50%)
+  color vg-black
 
 a:focus,
 a:hover
-  color vg-dark-green
-
-  @media (prefers-color-scheme: dark)
-    color lighten(vg-green, 50%)
-
-a:visited
-  color vg-green
-
-  @media (prefers-color-scheme: dark)
-    color lighten(vg-green, 50%)
+  color vg-blue
 
 .hidden
   @media screen
@@ -140,37 +119,6 @@ a:visited
     color vg-black
     background-color vg-white
     padding 1.2em 0
-
-
-#logo
-  width 20em
-  height 20em
-  
-  :hover
-    animation logoGlitch 1s linear infinite
-    fill vg-pink
-
-  @media print
-    display none
-
-  @media (max-width: 640px)
-    width 10em
-    height 10em
-
-  @media (prefers-color-scheme: dark)
-    fill vg-white
-
-  @keyframes logoGlitch {
-    2%,64%{
-      transform: translate(2px,0) skew(0deg)
-    }
-    4%,60%{
-      transform: translate(-2px,0) skew(0deg)
-    }
-    62%{
-      transform: translate(0,0) skew(5deg) 
-    }
-  }
 
 #logo-hidden
   display none
@@ -227,17 +175,11 @@ article
 table
   border-collapse collapse
   border 1px solid vg-black
-  
-  @media (prefers-color-scheme: dark)
-    border-color vg-white
 
 table th,
 table td
   border 1px solid vg-black
   padding 0.25em
-
-  @media (prefers-color-scheme: dark)
-    border-color vg-white
 
 pre
   font-family monospace
@@ -252,9 +194,6 @@ code
   white-space pre
   font-size 110%
   padding 0.0625em 0.125em 0
-
-  @media (prefers-color-scheme: dark)
-    color vg-white
 
 blockquote
   padding-left 1em
