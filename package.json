@@ -4,5 +4,11 @@
     "typogr": "0.6.x",
     "underscore": "^1.9.1"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "wintersmith": "^2.5.0"
+  },
+  "scripts": {
+    "build": "wintersmith build"
+  }
 }
