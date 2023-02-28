@@ -1,0 +1,172 @@
+---
+title: Good movies
+date: 2022-01-15 08:36
+author: brnrd
+template: article.pug
+---
+
+A raw, non-exhaustive, list of movies I watched with my wife and that we liked enough to give them our "good movie" seal of approval.
+
+There will be a subsequent list of regular movies that are good enough to list and to watch, but that don't meet our subjective criteria of being a "good movie".
+
+The list:
+
+- 12 Angry Men
+- 3 Women
+- A bout de souffle
+- A Clockwork Orange
+- A Few Good Men
+- An Affair to Remember
+- Anatomy of a Murder
+- Angst essen Seele auf
+- Annie Hall
+- Arizona Dream
+- Arrival
+- Artificial Intelligence
+- Baisers volés
+- Bande à part
+- Beetlejuice
+- Benny and Joon
+- Big Fish
+- Blue Valentine
+- Boyhood
+- Breakfast at Tiffany's
+- Bullitt
+- But I'm a Cheerleader
+- Butterflies Are Free
+- Cactus Flower
+- Charade
+- Closer
+- Comment c'est loin
+- Cool Hand Luke
+- Detachment
+- Dial M For Murder
+- District 9
+- Django Unchained
+- Drive
+- Dunkirk
+- Edge of Tomorrow
+- Edward Scissorhands
+- Eyes Wide Shut
+- Frost Nixon
+- Funny Face
+- Fury
+- Get Out
+- Girl, Interrupted
+- Good Bye Lenin
+- Hail Caesar
+- Happy Go Lucky
+- Happythankyoumoreplease
+- Hard Candy
+- Harold and Maude
+- Heathers
+- Her
+- Howl
+- I Heart Huckabees
+- In The Mood For Love
+- Inglourious Basterds
+- Inside Man
+- Into The Wild
+- James Dean
+- Judgment at Nuremberg
+- Jules et Jim
+- Juno
+- Kûki ningyô
+- Kynodontas
+- L'Armée des Ombres
+- L'enfant sauvage
+- La Maman et la Putain
+- La meglio gioventù
+- La Tête Haute
+- Lars and the Real Girl
+- Le Havre
+- Le Mépris
+- Le Samouraï
+- Léon Morin, Prêtre
+- Les quatre cents coups
+- Les Valseuses
+- Leviathan
+- Lila dit ça
+- Lincoln
+- Little Children
+- Little Miss Sunshine
+- Lola Rennt
+- Lord of the Rings
+- Lost in Translation
+- Lucky Number Slevin
+- Marie-Antoinette
+- Martha Marcy May Marlene
+- Masculin Féminin
+- Memories of Murder
+- Mermaids
+- Mesrine 1 L'instinct de Mort
+- Mesrine 2 L'ennemi public n°1
+- Mid90s
+- Mon Oncle
+- Mon Roi
+- Monty Python and the Holy Grail
+- Moonrise Kingdom
+- Mother!
+- My Name Is Nobody
+- Napoleon Dynamite
+- Narco
+- Network
+- No Country For Old Men
+- Nowhere Boy
+- Okja
+- Once Upon a Time in the West
+- One Flew Over The Cuckoo's Nest
+- One Hour Photo
+- Paper Moon
+- Pierrot le Fou
+- Rabbit Hole
+- Rear Window
+- Roma
+- Rushmore
+- Saving Mr. Banks
+- Shimotsuma monogatari
+- Silver Linings Playbook
+- Snowpiercer
+- Steel Magnolias
+- Stoker
+- Submarine
+- Sweeney Todd The Demon Barber of Fleet Street
+- Take Shelter
+- Taking Off
+- Thank You For Smoking
+- The Americanization of Emily
+- The Apartment
+- The Believer
+- The Book of Eli
+- The Curious Case of Benjamin Button
+- The Darjeeling Limited
+- The Dirty Dozen
+- The Godfather
+- The History Boys
+- The Hobbit
+- The Innocents
+- The Life And Death Of Colonel Blimp
+- The Life Aquatic with Steve Zissou
+- The Martian
+- The Notebook
+- The Philadelphia Story
+- The Reader
+- The Royal Tenenbaums
+- The Shining
+- The Sound Of Music
+- The Sting
+- The Sugarland Express
+- The Treasure Of The Sierra Madre
+- The Tree of Life
+- The Truman Show
+- The Wizard Of Oz
+- There Will Be Blood
+- Top Hat
+- True Grit
+- Une Femme Est Une Femme
+- Valley Of The Dolls
+- Vanilla Sky
+- Vicky Cristina Barcelona
+- Walk the Line
+- Yes Man
+- Yi Yi
