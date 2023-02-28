@@ -12,10 +12,11 @@
 	},
 	"dependencies": {
 		"@astrojs/image": "^0.13.0",
-		"@astrojs/mdx": "^0.11.6",
-		"@astrojs/rss": "^1.0.3",
-		"@astrojs/sitemap": "^1.0.0",
-		"astro": "^2.0.2"
+		"@astrojs/mdx": "^0.17.0",
+		"@astrojs/rss": "^2.1.1",
+		"@astrojs/sitemap": "^1.0.1",
+		"astro": "^2.0.14",
+		"sanitize-html": "^2.10.0"
 	},
 	"devDependencies": {
 		"eslint": "^8.32.0",
