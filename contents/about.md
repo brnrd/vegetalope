@@ -3,11 +3,10 @@ view: none
 noindex: true
 ---
 
-HELLO my name is [vegetalope][vg]
+HELLO my name is vegetalope.
 
-I don't have anything to sell. Yet. Free [RSS][rss]?
+I don't have anything to sell. Free [RSS][rss]?
 
 <sub><sup>No tracking, no cookies.</sup></sub>
 
-[vg]: <https://twitter.com/vegetalope>
 [rss]: <http://www.vegetalope.com/feed.xml>
