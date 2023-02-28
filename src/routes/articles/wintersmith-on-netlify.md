@@ -1,8 +1,7 @@
 ---
 title: Wintersmith on Netlify
-date: 2019-09-12 22:00
+date: 2019-09-12
 author: brnrd
-template: article.pug
 ---
 
 I was looking for a static site generator with no fancy features, that took Markdown files as an input and finally settled on [Wintersmith][wintersmith].

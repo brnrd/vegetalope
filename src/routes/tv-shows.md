@@ -2,10 +2,9 @@
 title: TV shows
 date: 2022-01-05 08:38
 author: brnrd
-template: article.pug
 ---
 
-A raw, non-exhaustive, list of TV shows we liked.
+A raw non-exhaustive list of TV shows we liked.
 
 The list:
 
