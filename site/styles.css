@@ -1,0 +1,50 @@
+*:focus {
+	outline: 0.0625em solid #83ecfc;
+}
+
+body,
+html {
+	background-color: #303030;
+	color: #ffffff;
+}
+
+a {
+	color: #fd83b5;
+}
+
+a:focus,
+a:hover {
+	color: #83fdcb;
+}
+
+ul {
+	display: inline-flex;
+}
+
+li::after {
+	margin-right: 0.33em;
+	content: ',';
+}
+
+.unbulleted li:last-of-type::after {
+	margin-right: 0.33em;
+	content: '';
+}
+
+.unbulleted {
+	padding-left: 0;
+}
+
+.unbulleted-item {
+	list-style-type: none;
+}
+
+.hidden {
+	position: absolute;
+	top: auto;
+	left: -999em;
+	width: 1px;
+	height: 1px;
+	white-space: nowrap;
+	overflow: hidden;
+}
