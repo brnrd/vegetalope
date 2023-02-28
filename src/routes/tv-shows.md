@@ -13,6 +13,7 @@ The list:
 - Betwitched
 - Black Mirror
 - Carnivàle
+- Cruel Summer
 - Escape at Dannemora
 - Fargo
 - Freaks and Geeks
