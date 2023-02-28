@@ -1,0 +1,26 @@
+{
+  "locals": {
+    "url": "https://www.vegetalope.com",
+    "name": "vegetalope",
+    "owner": "brnrd",
+    "description": "Stuff and things"
+  },
+  "plugins": [
+    "./plugins/paginator.coffee"
+  ],
+  "require": {
+    "moment": "moment",
+    "_": "underscore",
+    "typogr": "typogr"
+  },
+  "pug": {
+    "pretty": true
+  },
+  "markdown": {
+    "smartLists": true,
+    "smartypants": true
+  },
+  "paginator": {
+    "perPage": 6
+  }
+}

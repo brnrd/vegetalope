@@ -1,0 +1,35 @@
+
+extends layout
+
+block header
+  a#home(href='/')
+    svg#logo(alt='vegetalope logo' title='vegetalope logo, looks like a inverted triangle but really is a capital V')
+      title vegetalope logo, looks like a inverted triangle but really is a capital V
+      use(xlink:href='#vegetalope-logo')
+  //- Logo SVG trick: https://css-tricks.com/change-color-of-svg-on-hover/#article-header-id-1
+  svg(display='none' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' preserveaspectratio='xMidYMid meet')
+      symbol#vegetalope-logo(viewbox='0 0 640 640' width='320' height='320')
+        path#a33aR4SSJs(d='M320 558L488 93.81L217 93.81L217 113L461 113L320 500.95L172.38 93.81L150.95 93.81L320 558Z')
+
+block content
+  include author
+  each article in articles
+    article.article.intro
+      header
+        h2
+          a(href=article.url)= article.title
+      section.content
+        if article.intro.length > 0
+          != typogr(article.intro).typogrify()
+        if article.hasMore
+          p.more
+            a(href=article.url) more
+
+block prepend footer
+  div.nav
+    if prevPage
+      a(href=prevPage.url) &laquo; Newer
+    else
+      a(href='/archive.html') &laquo; Archives
+    if nextPage
+      a(href=nextPage.url) Next page &raquo;
