@@ -29,15 +29,28 @@ const {
 			<article>
 				{heroImage && <img width={720} height={360} src={heroImage} alt="" />}
 				<h1 class="title">{title}</h1>
-				{pubDate && <time>{pubDate}</time>}
-				{
-					updatedDate && (
-						<div>
-							Last updated on <time>{updatedDate}</time>
-						</div>
-					)
-				}
 				<slot />
+				<br>
+				{pubDate && <div>
+					<h3>Written</h3> 
+					<time datetime={pubDate}>
+						{new Date(pubDate).toLocaleDateString('en-gb', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						})}
+					</time>
+				</div>}
+				{updatedDate && (
+					<div>
+						<h3>Last updated</h3>
+						<time datetime={updatedDate}>{new Date(updatedDate).toLocaleDateString('en-gb', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						})}</time>
+					</div>
+				)}
 			</article>
 		</main>
 		<Footer />

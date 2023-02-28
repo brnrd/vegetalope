@@ -1,0 +1,32 @@
+---
+layout: "../layouts/BlogPost.astro"
+title: "about"
+description: "What's a vegetalope anyway?"
+---
+import { Picture } from '@astrojs/image/components';
+import logoImage from '../images/vegetalope-transparent.png';
+
+Punk à chat,
+
+Head of engineering @ AVIV group/Meilleurs Agents,
+
+Ex-senior frontend engineer @ FanDuel,
+
+Full Remote, homeschooling, vegan, father of 5.
+
+<div class="hello">
+    <div class="top">
+        <div>Hello</div>
+        <p> my name is</p>
+    </div>
+    <div class="name">
+        <Picture 
+				src={logoImage} 
+				aspectRatio="1805:887" 
+				fit="contain" 
+				formats={['webp', 'avif']} 
+				widths={[100, 200, 400, 800]} 
+				alt="vegetalope written with a black Sharpie on white paper" 
+			/>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-vg-pink = #ff4400ff // Red Orange Color Wheel
+vg-red = #ff4400ff // Red Orange Color Wheel
 vg-green = #256539ff // Cadmium Green
 vg-blue = #131c4eff // Space Cadet
 vg-white = #fefefeff
@@ -7,11 +7,11 @@ vg-black = #000000ff
 vg-font = sans-serif
 
 base-font-size = 1rem
-font-xs = base-font-size * 0.5
-font-s = base-font-size * 0.75
-font-m = base-font-size
-font-l = base-font-size * 1.5
-font-xl = base-font-size * 2
+xs = base-font-size * 0.5
+s = base-font-size * 0.75
+m = base-font-size
+l = base-font-size * 1.5
+xl = base-font-size * 2
 
 
 base-line-height = 1.5rem
@@ -23,6 +23,7 @@ base-line-height = 1.5rem
 body,
 html
   box-sizing border-box
+  margin 0
 
 body,
 html
@@ -59,9 +60,18 @@ header,
 footer
   text-align center
 
+h1
+  font-size xl
+  text-align center
+  margin s 0 l
+
 h2
-  margin-top 1em
-  padding-top 1em
+  font-size l
+  margin l 0
+
+h3
+  font-size s
+  margin m 0 xs
 
 article
   header
@@ -90,7 +100,7 @@ a:hover
   color vg-blue
 
   @media (prefers-color-scheme: dark)
-    color lighten(vg-green, 50%)
+    color vg-red
 
 .hidden
   @media screen
@@ -104,10 +114,10 @@ a:hover
 
 
 .hello 
-  font-size font-m
+  font-size m
   width 20em
   border-radius 1em
-  border-bottom solid 1em vg-pink
+  border-bottom solid 1em vg-red
   text-align center
   box-shadow 0 0 1em rgba(0, 0, 0, .3)
   margin 2em auto
@@ -115,9 +125,9 @@ a:hover
 
   .top 
     border-radius 1em 1em 0 0
-    background vg-pink
+    background vg-red
     color vg-white
-    padding .3em 0 .6em
+    padding .3em 0
 
     div 
       font-weight bold
@@ -125,11 +135,28 @@ a:hover
       line-height 1em
       text-transform uppercase
 
+    p
+      margin 0
+      
   .name 
-    font-size font-xl
-    color vg-black
     background-color vg-white
-    padding 1.2em 0
+    width 100%
+    height 100%
+    display flex
+    // @media (max-width: 400px)
+    //   width 200px
+    //   height 100px
+
+    picture 
+      width 100%
+      height 100%
+      display flex
+      
+      img
+        object-fit cover
+        height auto
+        width 80%
+        margin: 0 auto;
 
 #logo
   width 400px
@@ -165,13 +192,12 @@ nav
     li
       display inline-block
       position relative
-      font-size font-l
+      font-size l
       margin 0 0.25rem
 
       @media (max-width: 400px)
-        font-size font-m
+        font-size m
         margin 0 0 0.15rem
-
 
     > a
       @media print
@@ -184,9 +210,6 @@ nav
   ul
     list-style none
     text-align left
-
-h1
-  text-align center
 
 article
   max-width 35em
