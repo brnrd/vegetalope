@@ -1,7 +1,7 @@
 ---
-title: Good movies
-date: 2022-01-05 08:36
-author: brnrd
+layout: "../layouts/BlogPost.astro"
+title: "Good movies"
+pubDate: "2022-01-05"
 ---
 
 A raw non-exhaustive list of movies I watched with my wife and that we liked enough to give them our "good movie" seal of approval.

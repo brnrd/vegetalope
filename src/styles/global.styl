@@ -122,11 +122,17 @@ article
 table
   border-collapse collapse
   border 1px solid vg-black
+  
+  @media (prefers-color-scheme: dark)
+    border-color vg-white
 
 table th,
 table td
   border 1px solid vg-black
   padding 0.25em
+
+  @media (prefers-color-scheme: dark)
+    border-color vg-white
 
 pre
   font-family monospace
@@ -140,11 +146,10 @@ code
   line-height 140%
   white-space pre
   font-size 110%
-  background vg-green
   padding 0.0625em 0.125em 0
 
   @media (prefers-color-scheme: dark)
-    color vg-black
+    color vg-white
 
 
 blockquote

@@ -1,7 +1,7 @@
 ---
-title: TV shows
-date: 2022-01-05 08:38
-author: brnrd
+layout: "../layouts/BlogPost.astro"
+title: "TV shows"
+pubDate: "2022-01-05"
 ---
 
 A raw non-exhaustive list of TV shows we liked.

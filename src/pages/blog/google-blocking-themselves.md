@@ -1,7 +1,8 @@
 ---
-title: Google blocking itself?
-date: 2019-09-18 08:06
-author: brnrd
+layout: "../../layouts/BlogPost.astro"
+title: "Google blocking itself?"
+description: "Are we in 2030 yet?"
+pubDate: "2019-09-18"
 ---
 
 As a good concerned netcitizen here I was reading the cookies policy on a website I was on, as you do, living my best life when I noticed a footnote that said:

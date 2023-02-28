@@ -1,8 +1,16 @@
-<script>
-	import '$lib/styles/style.styl'
-</script>
+---
+import HeaderLink from './HeaderLink.astro';
+import { SITE_TITLE } from '../config';
+---
 
 <header>
+	<nav>
+		<HeaderLink href="/">Home</HeaderLink>
+		<HeaderLink href="/blog">Blog</HeaderLink>
+		<HeaderLink href="/about">About</HeaderLink>
+		<HeaderLink href="https://twitter.com/vegetalope" target="_blank">Twitter</HeaderLink>
+		<HeaderLink href="https://github.com/brnrd" target="_blank">GitHub</HeaderLink>
+	</nav>
 	<a id="home" href="/">
 		<svg
 			id="logo"
