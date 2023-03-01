@@ -10,8 +10,10 @@ base-font-size = 1rem
 xs = base-font-size * 0.5
 s = base-font-size * 0.75
 m = base-font-size
-l = base-font-size * 1.5
-xl = base-font-size * 2
+l = base-font-size * 1.25
+xl = base-font-size * 1.5
+xxl = base-font-size * 2
+jumbo = base-font-size * 3
 
 
 base-line-height = 1.5rem
@@ -61,17 +63,17 @@ footer
   text-align center
 
 h1
-  font-size xl
+  font-size xxl
   text-align center
   margin s 0 l
 
 h2
-  font-size l
-  margin l 0
+  font-size xl
+  margin m 0
 
 h3
-  font-size m
-  margin l 0 m
+  font-size l
+  margin jumbo 0 m
   font-weight normal
 
 article
@@ -144,9 +146,6 @@ a:hover
     width 100%
     height 100%
     display flex
-    // @media (max-width: 400px)
-    //   width 200px
-    //   height 100px
 
     picture 
       width 100%
@@ -157,7 +156,7 @@ a:hover
         object-fit cover
         height auto
         width 80%
-        margin: 0 auto;
+        margin 0 auto;
 
 #logo
   width 400px
@@ -180,7 +179,7 @@ a:hover
       width 100%
       
       @media (prefers-color-scheme: dark)
-        filter: invert(1);
+        filter invert(1);
   
 ul
   margin 0
@@ -239,7 +238,7 @@ pre
   line-height 140%
   white-space pre
   padding-left 1em
-  overflow-x: auto
+  overflow-x auto
 
 code
   font-family  monospace
