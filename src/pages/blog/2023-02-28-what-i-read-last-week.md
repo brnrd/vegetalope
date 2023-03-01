@@ -9,11 +9,6 @@ It was last week that I actually read those, changing the series title whilst it
 
 ## The links
 
-### RapidAPI for Mac – The most advanced API tool for Mac
-https://paw.cloud
-
-Although the logo and name have changed since Paw was a thing, Rapid API seems to be the Postman replacement app we've all been waiting for.
-
 ### An engineering leader’s guide to tackling change
 https://leaddev.com/team/engineering-leaders-guide-tackling-change
 
