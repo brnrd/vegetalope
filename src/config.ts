@@ -3,3 +3,4 @@
 
 export const SITE_TITLE = 'vegetalope'
 export const SITE_DESCRIPTION = 'Large fancy site filled with crap'
+export const SITE_IMAGE = '/vegetalope.webp'
