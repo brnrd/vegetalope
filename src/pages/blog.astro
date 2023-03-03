@@ -13,7 +13,7 @@ const posts = (await Astro.glob('./blog/*.{md,mdx}')).sort(
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<BaseHead title=`blog | ${SITE_TITLE}` description="Like a vlog, but without the video." image={SITE_IMAGE}/>
+		<BaseHead title="Blog" description="Like a vlog, but without the video." image={SITE_IMAGE}/>
 	</head>
 	<body>
 		<Header />
