@@ -1,7 +1,7 @@
 {
-	"name": "vegetalope/blog",
+	"name": "vegetalope",
 	"type": "module",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"private": true,
 	"scripts": {
 		"dev": "astro dev",
@@ -11,12 +11,12 @@
 		"astro": "astro"
 	},
 	"dependencies": {
-		"@astrojs/image": "^0.13.0",
-		"@astrojs/mdx": "^0.17.0",
-		"@astrojs/rss": "^2.1.1",
-		"@astrojs/sitemap": "^1.0.1",
-		"astro": "^2.0.14",
-		"sanitize-html": "^2.10.0"
+		"@astrojs/image": "^0.17.3",
+		"@astrojs/mdx": "^0.19.7",
+		"@astrojs/rss": "^2.4.4",
+		"@astrojs/sitemap": "^2.0.2",
+		"astro": "^2.10.14",
+		"sanitize-html": "^2.11.0"
 	},
 	"devDependencies": {
 		"eslint": "^8.32.0",
