@@ -6,4 +6,7 @@ import image from '@astrojs/image'
 export default defineConfig({
 	site: 'https://www.vegetalope.com',
 	integrations: [mdx(), sitemap(), image()],
+	experimental: {
+		viewTransitions: true
+	}
 })
