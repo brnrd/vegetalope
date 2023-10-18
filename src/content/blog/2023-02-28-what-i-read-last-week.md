@@ -1,5 +1,4 @@
 ---
-layout: '../../layouts/BlogPost.astro'
 title: 'What I read last week #2'
 description: 'Yey, I made a second one! '
 pubDate: '2023-02-28'

@@ -1,39 +1,44 @@
 ---
 // Import the global.css file here so that it is included on
-// all pages through the use of the <BaseHead /> component.'
-import '../styles/global.styl';
-import { SITE_TITLE } from '../config';
-import { ViewTransitions } from 'astro:transitions';
+// all pages through the use of the <BaseHead /> component.
+import '../styles/global.css';
 
-export interface Props {
+interface Props {
 	title: string;
 	description: string;
 	image?: string;
 }
 
-const { title, description, image } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
 
 <!-- Favicon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=1">
-<link rel="manifest" href="/site.webmanifest?v=1">
-<link rel="mask-icon" href="/safari-pinned-tab.svg?v=1" color="#256539">
-<link rel="shortcut icon" href="/favicon.ico?v=1">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=1">
+<link rel="manifest" href="/images/site.webmanifest?v=1">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=1" color="#256539">
+<link rel="shortcut icon" href="/images/favicon.ico?v=1">
 <meta name="msapplication-TileColor" content="#256539">
 <meta name="theme-color" content="#ffffff">
 
-<!-- RSS -->
-<link rel="alternate" href="https://vegetalope.com/rss.xml" type="application/rss+xml" />
-<meta name="generator" content={Astro.generator} />
+<!-- Font preloads -->
+<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
 
 <!-- Primary Meta Tags -->
-<title>{title} | { SITE_TITLE } </title>
+<title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 
@@ -52,13 +57,7 @@ const { title, description, image } = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
-<!-- Secondary Meta Tags -->
-<meta name="pocket-site-verification" content="7d224a8d64116b08c6daec8fc08a43" />
-<meta name="msvalidate.01" content="C26C7601A7BC06EDD0773BD8B09723CF" />
-
 <!-- Firefox FOUC fix -->
 <script>
 	let FF_FOUC_FIX
 </script>
-
-<ViewTransitions />
