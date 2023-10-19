@@ -17,7 +17,6 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Favicon -->
@@ -31,8 +30,8 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <meta name="theme-color" content="#ffffff">
 
 <!-- Font preloads -->
-<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+<!-- <link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin /> -->
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -57,7 +56,13 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
-<!-- Firefox FOUC fix -->
-<script>
-	let FF_FOUC_FIX
+<!-- This is intentionally inlined to avoid FOUC -->
+<script is:inline>
+	const root = document.documentElement;
+	const theme = localStorage.getItem('theme');
+	if (theme === 'dark' || (!theme) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+	  root.classList.add('theme-dark');
+	} else {
+	  root.classList.remove('theme-dark');
+	}
 </script>

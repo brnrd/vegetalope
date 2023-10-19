@@ -6,5 +6,5 @@ import svelte from '@astrojs/svelte';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://vegetalope.com',
-	integrations: [mdx(), sitemap(), svelte()],
+	integrations: [mdx(), sitemap(), svelte()]
 });

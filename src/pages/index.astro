@@ -2,6 +2,8 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { Picture } from 'astro:assets';
+import logoImage from '../assets/vegetalope-transparent.png'
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 ---
 
@@ -9,11 +11,75 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 <html lang="en">
 	<head>
 		<BaseHead title="Home" description={SITE_DESCRIPTION} image={SITE_IMAGE}/>
+		<style>
+			.hello {
+				font-size: 1rem;
+				width: 20em;
+				border-radius: 1em;
+				border-bottom: solid 1em var(--accent);
+				text-align: center;
+				box-shadow: 0 0 1em rgba(0,0,0,0.3);
+				margin: 2em auto;
+				transform: rotate(-2deg);
+			}
+
+			.hello .top {
+				border-radius: 1em 1em 0 0;
+				background: var(--accent);
+				color: var(--paper-white);
+				padding: 0.3em 0;
+			}
+			
+			.hello .top div {
+				font-weight: bold;
+				font-size: 2em;
+				line-height: 1em;
+				text-transform: uppercase;
+			}
+
+			.hello .top p {
+				margin: 0;
+			}
+
+			.hello .name {
+				background-color: var(--paper-white);
+				color: var(--ink-black);
+				width: 100%;
+				height: 100%;
+				display: flex;
+			}
+
+			.hello .name picture {
+				width: 100%;
+				height: 100%;
+				display: flex;
+			}
+			
+			.hello .name picture img {
+				object-fit: cover;
+				height: auto;
+				width: 80%;
+				margin: 0 auto;
+			}
+		</style>
 	</head>
 	<body>
 		<Header title={SITE_TITLE} />
 		<main>
-		
+			<div class="hello">
+				<div class="top">
+					<div>Hello</div>
+					<p>my name is</p>
+				</div>
+				<div class="name">
+					<Picture
+						src={logoImage}
+						formats={['webp', 'avif']}
+						widths={[100, 200, 400, 800]}
+						alt="vegetalope written with a black Sharpie on white paper"
+					/>
+				</div>
+			</div>
 		</main>
 		<Footer />
 	</body>
