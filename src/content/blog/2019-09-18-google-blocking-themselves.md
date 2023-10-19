@@ -1,5 +1,4 @@
 ---
-layout: '../../layouts/BlogPost.astro'
 title: 'Google blocking itself?'
 description: 'Are we in 2030 yet?'
 pubDate: '2019-09-18'

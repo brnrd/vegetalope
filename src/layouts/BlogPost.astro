@@ -1,58 +1,83 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 
-import { SITE_IMAGE } from '../config';
+type Props = CollectionEntry<'blog'>['data'];
 
-export interface Props {
-	content: {
-		title: string;
-		description: string;
-		pubDate?: string;
-		updatedDate?: string;
-		heroImage?: string;
-	};
-}
-
-const {
-	content: { title, description, pubDate, updatedDate, heroImage },
-} = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} image={SITE_IMAGE} />
+		<BaseHead title={title} description={description} />
+		<style>
+			main {
+				width: calc(100% - 2em);
+				max-width: 100%;
+				margin: 0;
+			}
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+			.prose {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: rgb(var(--gray-dark));
+			}
+			.title {
+				margin-bottom: 1em;
+				padding: 1em 0;
+				text-align: center;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+			}
+			.date {
+				margin-bottom: 0.5em;
+				color: rgb(var(--gray));
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+		</style>
 	</head>
 
 	<body>
 		<Header />
 		<main>
 			<article>
-				{heroImage && <img width={720} height={360} src={heroImage} alt="" />}
-				<h1 class="title">{title}</h1>
-				<slot />
-				<br>
-				{pubDate && <div>
-					<h3>Written</h3> 
-					<time datetime={pubDate}>
-						{new Date(pubDate).toLocaleDateString('en-gb', {
-							year: 'numeric',
-							month: 'long',
-							day: 'numeric',
-						})}
-					</time>
-				</div>}
-				{updatedDate && (
-					<div>
-						<h3>Last updated</h3>
-						<time datetime={updatedDate}>{new Date(updatedDate).toLocaleDateString('en-gb', {
-							year: 'numeric',
-							month: 'long',
-							day: 'numeric',
-						})}</time>
+				<div class="hero-image">
+					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
+				</div>
+				<div class="prose">
+					<div class="title">
+						<div class="date">
+							<FormattedDate date={pubDate} />
+							{
+								updatedDate && (
+									<div class="last-updated-on">
+										Last updated on <FormattedDate date={updatedDate} />
+									</div>
+								)
+							}
+						</div>
+						<h1>{title}</h1>
+						<hr />
 					</div>
-				)}
+					<slot />
+				</div>
 			</article>
 		</main>
 		<Footer />

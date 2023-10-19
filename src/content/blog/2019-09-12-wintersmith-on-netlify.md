@@ -1,5 +1,4 @@
 ---
-layout: '../../layouts/BlogPost.astro'
 title: 'Wintersmith on Netlify'
 description: 'Who uses Wintersmith anymore?'
 pubDate: '2019-09-12'
