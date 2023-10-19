@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^1.1.2",
+    "@astrojs/netlify": "^3.0.3",
     "@astrojs/rss": "^3.0.0",
     "@astrojs/sitemap": "^3.0.2",
     "@astrojs/svelte": "^4.0.3",
     "astro": "^3.3.1",
+    "path-browserify": "^1.0.1",
     "sharp": "^0.32.6",
     "svelte": "^4.2.1"
   },
