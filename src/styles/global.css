@@ -1,37 +1,77 @@
 /*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
+  The CSS in this file is based off of Bear Blog's default CSS.
   https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
+/*
+  The colours in this file are from the colour https://stephango.com/flexoki
+  License MIT: https://github.com/kepano/flexoki/blob/main/LICENSE
+ */
 
-:root {
-	--accent: #D14D41;
-	--accent-dark: #AF3029;
-	--ink-black: #100F0F;
-	--gray: #343331;
-	--gray-light:#6F6E69;
-	--gray-dark: #575653;
-	--paper-white: #FFFCF0;
-	--blue-dark: #205EA6;
-	--blue-light: #4385BE;
-	--gray-gradient: rgba(var(--gray-light), 50%), #FFFCF0;
-	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+ :root {
+	--flexoki-black:       #100F0F;
+	--flexoki-paper:       #FFFCF0;
+  
+	--flexoki-950:         #1C1B1A;
+	--flexoki-900:         #282726;
+	--flexoki-850:         #343331;
+	--flexoki-800:         #403E3C;
+	--flexoki-700:         #575653;
+	--flexoki-600:         #6F6E69;
+	--flexoki-500:         #878580;
+	--flexoki-300:         #B7B5AC;
+	--flexoki-200:         #CECDC3;
+	--flexoki-150:         #DAD8CE;
+	--flexoki-100:         #E6E4D9;
+	--flexoki-50:          #F2F0E5;
+  
+	--flexoki-red-600:     #AF3029;
+	--flexoki-red-400:     #D14D41;
+  
+	--flexoki-orange-600:  #BC5215;
+	--flexoki-orange-400:  #DA702C;
+  
+	--flexoki-yellow-900:  #4D3A0B;
+	--flexoki-yellow-600:  #AD8301;
+	--flexoki-yellow-400:  #D0A215;
+	--flexoki-yellow-100:  #FCEEB8;
+  
+	--flexoki-green-600:   #66800B;
+	--flexoki-green-400:   #879A39;
+  
+	--flexoki-cyan-950:    #142625;
+	--flexoki-cyan-600:    #24837B;
+	--flexoki-cyan-400:    #3AA99F;
+	--flexoki-cyan-50:     #EBF2E7;
+  
+	--flexoki-blue-600:    #205EA6;
+	--flexoki-blue-400:    #4385BE;
+  
+	--flexoki-purple-600:  #5E409D;
+	--flexoki-purple-400:  #8B7EC8;
+  
+	--flexoki-magenta-600: #A02F6F;
+	--flexoki-magenta-400: #CE5D97;
 
+	
 		
-	--background-body: var(--paper-white);
-	--text-main: var(--black);
-	--text-secondary: var(--gray);
-	--primary-color: var(--accent-dark);
-	--link-main:var(--blue-dark);
+	--background-body: var(--flexoki-paper);
+	--text-main: var(--flexoki-black);
+	--text-secondary: var(--flexoki-850);
+	--primary-color: var(--flexoki-red-600);
+	--link-main: var(--flexoki-cyan-600);
+	
+	--gray-gradient: rgba(var(--gray-light), 50%), var(--flexoki-paper);
+	--box-shadow: 0 2px 6px rgba(var(--flexoki-850), 25%), 0 8px 24px rgba(var(--flexoki-850), 33%),
+		0 16px 32px rgba(var(--flexoki-850), 33%);
 }
 
 :root.theme-dark {
-	--background-body: var(--ink-black);
-	--text-main: var(--paper-white);
-	--text-secondary: var(--gray-light);
-	--primary-color: var(--accent);
-	--link-main:var(--blue-light);
+	--background-body: var(--flexoki-black);
+	--text-main: var(--flexoki-paper);
+	--text-secondary: var(--flexoki-600);
+	--primary-color: var(--flexoki-red-400);
+	--link-main: var(--flexoki-cyan-400);
 }
 
 body {
@@ -47,12 +87,14 @@ body {
 	font-size: 20px;
 	line-height: 1.7;
 }
+
 main {
 	width: 720px;
 	max-width: calc(100% - 2em);
 	margin: auto;
 	padding: 3em 1em;
 }
+
 h1,
 h2,
 h3,
@@ -63,74 +105,94 @@ h6 {
 	color: var(--text-main);
 	line-height: 1.2;
 }
+
 h1 {
 	font-size: 3.052em;
 }
+
 h2 {
 	font-size: 2.441em;
 }
+
 h3 {
 	font-size: 1.953em;
 }
+
 h4 {
 	font-size: 1.563em;
 }
+
 h5 {
 	font-size: 1.25em;
 }
+
 strong,
 b {
 	font-weight: 700;
 }
+
 a {
 	color: var(--link-main);
 }
+
 a:hover {
 	color: var(--link-main);
 }
+
 p {
 	margin-bottom: 1em;
 }
+
 .prose p {
 	margin-bottom: 2em;
 }
+
 textarea {
 	width: 100%;
 	font-size: 16px;
 }
+
 input {
 	font-size: 16px;
 }
+
 table {
 	width: 100%;
 }
+
 img {
 	max-width: 100%;
 	height: auto;
 	border-radius: 8px;
 }
+
 code {
 	padding: 2px 5px;
 	background-color: var(--text-secondary);
 	border-radius: 2px;
 }
+
 pre {
 	padding: 1.5em;
 	border-radius: 8px;
 }
+
 pre > code {
 	all: unset;
 }
+
 blockquote {
-	border-left: 4px solid var(--accent);
+	border-left: 4px solid var(--primary-color);
 	padding: 0 0 0 20px;
 	margin: 0px;
 	font-size: 1.333em;
 }
+
 hr {
 	border: none;
 	border-top: 1px solid rgb(var(--text-secondary));
 }
+
 @media (max-width: 720px) {
 	body {
 		font-size: 18px;
@@ -166,16 +228,16 @@ hr {
 	margin-left: 10px;
 	gap: 0.6em;
 	border-radius: 99em;
-	background-color: var(--theme-code-inline-bg);
+	background-color: var(--background-body);
 }
 
 .theme-toggle > label:focus-within {
 	outline: 2px solid transparent;
-	box-shadow: 0 0 0 0.08em var(--accent), 0 0 0 0.12em white;
+	box-shadow: 0 0 0 0.08em var(--primary-color), 0 0 0 0.12em var(--flexoki-paper);
 }
 
 .theme-toggle > label {
-	color: var(--theme-code-inline-text);
+	color: var(--text-main);
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -185,7 +247,7 @@ hr {
 }
 
 .theme-toggle .checked {
-	color: var(--accent);
+	color: var(--primary-color);
 	opacity: 1;
 }
 
