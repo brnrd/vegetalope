@@ -74,6 +74,11 @@
 	--link-main: var(--flexoki-cyan-400);
 }
 
+* {
+	box-sizing: border-box;
+	min-width: 0;
+}
+
 body {
 	font-family: sans-serif;
 	margin: 0;
@@ -86,6 +91,7 @@ body {
 	color: var(--text-main);
 	font-size: 20px;
 	line-height: 1.7;
+	min-height: 100dvh;
 }
 
 main {
@@ -104,6 +110,7 @@ h6 {
 	margin: 0 0 0.5rem 0;
 	color: var(--text-main);
 	line-height: 1.2;
+	text-wrap: balance;
 }
 
 h1 {
@@ -141,6 +148,7 @@ a:hover {
 
 p {
 	margin-bottom: 1em;
+	text-wrap: pretty;
 }
 
 .prose p {
