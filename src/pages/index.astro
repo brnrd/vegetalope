@@ -1,8 +1,8 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
-import { Picture } from 'astro:assets';
-import logoImage from '../assets/vegetalope-transparent.webp'
+import { Image } from 'astro:assets';
+import logoImage from '../assets/vegetalope.webp'
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 ---
 
@@ -71,7 +71,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 					<p>my name is</p>
 				</div>
 				<div class="name">
-					<Picture
+					<Image
 						src={logoImage}
 						formats={['webp', 'avif']}
 						widths={[100, 200, 400, 800]}
