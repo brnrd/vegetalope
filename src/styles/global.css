@@ -8,59 +8,57 @@
   License MIT: https://github.com/kepano/flexoki/blob/main/LICENSE
  */
 
- :root {
-	--flexoki-black:       #100F0F;
-	--flexoki-paper:       #FFFCF0;
-  
-	--flexoki-950:         #1C1B1A;
-	--flexoki-900:         #282726;
-	--flexoki-850:         #343331;
-	--flexoki-800:         #403E3C;
-	--flexoki-700:         #575653;
-	--flexoki-600:         #6F6E69;
-	--flexoki-500:         #878580;
-	--flexoki-300:         #B7B5AC;
-	--flexoki-200:         #CECDC3;
-	--flexoki-150:         #DAD8CE;
-	--flexoki-100:         #E6E4D9;
-	--flexoki-50:          #F2F0E5;
-  
-	--flexoki-red-600:     #AF3029;
-	--flexoki-red-400:     #D14D41;
-  
-	--flexoki-orange-600:  #BC5215;
-	--flexoki-orange-400:  #DA702C;
-  
-	--flexoki-yellow-900:  #4D3A0B;
-	--flexoki-yellow-600:  #AD8301;
-	--flexoki-yellow-400:  #D0A215;
-	--flexoki-yellow-100:  #FCEEB8;
-  
-	--flexoki-green-600:   #66800B;
-	--flexoki-green-400:   #879A39;
-  
-	--flexoki-cyan-950:    #142625;
-	--flexoki-cyan-600:    #24837B;
-	--flexoki-cyan-400:    #3AA99F;
-	--flexoki-cyan-50:     #EBF2E7;
-  
-	--flexoki-blue-600:    #205EA6;
-	--flexoki-blue-400:    #4385BE;
-  
-	--flexoki-purple-600:  #5E409D;
-	--flexoki-purple-400:  #8B7EC8;
-  
-	--flexoki-magenta-600: #A02F6F;
-	--flexoki-magenta-400: #CE5D97;
+:root {
+	--flexoki-black: #100f0f;
+	--flexoki-paper: #fffcf0;
 
-	
-		
+	--flexoki-950: #1c1b1a;
+	--flexoki-900: #282726;
+	--flexoki-850: #343331;
+	--flexoki-800: #403e3c;
+	--flexoki-700: #575653;
+	--flexoki-600: #6f6e69;
+	--flexoki-500: #878580;
+	--flexoki-300: #b7b5ac;
+	--flexoki-200: #cecdc3;
+	--flexoki-150: #dad8ce;
+	--flexoki-100: #e6e4d9;
+	--flexoki-50: #f2f0e5;
+
+	--flexoki-red-600: #af3029;
+	--flexoki-red-400: #d14d41;
+
+	--flexoki-orange-600: #bc5215;
+	--flexoki-orange-400: #da702c;
+
+	--flexoki-yellow-900: #4d3a0b;
+	--flexoki-yellow-600: #ad8301;
+	--flexoki-yellow-400: #d0a215;
+	--flexoki-yellow-100: #fceeb8;
+
+	--flexoki-green-600: #66800b;
+	--flexoki-green-400: #879a39;
+
+	--flexoki-cyan-950: #142625;
+	--flexoki-cyan-600: #24837b;
+	--flexoki-cyan-400: #3aa99f;
+	--flexoki-cyan-50: #ebf2e7;
+
+	--flexoki-blue-600: #205ea6;
+	--flexoki-blue-400: #4385be;
+
+	--flexoki-purple-600: #5e409d;
+	--flexoki-purple-400: #8b7ec8;
+
+	--flexoki-magenta-600: #a02f6f;
+	--flexoki-magenta-400: #ce5d97;
+
 	--background-body: var(--flexoki-paper);
 	--text-main: var(--flexoki-black);
 	--text-secondary: var(--flexoki-850);
 	--primary-color: var(--flexoki-red-600);
 	--link-main: var(--flexoki-cyan-600);
-	
+
 	--gray-gradient: rgba(var(--gray-light), 50%), var(--flexoki-paper);
 	--box-shadow: 0 2px 6px rgba(var(--flexoki-850), 25%), 0 8px 24px rgba(var(--flexoki-850), 33%),
 		0 16px 32px rgba(var(--flexoki-850), 33%);
@@ -79,6 +77,15 @@
 	min-width: 0;
 }
 
+::selection {
+	background-color: #ff0;
+	color: var(--flexoki-black);
+}
+
+html {
+	font-size: 62.5%;
+}
+
 body {
 	font-family: sans-serif;
 	margin: 0;
@@ -89,8 +96,11 @@ body {
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	color: var(--text-main);
-	font-size: 20px;
-	line-height: 1.7;
+	font-size: 18px;
+	font-size: 1.8rem;
+	word-spacing: 1px;
+	font-weight: 300;
+	line-height: 1.625;
 	min-height: 100dvh;
 }
 
@@ -110,27 +120,51 @@ h6 {
 	margin: 0 0 0.5rem 0;
 	color: var(--text-main);
 	line-height: 1.2;
+	font-weight: 300;
 	text-wrap: balance;
+	margin: 0 0 12px;
+	margin: 0 0 1.2rem;
+}
+
+.title h1 {
+	font-size: 24px;
+	font-size: 2.4rem;
 }
 
 h1 {
-	font-size: 3.052em;
+	font-size: 24px;
+	font-size: 2.4rem;
 }
 
 h2 {
-	font-size: 2.441em;
+	font-size: 20px;
+	font-size: 2rem;
+	font-weight: 400;
 }
 
 h3 {
-	font-size: 1.953em;
+	font-size: 25px;
+	font-size: 2.5rem;
+	margin: 0 0 2rem;
 }
 
 h4 {
-	font-size: 1.563em;
+	font-size: 13px;
+	font-size: 1.3rem;
+	text-transform: uppercase;
+	margin: 0 0 12px;
+	margin: 0 0 1.2rem;
+	font-weight: bold;
 }
 
 h5 {
-	font-size: 1.25em;
+	font-size: 18px;
+	font-size: 1.8rem;
+}
+
+h6 {
+	font-size: 16px;
+	font-size: 1.6rem;
 }
 
 strong,
@@ -147,13 +181,20 @@ a:hover {
 }
 
 p {
-	margin-bottom: 1em;
+	margin: 0 0 16px;
+	margin: 0 0 1.6rem;
+	padding: 0;
 	text-wrap: pretty;
 }
 
-.prose p {
-	margin-bottom: 2em;
+p:has(+ p) {
+	margin: 0 0 8px;
+	margin: 0 0 0.8rem;
 }
+
+/* .prose p {
+	margin-bottom: 2em;
+} */
 
 textarea {
 	width: 100%;
@@ -166,6 +207,11 @@ input {
 
 table {
 	width: 100%;
+}
+
+.date {
+	font-size: 12px;
+	font-size: 1.2rem;
 }
 
 img {
@@ -241,7 +287,9 @@ hr {
 
 .theme-toggle > label:focus-within {
 	outline: 2px solid transparent;
-	box-shadow: 0 0 0 0.08em var(--primary-color), 0 0 0 0.12em var(--flexoki-paper);
+	box-shadow:
+		0 0 0 0.08em var(--primary-color),
+		0 0 0 0.12em var(--flexoki-paper);
 }
 
 .theme-toggle > label {

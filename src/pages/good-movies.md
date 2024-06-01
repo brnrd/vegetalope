@@ -6,8 +6,6 @@ pubDate: '2022-01-05'
 updatedDate: '2024-06-01'
 ---
 
-## Good movies
-
 A raw non-exhaustive list of movies my wife and I watched and that we liked enough to give them our "good movie" seal of approval.
 
 You'll also find a list of regular [movies](/movies) that are good enough to list and to watch, but that don't meet our subjective criteria of being a good one.

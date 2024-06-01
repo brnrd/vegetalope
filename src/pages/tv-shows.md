@@ -6,8 +6,6 @@ pubDate: '2022-01-05'
 updatedDate: '2023-01-28'
 ---
 
-## TV Shows
-
 A raw non-exhaustive list of TV shows my wife and I liked.
 
 ### Äkta människor
