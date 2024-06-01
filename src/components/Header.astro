@@ -18,7 +18,7 @@ import { SITE_TITLE } from '../consts';
 </header>
 <style>
 	header {
-		margin: 0;
+		margin: 1em 0 0;
 		padding: 0 1em;
 		background: var(--background-body);
 		box-shadow: 0 2px 8px rgba(var(--ink-black), 5%);
@@ -38,7 +38,7 @@ import { SITE_TITLE } from '../consts';
 		justify-content: space-between;
 	}
 	nav a {
-		padding: 1em 0.5em;
+		padding: 1em 0em;
 		color: var(--text-main);
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
@@ -46,6 +46,10 @@ import { SITE_TITLE } from '../consts';
 	nav a.active {
 		text-decoration: none;
 		border-bottom-color: var(--flexoki-red-600);
+	}
+
+	nav h2 {
+		padding: 0;
 	}
 	.social-links,
 	.social-links a {
