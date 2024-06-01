@@ -104,8 +104,6 @@ Charlie Chaplin's iconic character struggles to survive in the modern industrial
 
 ### 17. Brief Encounter (1945)
 
-
-4M2ItOTM0OC00ZDgzLTk3YTMtNzA1MzI3OTNjYjNkXkEyXkFqcGdeQXVyNjc2NTQ5NzQ@._V1_SX300.jpg)
 A chance meeting at a railway station leads to a brief but passionate extramarital affair.
 
 [IMDb](https://www.imdb.com/title/tt0037558/) - Rating: 8.0
