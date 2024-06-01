@@ -1,5 +1,5 @@
 ---
-layout: '../../layouts/BlogPost.astro'
+layout: '../../layouts/Article.astro'
 title: ''
 description: ''
 pubDate: 'yyyy-mm-dd'

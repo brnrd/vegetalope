@@ -2,5 +2,5 @@ User-agent: *
 Allow: 
 
 User-agent: *
-Disallow: /blog
-Noindex: /blog
+Disallow: /articles
+Noindex: /articles
