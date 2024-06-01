@@ -1,5 +1,5 @@
 ---
-title: 'Brian Viner\'s Top 100 Movies'
+title: 'Top 100 Movies from Brian Viner'
 description: 'The 100 greatest classic films ever fron Veteran critic Brian Viner'
 pubDate: '2024-06-01'
 ---
