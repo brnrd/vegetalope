@@ -1,10 +1,9 @@
 ---
 title: 'The 100 greatest classic films ever'
-description: 'The 100 greatest classic films ever fron Veteran critic Brian Viner'
+description: 'The 100 greatest classic films ever from Veteran critic Brian Viner'
 pubDate: '2024-06-01'
 ---
 
-## The 100 greatest classic films ever
 Veteran critic BRIAN VINER'S movies everyone should see at least once - and they don't include Marvel, Shawshank Redemption or Titanic
 
 ### 1. The Godfather (1972)
