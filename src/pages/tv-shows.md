@@ -8,7 +8,7 @@ updatedDate: '2023-01-28'
 
 ## TV Shows
 
-A raw non-exhaustive list of TV shows we liked.
+A raw non-exhaustive list of TV shows my wife and I liked.
 
 ### Äkta människor
 

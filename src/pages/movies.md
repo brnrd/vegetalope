@@ -8,7 +8,7 @@ updatedDate: '2024-06-01'
 
 ## Movies
 
-You’ll find a list of regular movies at the end that are good enough to list and to watch, but that don’t meet our subjective criteria of being a [“good movie”](/good-movies).
+You’ll find a list of regular movies that are good enough to list and to watch, but that don’t meet our subjective criteria of being a [“good movie”](/good-movies).
 
 ## The Movies
 
