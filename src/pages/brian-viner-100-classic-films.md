@@ -1,8 +1,11 @@
 ---
 title: 'The 100 greatest classic films ever'
 description: 'The 100 greatest classic films ever from Veteran critic Brian Viner'
+layout: '../layouts/Article.astro'
 pubDate: '2024-06-01'
 ---
+
+## The 100 greatest classic films ever
 
 Veteran critic BRIAN VINER'S movies everyone should see at least once - and they don't include Marvel, Shawshank Redemption or Titanic
 
@@ -496,7 +499,7 @@ Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two
 
 Greed and class discrimination threaten the newly formed symbiotic relationship between the
 
- wealthy Park family and the destitute Kim clan.
+wealthy Park family and the destitute Kim clan.
 
 [IMDb](https://www.imdb.com/title/tt6751668/) - Rating: 8.6
 
@@ -594,7 +597,7 @@ With his wife's disappearance having become the focus of an intense media circus
 
 A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse
 
- task of planting an idea into the mind of a C.E.O.
+task of planting an idea into the mind of a C.E.O.
 
 [IMDb](https://www.imdb.com/title/tt1375666/) - Rating: 8.8
 
@@ -609,4 +612,3 @@ A cynical expatriate American café owner struggles to decide whether or not to 
 A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.
 
 [IMDb](https://www.imdb.com/title/tt0120737/) - Rating: 8.8
-

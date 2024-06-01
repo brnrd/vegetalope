@@ -1,8 +1,11 @@
 ---
 title: 'PUNK'
-description: "We all should be a little bit more punk!"
+description: 'We all should be a little bit more punk!'
+layout: '../layouts/Article.astro'
 pubDate: '2023-10-23'
 ---
+
+## Punk
 
 I stumbled upon [Travis Hubbard on X](https://twitter.com/wtravishubbard) recently, and was reading a [tweet](https://twitter.com/wtravishubbard/status/1716451033277190148) of his stating that "[we]'re all punks too". That hit close to home.
 
