@@ -3,7 +3,7 @@ title: 'TV shows'
 description: 'A raw non-exhaustive list of good TV shows.'
 layout: '../layouts/Article.astro'
 pubDate: '2022-01-05'
-updatedDate: '2023-01-28'
+updatedDate: '2024-06-01'
 ---
 
 A raw non-exhaustive list of TV shows my wife and I liked.

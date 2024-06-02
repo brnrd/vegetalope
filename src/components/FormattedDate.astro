@@ -9,9 +9,9 @@ const dateObject = new Date(date);
 
 <time datetime={dateObject.toISOString()}>
 	{
-		dateObject.toLocaleDateString('en-us', {
+		dateObject.toLocaleDateString('en-uk', {
 			year: 'numeric',
-			month: 'short',
+			month: 'long',
 			day: 'numeric',
 		})
 	}

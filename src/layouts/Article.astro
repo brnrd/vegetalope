@@ -53,6 +53,12 @@ const { title, description, pubDate, updatedDate, heroImage } = frontmatter
 				color: rgb(var(--gray));
 			}
 
+			.last-updated-on::before {
+				content: "\2014";
+				margin: 0 6px 0 2px;
+				margin: 0 0.6rem 0 0.2rem;
+			}
+
 			@media (max-width: 720px) {
 				main {
 					width: 100%;
@@ -75,18 +81,15 @@ const { title, description, pubDate, updatedDate, heroImage } = frontmatter
 				</div>
 				<div class="prose">
 					<div class="title">
+						<h1>{title}</h1>
 						<div class="date">
-							{pubDate && <FormattedDate date={pubDate} />}
+							{pubDate && <span><FormattedDate date={pubDate} /></span>}
 							{
 								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
+									<span class="last-updated-on">last updated on <FormattedDate date={updatedDate} /></span>
 								)
 							}
 						</div>
-						<h1>{title}</h1>
-
 					</div>
 					<slot />
 				</div>

@@ -5,7 +5,7 @@ layout: '../layouts/Article.astro'
 pubDate: '2024-06-01'
 ---
 
-Veteran critic BRIAN VINER'S movies everyone should see at least once - and they don't include Marvel, Shawshank Redemption or Titanic
+Veteran critic Brian Viner's movies everyone should see at least once - and they don't include Marvel, Shawshank Redemption or Titanic.
 
 ## 1. The Godfather (1972)
 
