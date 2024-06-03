@@ -501,112 +501,110 @@ wealthy Park family and the destitute Kim clan.
 
 [IMDb](https://www.imdb.com/title/tt6751668/) - Rating: 8.6
 
-## 83. It's a Wonderful Life (1946)
+## 83. All The President's Men (1976)
 
-An angel is sent from Heaven to help a desperately frustrated businessman by showing him what life would have been like if he had never existed.
+Two journalists uncover the Watergate scandal, leading to President Nixon's resignation.
 
-[IMDb](https://www.imdb.com/title/tt0038650/) - Rating: 8.6
+[IMDB](https://www.imdb.com/title/tt0074119/) - Rating: 8.0
 
-## 84. Goodfellas (1990)
+## 84. High Noon (1952)
 
-The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners Jimmy Conway and Tommy DeVito in the Italian-American crime syndicate.
+A town marshal faces a gang of deadly outlaws alone as his wedding day approaches.
 
-[IMDb](https://www.imdb.com/title/tt0099685/) - Rating: 8.7
+[IMDB](https://www.imdb.com/title/tt0044706/) - Rating: 8.0
 
-## 85. Pan's Labyrinth (2006)
+## 85. The Exorcist (1973)
 
-In the Falangist Spain of 1944, the bookish young stepdaughter of a sadistic army officer escapes into an eerie but captivating fantasy world.
+A mother seeks the help of priests to save her daughter from a demonic possession.
 
-[IMDb](https://www.imdb.com/title/tt0457430/) - Rating: 8.2
+[IMDB](https://www.imdb.com/title/tt0070047/) - Rating: 8.1
 
-## 86. Vertigo (1958)
+## 86. Kes (1969)
 
-A former police detective juggles wrestling with his personal demons and becoming obsessed with the hauntingly beautiful woman he has been hired to trail, who may be deeply disturbed.
+A young boy in a bleak Yorkshire mining town finds solace training a kestrel.
 
-[IMDb](https://www.imdb.com/title/tt0052357/) - Rating: 8.3
+[IMDB](https://www.imdb.com/title/tt0064541/) - Rating: 7.9
 
-## 87. Some Like It Hot (1959)
+## 87. Shane (1953)
 
-When two male musicians witness a mob hit, they flee the state in an all-female band disguised as women, but further complications set in.
+A weary gunfighter attempts to settle down with a homesteading family, but his past catches up with him.
 
-[IMDb](https://www.imdb.com/title/tt0053291/) - Rating: 8.2
+[IMDB](https://www.imdb.com/title/tt0046303/) - Rating: 7.6
 
-## 88. Citizen Kane (1941)
+## 88. Chariots Of Fire (1981)
 
-Following the death of publishing tycoon Charles Foster Kane, reporters scramble to uncover the meaning of his final utterance.
+Two British track athletes, one a determined Jew, the other a devout Christian, compete in the 1924 Olympics.
 
-[IMDb](https://www.imdb.com/title/tt0033467/) - Rating: 8.3
+[IMDB](https://www.imdb.com/title/tt0082158/) - Rating: 7.2
 
-## 89. The Dark Knight (2008)
+## 89. It Happened One Night (1934)
 
-When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.
+A spoiled heiress running away from her family is helped by a man who's actually a reporter in need of a story.
 
-[IMDb](https://www.imdb.com/title/tt0468569/) - Rating: 9.0
+[IMDB](https://www.imdb.com/title/tt0025316/) - Rating: 8.1
 
-## 90. La La Land (2016)
+## 90. 12 Angry Men (1957)
 
-While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future.
+A lone juror tries to prevent a miscarriage of justice by forcing his colleagues to reconsider the evidence.
 
-[IMDb](https://www.imdb.com/title/tt3783958/) - Rating: 8.0
+[IMDB](https://www.imdb.com/title/tt0050083/) - Rating: 9.0
 
-## 91. Taxi Driver (1976)
+## 91. When We Were Kings (1996)
 
-A mentally unstable veteran works as a nighttime taxi driver in New York City, where the perceived decadence and sleaze fuels his urge for violent action by attempting to liberate a presidential campaign worker and an underage prostitute.
+A documentary about the legendary "Rumble in the Jungle" heavyweight championship fight.
 
-[IMDb](https://www.imdb.com/title/tt0075314/) - Rating: 8.2
+[IMDB](https://www.imdb.com/title/tt0118147/) - Rating: 8.0
 
-## 92. Modern Times (1936)
+## 92. The Vanishing (1988)
 
-The Tramp struggles to live in modern industrial society with the help of a young homeless woman.
+A man obsessively searches for his girlfriend who disappeared during their vacation in France.
 
-[IMDb](https://www.imdb.com/title/tt0027977/) - Rating: 8.5
+[IMDB](https://www.imdb.com/title/tt0096163/) - Rating: 7.7
 
-## 93. 12 Angry Men (1957)
+## 93. The Sting (1973)
 
-A jury holdout attempts to prevent a miscarriage of justice by forcing his colleagues to reconsider the evidence.
+Two con men set out to avenge the death of a friend by swindling a mob boss.
 
-[IMDb](https://www.imdb.com/title/tt0050083/) - Rating: 9.0
+[IMDB](https://www.imdb.com/title/tt0070735/) - Rating: 8.3
 
-## 94. Bicycle Thieves (1948)
+## 94. To Kill A Mockingbird (1962)
 
-In post-war Italy, a working-class man's bicycle is stolen. He and his son set out to find it.
+Atticus Finch, a lawyer in the Depression-era South, defends a black man against an undeserved rape charge.
 
-[IMDb](https://www.imdb.com/title/tt0040522/) - Rating: 8.3
+[IMDB](https://www.imdb.com/title/tt0056592/) - Rating: 8.3
 
-## 95. Pulp Fiction (1994)
+## 95. This Is Spinal Tap (1984)
 
-The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.
+A mockumentary about the rise and fall of a fictional British heavy metal band.
 
-[IMDb](https://www.imdb.com/title/tt0110912/) - Rating: 8.9
+[IMDB](https://www.imdb.com/title/tt0088258/) - Rating: 7.9
 
-## 96. The Godfather (1972)
+## 96. In The Heat Of The Night (1967)
 
-The aging patriarch of an organised crime dynasty transfers control of his clandestine empire to his reluctant son.
+An African American detective is asked to investigate a murder in a racially hostile southern town.
 
-[IMDb](https://www.imdb.com/title/tt0068646/) - Rating: 9.2
+[IMDB](https://www.imdb.com/title/tt0061811/) - Rating: 7.9
 
-## 97. Gone Girl (2014)
+## 97. Goldfinger (1964)
 
-With his wife's disappearance having become the focus of an intense media circus, a man sees the spotlight turned on him when it's suspected that he may not be innocent.
+James Bond must foil a plot to contaminate the Fort Knox gold reserve.
 
-[IMDb](https://www.imdb.com/title/tt2267998/) - Rating: 8.1
+[IMDB](https://www.imdb.com/title/tt0058150/) - Rating: 7.7
 
-## 98. Inception (2010)
+## 98. Raiders Of The Lost Ark (1981)
 
-A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse
+Archaeologist Indiana Jones races against time to retrieve a religious artifact before the Nazis can get it.
 
-task of planting an idea into the mind of a C.E.O.
+[IMDB](https://www.imdb.com/title/tt0082971/) - Rating: 8.4
 
-[IMDb](https://www.imdb.com/title/tt1375666/) - Rating: 8.8
+## 99. Thelma & Louise (1991)
 
-## 99. Casablanca (1942)
+Two friends embark on a road trip that ends up becoming a flight from the law.
 
-A cynical expatriate American café owner struggles to decide whether or not to help his former lover and her fugitive husband escape the Nazis in French Morocco.
+[IMDB](https://www.imdb.com/title/tt0103074/) - Rating: 7.5
 
-[IMDb](https://www.imdb.com/title/tt0034583/) - Rating: 8.5
+## 100. Oliver! (1968)
 
-## 100. The Lord of the Rings: The Fellowship of the Ring (2001)
+A musical adaptation of Charles Dickens' classic tale of an orphan who runs away from an orphanage.
 
-A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.
-
-[IMDb](https://www.imdb.com/title/tt0120737/) - Rating: 8.8
+[IMDB](https://www.imdb.com/title/tt0063385/) - Rating: 7.4
