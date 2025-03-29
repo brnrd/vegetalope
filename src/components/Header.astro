@@ -1,13 +1,14 @@
 ---
-import HeaderLink from './HeaderLink.astro';
+import HeaderLink from './HeaderLink.astro'
 import ThemeToggle from './ThemeToggle.svelte'
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE } from '../consts'
 ---
 
 <header>
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
 		<div class="social-links">
+			<a href="https://moments.vegetalope.com">Moment Tracker</a>
 			<div class="theme-toggle-container">
 				<Fragment>
 					<ThemeToggle client:load />
@@ -62,6 +63,6 @@ import { SITE_TITLE } from '../consts';
 	}
 
 	.theme-toggle-container {
-  		width: 75px;
-  	}
+		width: 75px;
+	}
 </style>
