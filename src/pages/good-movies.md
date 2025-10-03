@@ -3,7 +3,7 @@ title: 'Good movies'
 description: 'A list of good movies.'
 layout: '../layouts/Article.astro'
 pubDate: '2022-01-05'
-updatedDate: '2024-06-01'
+updatedDate: '2025-10-03'
 ---
 
 A raw non-exhaustive list of movies my wife and I watched and that we liked enough to give them our "good movie" seal of approval.
