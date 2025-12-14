@@ -3,24 +3,30 @@ src/components/ThemeToggleButton.svelte
 License MIT: https://github.com/Charca/astro-blog-template/blob/main/LICENSE -->
 
 <script>
-    const rootEl = typeof document !== 'undefined' ? document.documentElement : null;
+    import { onMount } from 'svelte';
+    
+    const rootEl = document.documentElement;
     const themes = ['light', 'dark'];
     let theme = ''
   
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-      theme = localStorage.getItem('theme');
-    } else if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      theme = 'dark';
-    }
+    // Initialize theme from localStorage or system preference
+    onMount(() => {
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme) {
+        theme = storedTheme;
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        theme = 'dark';
+      }
+    });
   
     function handleChange(event) {
       theme = event.target.value;
       localStorage.setItem('theme', theme);
     }
   
-    $: if (rootEl && theme === 'light') {
+    $: if (theme === 'light') {
       rootEl.classList.remove('theme-dark');
-    } else if (rootEl && theme === 'dark') {
+    } else if (theme === 'dark') {
       rootEl.classList.add('theme-dark');
     }
   

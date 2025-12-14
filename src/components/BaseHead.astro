@@ -47,11 +47,13 @@ const { title, description, image = '../assets/vegetalope.webp' } = Astro.props;
 
 <!-- This is intentionally inlined to avoid FOUC -->
 <script is:inline>
-	const root = document.documentElement;
-	const theme = localStorage.getItem('theme');
-	if (theme === 'dark' || (!theme) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-	  root.classList.add('theme-dark');
-	} else {
-	  root.classList.remove('theme-dark');
+	if (typeof document !== 'undefined' && typeof localStorage !== 'undefined' && typeof window !== 'undefined') {
+		const root = document.documentElement;
+		const theme = localStorage.getItem('theme');
+		if (theme === 'dark' || (!theme) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			root.classList.add('theme-dark');
+		} else {
+			root.classList.remove('theme-dark');
+		}
 	}
 </script>
