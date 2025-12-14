@@ -395,7 +395,6 @@
 	}
 	.imdb-badge {
 		border-color: var(--flexoki-yellow-400, #d0a215);
-		color: var(--flexoki-yellow-400, #d0a215);
 	}
 	.summary {
 		margin: 0.6rem 0 0;
