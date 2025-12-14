@@ -279,6 +279,7 @@ hr {
 	align-items: center;
 	height: 100%;
 	padding: 0 0.67em;
+	margin-top: -0.2em;
 	margin-left: 10px;
 	gap: 0.6em;
 	border-radius: 99em;
