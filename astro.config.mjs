@@ -1,10 +1,11 @@
 import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
+import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://vegetalope.com',
-	integrations: [svelte()],
+	integrations: [svelte(), mdx()],
 	redirects: {
 		'/blog/brian-viner-100-classic-films': {
 			status: 302,
