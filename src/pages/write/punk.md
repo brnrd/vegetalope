@@ -1,7 +1,7 @@
 ---
 title: 'PUNK'
 description: 'We all should be a little bit more punk!'
-layout: '../layouts/Article.astro'
+layout: ../../layouts/Article.astro
 pubDate: '2023-10-23'
 ---
 

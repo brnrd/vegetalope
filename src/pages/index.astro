@@ -65,22 +65,102 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 	<body>
 		<Header title={SITE_TITLE} />
 		<main>
-			<div class="hello">
-				<div class="top">
-					<div>Hello</div>
-					<p>my name is</p>
+			<header class="home-intro">
+				<div class="hello">
+					<div class="top">
+						<div>Hello</div>
+						<p>my name is</p>
+					</div>
+					<div class="name">
+						<Image
+							src={logoImage}
+							formats={['webp', 'avif']}
+							widths={[100, 200, 400, 800]}
+							alt="vegetalope written with a black Sharpie on white paper"
+							loading="eager"
+						/>
+					</div>
 				</div>
-				<div class="name">
-					<Image
-						src={logoImage}
-						formats={['webp', 'avif']}
-						widths={[100, 200, 400, 800]}
-						alt="vegetalope written with a black Sharpie on white paper"
-						loading="eager"
-					/>
+				<p>
+					I build small tools, write about software engineering, and keep a curated media watchlist.
+				</p>
+			</header>
+		
+			<section class="home-grid" aria-label="Site navigation">
+				<div class="home-group">
+					<h2>Write</h2>
+					<ul>
+						<li>
+							<a href="/write/punk">PUNK</a>
+							<p>Pragmatic, Unconventional, Nimble, Keen.</p>
+						</li>
+						<li>
+							<a href="/write/speed-over-perfection">Speed over perfection</a>
+							<p>Delivery-first engineering, fast feedback, and shared ownership.</p>
+						</li>
+						<li>
+							<a href="/write/modern-em">The Modern Engineering Manager</a>
+							<p>Use AI to remove friction, not responsibility.</p>
+						</li>
+					</ul>
 				</div>
-			</div>
-			
-		</main>
+		
+				<div class="home-group">
+					<h2>Watch</h2>
+					<ul>
+						<li>
+							<a href="/watch/good-movies">Good movies</a>
+							<p>Films I consider genuinely great.</p>
+						</li>
+						<!-- <li>
+							<a href="/watch/old-good-movies">Old good movies</a>
+							<p>Great films made before 1980.</p>
+						</li> -->
+						<li>
+							<a href="/watch/movies">Movies</a>
+							<p>Good films, not masterpieces, still worth your time.</p>
+						</li>
+						<!-- <li>
+							<a href="/watch/old-movies">Old movies</a>
+							<p>Older films that are notable or interesting.</p>
+						</li> -->
+						<li>
+							<a href="/watch/tv-shows">TV series</a>
+							<p>Non-exhaustive list of series we loved.</p>
+						</li>
+						<li>
+							<a href="/watch/brian-viner-100-classic-films">Brian Viner: 100 classic films</a>
+							<p>External canon, not my list, but unordinary classics.</p>
+						</li>
+					</ul>
+				</div>
+
+				<div class="home-group">
+					<h2>Build</h2>
+					<ul>
+						<li>
+							<a href="https://moments.vegetalope.com/">Moment Tracker</a>
+							<p>A tiny app to track meaningful dates. Local-first, no account.</p>
+						</li>
+					</ul>
+				</div>
+
+				<div class="home-group">
+					<h2>Make</h2>
+					<ul>
+						<li>
+							<a href="https://makerworld.com/en/@vegetalope">MakerWorld</a>
+							<p>Bambu-focused projects and print profiles.</p>
+						</li>
+						<li>
+							<a href="https://www.printables.com/@vegetalope_2497925">Printables</a>
+							<p>Mirrors of selected finished models.</p>
+						</li>
+					</ul>
+				</div>
+			</section>
+		
+			<footer style="margin-top: 3.2rem;">
+				<p class="date">Minimal, opinionated, and still in progress.</p>
 	</body>
 </html>

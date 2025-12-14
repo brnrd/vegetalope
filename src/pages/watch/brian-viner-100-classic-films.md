@@ -1,7 +1,7 @@
 ---
 title: 'The 100 greatest classic films ever'
 description: 'The 100 greatest classic films ever from Veteran critic Brian Viner'
-layout: '../layouts/Article.astro'
+layout: ../../layouts/Article.astro
 pubDate: '2024-06-01'
 ---
 

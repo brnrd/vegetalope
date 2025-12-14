@@ -1,7 +1,7 @@
 ---
 title: 'Movies'
 description: 'A list of good enough movies.'
-layout: '../layouts/Article.astro'
+layout: ../../layouts/Article.astro
 pubDate: '2022-01-05'
 updatedDate: '2024-06-01'
 ---

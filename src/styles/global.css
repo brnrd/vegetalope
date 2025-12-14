@@ -316,3 +316,51 @@ input[name='theme-toggle'] {
 	left: 0;
 	z-index: -1;
 }
+
+.home-intro {
+	margin-bottom: 3.2rem;
+}
+
+.home-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 2.4rem;
+	margin-top: 2.4rem;
+}
+
+.home-group {
+	padding: 1.6rem;
+	border: 1px solid var(--flexoki-150);
+	border-radius: 12px;
+}
+
+:root.theme-dark .home-group {
+	border-color: var(--flexoki-850);
+}
+
+.home-group h2 {
+	margin-bottom: 0.8rem;
+}
+
+.home-group ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.home-group li {
+	margin: 0 0 1.2rem;
+}
+
+.home-group p {
+	margin: 0.4rem 0 0;
+	color: var(--text-secondary);
+	font-size: 1.5rem;
+	line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+	.home-grid {
+		grid-template-columns: 1fr;
+	}
+}

@@ -1,7 +1,7 @@
 ---
 title: 'TV shows'
 description: 'A raw non-exhaustive list of good TV shows.'
-layout: '../layouts/Article.astro'
+layout: ../../layouts/Article.astro
 pubDate: '2022-01-05'
 updatedDate: '2025-10-03'
 ---
