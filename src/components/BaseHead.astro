@@ -45,6 +45,9 @@ const { title, description, image = '../assets/vegetalope.webp' } = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
+<!-- Tracking -->
+<script defer src="https://umami.vegetalope.com/script.js" data-website-id="75cd0945-8e28-45e1-8a52-006373da5261"></script>
+
 <!-- This is intentionally inlined to avoid FOUC -->
 <script is:inline>
 	if (typeof document !== 'undefined' && typeof localStorage !== 'undefined' && typeof window !== 'undefined') {
