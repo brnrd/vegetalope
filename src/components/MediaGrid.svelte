@@ -8,8 +8,61 @@
 	let sort = 'title-asc' // default: alphabetical
 	let decade = 'all'
 	let minImdb = 'all'
-	let goodOnly = false
 	let selectedMovie = null
+
+	const DEFAULTS = {
+		q: '',
+		sort: 'title-asc',
+		decade: 'all',
+		minImdb: 'all',
+	}
+
+	const SORT_OPTIONS = new Set([
+		'title-asc',
+		'title-desc',
+		'year-desc',
+		'year-asc',
+		'imdb-desc',
+		'runtime-asc',
+		'runtime-desc',
+	])
+
+	const MIN_IMDB_OPTIONS = new Set(['all', '9', '8.5', '8', '7.5', '7'])
+
+	let didInitFromUrl = false
+
+	function readStateFromUrl() {
+		const params = new URLSearchParams(window.location.search)
+		const nextQ = params.get('q') ?? DEFAULTS.q
+		const nextSort = params.get('sort') ?? DEFAULTS.sort
+		const nextDecade = params.get('decade') ?? DEFAULTS.decade
+		const nextMinImdb = params.get('minImdb') ?? DEFAULTS.minImdb
+		
+		q = nextQ
+		sort = SORT_OPTIONS.has(nextSort) ? nextSort : DEFAULTS.sort
+		decade = nextDecade || DEFAULTS.decade
+		minImdb = MIN_IMDB_OPTIONS.has(nextMinImdb) ? nextMinImdb : DEFAULTS.minImdb
+	}
+
+	function writeStateToUrl() {
+		if (!didInitFromUrl) return
+
+		const params = new URLSearchParams(window.location.search)
+
+		const setOrDelete = (key, value, isDefault) => {
+			if (isDefault) params.delete(key)
+			else params.set(key, value)
+		}
+
+		setOrDelete('q', q, !q || q === DEFAULTS.q)
+		setOrDelete('sort', sort, sort === DEFAULTS.sort)
+		setOrDelete('decade', decade, !decade || decade === DEFAULTS.decade)
+		setOrDelete('minImdb', minImdb, minImdb === DEFAULTS.minImdb)
+
+		const search = params.toString()
+		const nextUrl = `${window.location.pathname}${search ? `?${search}` : ''}${window.location.hash || ''}`
+		window.history.replaceState({}, '', nextUrl)
+	}
 
 	function normalise(s) {
 		return String(s || '')
@@ -60,12 +113,22 @@
 	}
 
 	onMount(() => {
+		readStateFromUrl()
+		didInitFromUrl = true
+
+		const onPopState = () => {
+			readStateFromUrl()
+		}
+		window.addEventListener('popstate', onPopState)
 		window.addEventListener('keydown', handleKeydown)
 		return () => {
+			window.removeEventListener('popstate', onPopState)
 			window.removeEventListener('keydown', handleKeydown)
 			document.body.style.overflow = ''
 		}
 	})
+
+	$: writeStateToUrl()
 
 	$: decades = Array.from(
 		new Set(
@@ -79,6 +142,12 @@
 		const numB = Number(b.replace('s', ''))
 		return numA - numB
 	})
+
+	$: if (didInitFromUrl && decades.length) {
+		if (decade !== 'all' && !decades.includes(decade)) {
+			decade = 'all'
+		}
+	}
 
 	$: filtered = movies
 		.map((m, idx) => {
@@ -99,9 +168,8 @@
 			const matchesDecade = decade === 'all' || x.decade === decade
 			const min = minImdb === 'all' ? null : Number(minImdb)
 			const matchesRating = min === null || (x.imdb !== null && x.imdb >= min)
-			const matchesGoodOnly = !goodOnly || x.m.rating === 'good'
 
-			return matchesSearch && matchesDecade && matchesRating && matchesGoodOnly
+			return matchesSearch && matchesDecade && matchesRating
 		})
 		.sort((a, b) => {
 			if (sort === 'title-asc' || sort === 'title-desc') {
@@ -168,24 +236,16 @@
 			<option value="7">7+</option>
 		</select>
 	</div>
-
-	<div>
-		<label class="checkbox-label">
-			<input type="checkbox" bind:checked={goodOnly} />
-			<span>Good movies only</span>
-		</label>
-	</div>
 	
 </div>
 
 <p class="meta">
 	<span>{filtered.length} / {movies.length}</span>
 	<span>
-		{#if q || decade !== 'all' || minImdb !== 'all' || goodOnly}
+		{#if q || decade !== 'all' || minImdb !== 'all'}
 			{#if q}search: "{q}"{/if}
 			{#if decade !== 'all'} · decade: {decade}{/if}
 			{#if minImdb !== 'all'} · IMDb: {minImdb}+{/if}
-			{#if goodOnly} · good movies only{/if}
 		{:else}
 			All movies
 		{/if}
@@ -205,9 +265,6 @@
 				</h3>
 
 				<div class="badges">
-					{#if x.m.rating === 'good'}
-						<span class="badge good-badge">Good</span>
-					{/if}
 					<span class="badge imdb-badge"><a href=https://www.imdb.com/title/{x.m.imdbId} target="_blank" on:click|stopPropagation>IMDb</a>
 						{#if x.m.imdbRating !== null}
 							<span>{x.m.imdbRating.toFixed(1)}/10</span>
@@ -243,9 +300,6 @@
 				</h2>
 
 				<div class="modal-badges">
-					{#if selectedMovie.rating === 'good'}
-						<span class="badge good-badge">Good</span>
-					{/if}
 					<span class="badge imdb-badge">
 						<a href="https://www.imdb.com/title/{selectedMovie.imdbId}" target="_blank">IMDb</a>
 						{#if selectedMovie.imdbRating !== null}
@@ -388,10 +442,6 @@
 	.badge a {
 		color: inherit;
 		text-decoration: none;
-	}
-	.good-badge {
-		border-color: var(--flexoki-green-600, #66800b);
-		color: var(--flexoki-green-600, #66800b);
 	}
 	.imdb-badge {
 		border-color: var(--flexoki-yellow-400, #d0a215);
