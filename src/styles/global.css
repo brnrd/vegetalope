@@ -1,364 +1,437 @@
-/*
-  The CSS in this file is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
-/*
-  The colours in this file are from the colour https://stephango.com/flexoki
-  License MIT: https://github.com/kepano/flexoki/blob/main/LICENSE
- */
+/* global.css
+   "Raw HTML" look with modern layout, dark mode, accessibility, and minimal opinion.
+*/
+
+/* 1) Let the UA handle light/dark defaults and system colours */
+html {
+	color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+	html {
+		color-scheme: dark;
+	}
+}
+
+html.theme-dark {
+	color-scheme: dark;
+}
+
+html:not(.theme-dark) {
+	color-scheme: light;
+}
 
 :root {
-	--flexoki-black: #100f0f;
-	--flexoki-paper: #fffcf0;
+	color-scheme: light dark;
 
-	--flexoki-950: #1c1b1a;
-	--flexoki-900: #282726;
-	--flexoki-850: #343331;
-	--flexoki-800: #403e3c;
-	--flexoki-700: #575653;
-	--flexoki-600: #6f6e69;
-	--flexoki-500: #878580;
-	--flexoki-300: #b7b5ac;
-	--flexoki-200: #cecdc3;
-	--flexoki-150: #dad8ce;
-	--flexoki-100: #e6e4d9;
-	--flexoki-50: #f2f0e5;
+	/* Layout tokens */
+	--page-pad: clamp(16px, 4vw, 28px);
+	--measure: 72ch;
+	--measure-wide: 92ch;
+	--radius: 10px;
 
-	--flexoki-red-600: #af3029;
-	--flexoki-red-400: #d14d41;
+	/* Vertical rhythm */
+	--stack-1: 0.5rem;
+	--stack-2: 1rem;
+	--stack-3: 1.5rem;
+	--stack-4: 2.25rem;
 
-	--flexoki-orange-600: #bc5215;
-	--flexoki-orange-400: #da702c;
+	/* Borders use currentColor so they work in both modes without a palette */
+	--rule: 1px solid color-mix(in oklab, currentColor 18%, transparent);
+	--rule-strong: 1px solid color-mix(in oklab, currentColor 28%, transparent);
 
-	--flexoki-yellow-900: #4d3a0b;
-	--flexoki-yellow-600: #ad8301;
-	--flexoki-yellow-400: #d0a215;
-	--flexoki-yellow-100: #fceeb8;
-
-	--flexoki-green-600: #66800b;
-	--flexoki-green-400: #879a39;
-
-	--flexoki-cyan-950: #142625;
-	--flexoki-cyan-600: #24837b;
-	--flexoki-cyan-400: #3aa99f;
-	--flexoki-cyan-50: #ebf2e7;
-
-	--flexoki-blue-600: #205ea6;
-	--flexoki-blue-400: #4385be;
-
-	--flexoki-purple-600: #5e409d;
-	--flexoki-purple-400: #8b7ec8;
-
-	--flexoki-magenta-600: #a02f6f;
-	--flexoki-magenta-400: #ce5d97;
-
-	--background-body: var(--flexoki-paper);
-	--text-main: var(--flexoki-black);
-	--text-secondary: var(--flexoki-850);
-	--primary-color: var(--flexoki-red-600);
-	--link-main: var(--flexoki-cyan-600);
-
-	--gray-gradient: rgba(var(--gray-light), 50%), var(--flexoki-paper);
-	--box-shadow: 0 2px 6px rgba(var(--flexoki-850), 25%), 0 8px 24px rgba(var(--flexoki-850), 33%),
-		0 16px 32px rgba(var(--flexoki-850), 33%);
+	/* Focus */
+	--focus: 2px solid Highlight;
+	--focus-offset: 3px;
 }
 
-:root.theme-dark {
-	--background-body: var(--flexoki-black);
-	--text-main: var(--flexoki-paper);
-	--text-secondary: var(--flexoki-600);
-	--primary-color: var(--flexoki-red-400);
-	--link-main: var(--flexoki-cyan-400);
-}
-
-* {
+/* 2) Minimal reset, keep specificity low */
+*,
+*::before,
+*::after {
 	box-sizing: border-box;
-	min-width: 0;
 }
 
-::selection {
-	background-color: #ff0;
-	color: var(--flexoki-black);
+:where(img, picture, video, canvas, svg) {
+	max-width: 100%;
+	height: auto;
 }
 
-body {
-	font-family: sans-serif;
+:where(img, picture) {
+	display: block;
+}
+
+:where(html) {
+	text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	scroll-behavior: smooth;
+}
+
+:where(body) {
 	margin: 0;
-	padding: 0;
-	text-align: left;
-	background: var(--background-body);
-	background-size: 100% 600px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: var(--text-main);
-	font-size: 18px;
-	font-size: 1rem;
-	word-spacing: 1px;
-	font-weight: 300;
-	line-height: 1.625;
-	min-height: 100dvh;
+	min-height: 100svh;
+	font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+		"Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+	line-height: 1.55;
+
+	/* Do not set background or text colour, so UA defaults + color-scheme drive it */
 }
 
-main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 0 1em;
+/* Reduce motion, keep it calm */
+@media (prefers-reduced-motion: reduce) {
+	:where(html) {
+		scroll-behavior: auto;
+	}
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+	}
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: var(--text-main);
+/* 3) Main layout: simple centred column */
+:where(main),
+:where(.content) {
+	max-width: var(--measure);
+	margin-inline: auto;
+	padding-inline: var(--page-pad);
+	padding-block: var(--page-pad);
+}
+
+/* Optional wider pages for tables/lists (eg Movies) */
+:where(.content--wide),
+:where(main.content--wide) {
+	max-width: var(--measure-wide);
+}
+
+/* Small top strip / header */
+:where(header.site-header) {
+	padding-inline: var(--page-pad);
+	padding-block: 0.75rem;
+	border-bottom: var(--rule);
+}
+
+:where(header.site-header .inner) {
+	max-width: var(--measure-wide);
+	margin-inline: auto;
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+}
+
+:where(nav.site-nav) {
+	display: flex;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
+
+:where(footer.site-footer) {
+	padding-inline: var(--page-pad);
+	padding-block: 1.25rem;
+	border-top: var(--rule);
+}
+
+:where(footer.site-footer .inner) {
+	max-width: var(--measure-wide);
+	margin-inline: auto;
+}
+
+/* 4) Typography: keep it raw, just improve spacing and wrapping */
+:where(p, ul, ol, dl, blockquote, pre, table, figure) {
+	margin: 0;
+}
+
+:where(.stack > * + *) {
+	margin-block-start: var(--stack-2);
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+	margin: 0;
 	line-height: 1.2;
-	font-weight: 300;
 	text-wrap: balance;
-	margin: 0 0 12px;
-	margin: 0 0 1.2rem;
 }
 
-.title h1 {
-	font-size: 24px;
-	font-size: 2.4rem;
+:where(h1) {
+	font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+	margin-block: var(--stack-3) var(--stack-2);
 }
 
-h1 {
-	font-size: 24px;
-	font-size: 2.4rem;
+:where(h2) {
+	font-size: 1.35rem;
+	margin-block: var(--stack-4) var(--stack-2);
+	padding-block-start: var(--stack-2);
 }
 
-h2 {
-	font-size: 20px;
-	font-size: 2rem;
-	font-weight: 400;
+:where(h3) {
+	font-size: 1.15rem;
+	margin-block: var(--stack-3) var(--stack-1);
 }
 
-h3 {
-	font-size: 25px;
-	font-size: 2.5rem;
-	margin: 0 0 2rem;
+:where(h4) {
+	font-size: 1rem;
+	margin-block: var(--stack-2) var(--stack-1);
 }
 
-h4 {
-	font-size: 13px;
-	font-size: 1.3rem;
-	text-transform: uppercase;
-	margin: 0 0 12px;
-	margin: 0 0 1.2rem;
-	font-weight: bold;
+:where(p) {
+	text-wrap: pretty;
+	hyphens: auto;
 }
 
-h5 {
-	font-size: 18px;
-	font-size: 1.8rem;
+/* Lists: slightly nicer rhythm, still very HTML */
+:where(ul, ol) {
+	padding-inline-start: 1.25rem;
 }
 
-h6 {
-	font-size: 16px;
-	font-size: 1.6rem;
+:where(li + li) {
+	margin-block-start: 0.25rem;
 }
 
-strong,
-b {
+/* Definition list: good for directory-style home page */
+:where(dl) {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0.5rem 1.25rem;
+}
+
+@media (min-width: 720px) {
+	:where(dl) {
+		grid-template-columns: 12ch 1fr;
+		align-items: baseline;
+	}
+}
+
+:where(dt) {
 	font-weight: 700;
 }
 
-a {
-	color: var(--link-main);
-}
-
-a:hover {
-	color: var(--link-main);
-}
-
-p {
-	margin: 0 0 16px;
-	margin: 0 0 1.6rem;
-	padding: 0;
-	text-wrap: pretty;
-	font-size: 1rem;
-}
-
-p:has(+ p) {
-	margin: 0 0 8px;
-	margin: 0 0 0.8rem;
-}
-
-/* .prose p {
-	margin-bottom: 2em;
-} */
-
-textarea {
-	width: 100%;
-	font-size: 16px;
-}
-
-input {
-	font-size: 16px;
-}
-
-table {
-	width: 100%;
-}
-
-.date {
-	font-size: 12px;
-	font-size: 1.2rem;
-}
-
-img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
-}
-
-code {
-	padding: 2px 5px;
-	background-color: var(--text-secondary);
-	border-radius: 2px;
-}
-
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
-}
-
-pre > code {
-	all: unset;
-}
-
-blockquote {
-	border-left: 4px solid var(--primary-color);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
-}
-
-hr {
-	border: none;
-	border-top: 1px solid rgb(var(--text-secondary));
-}
-
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
-	}
-}
-
-.sr-only {
-	border: 0;
-	padding: 0;
+:where(dd) {
 	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto seperate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
 }
 
-.theme-toggle {
-	display: inline-flex;
-	align-items: center;
-	height: 100%;
-	padding: 0 0.67em;
-	margin-top: -0.2em;
-	margin-left: 10px;
-	gap: 0.6em;
-	border-radius: 99em;
-	background-color: var(--background-body);
+/* Blockquotes: subtle, not "designed" */
+:where(blockquote) {
+	padding-inline-start: 1rem;
+	border-inline-start: var(--rule-strong);
 }
 
-.theme-toggle > label:focus-within {
-	outline: 2px solid transparent;
-	box-shadow:
-		0 0 0 0.08em var(--primary-color),
-		0 0 0 0.12em var(--flexoki-paper);
+/* Small metadata */
+:where(.meta) {
+	font-size: 0.95em;
+	color: GrayText;
 }
 
-.theme-toggle > label {
-	color: var(--text-main);
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	opacity: 0.5;
+/* 5) Links: keep native, just improve underline behaviour */
+:where(a) {
+	text-decoration-thickness: from-font;
+	text-underline-offset: 0.18em;
+}
+
+:where(a:hover) {
+	text-decoration-thickness: 2px;
+}
+
+:where(a:visited) {
+	color: VisitedText;
+}
+
+/* 6) Code and pre: readable without theming */
+:where(code, kbd, samp, pre) {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+		"Liberation Mono", "Courier New", monospace;
+	font-size: 0.95em;
+}
+
+:where(code) {
+	padding-inline: 0.25em;
+	padding-block: 0.1em;
+	border: var(--rule);
+	border-radius: 6px;
+}
+
+:where(pre) {
+	padding: 0.9rem 1rem;
+	border: var(--rule);
+	border-radius: var(--radius);
+	overflow: auto;
+	tab-size: 4;
+}
+
+:where(pre code) {
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+}
+
+/* 7) Tables: minimal grid */
+:where(table) {
+	width: 100%;
+	border-collapse: collapse;
+	margin-block: var(--stack-2);
+	font-variant-numeric: tabular-nums;
+}
+
+:where(th, td) {
+	text-align: left;
+	padding: 0.5rem 0.6rem;
+	vertical-align: top;
+	border-bottom: var(--rule);
+}
+
+:where(th) {
+	border-bottom: var(--rule-strong);
+}
+
+/* Wrap tables on small screens */
+:where(.table-wrap) {
+	overflow-x: auto;
+	border: var(--rule);
+	border-radius: var(--radius);
+}
+:where(.table-wrap table) {
+	margin: 0;
+}
+
+/* 8) Forms: keep native controls, just align and space nicely */
+:where(form) {
+	margin-block: var(--stack-2);
+}
+
+:where(fieldset) {
+	border: var(--rule);
+	border-radius: var(--radius);
+	padding: 0.8rem 1rem;
+}
+
+:where(legend) {
+	padding-inline: 0.25rem;
+}
+
+:where(label) {
+	display: inline-block;
+	margin-block: 0.2rem;
+}
+
+:where(input, select, textarea, button) {
+	font: inherit;
+}
+
+:where(input[type="text"], input[type="search"], input[type="number"], select, textarea) {
+	max-width: 100%;
+	padding: 0.45rem 0.55rem;
+	border: var(--rule-strong);
+	border-radius: 8px;
+
+	/* Let UA pick colours in light/dark */
+	background: Canvas;
+	color: CanvasText;
+}
+
+:where(textarea) {
+	min-height: 8rem;
+	resize: vertical;
+}
+
+:where(button) {
+	padding: 0.45rem 0.75rem;
+	border: var(--rule-strong);
+	border-radius: 10px;
+	background: Canvas;
+	color: CanvasText;
 	cursor: pointer;
 }
 
-.theme-toggle .checked {
-	color: var(--primary-color);
-	opacity: 1;
+:where(button:hover) {
+	border-color: color-mix(in oklab, currentColor 45%, transparent);
 }
 
-input[name='theme-toggle'] {
-	position: absolute;
-	opacity: 0;
+:where(button:active) {
+	transform: translateY(0.5px);
+}
+
+/* 9) Focus: highly visible, works in forced colours */
+:where(a, button, input, select, textarea, summary):focus {
+	outline: none;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+	outline: var(--focus);
+	outline-offset: var(--focus-offset);
+}
+
+/* Better anchor navigation for headings */
+:where(h2, h3, h4, h5, h6)[id] {
+	scroll-margin-top: 5rem;
+}
+
+/* 10) Utility: a sticky filter bar for the Movies page without looking "designed" */
+:where(.sticky-bar) {
+	position: sticky;
 	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	z-index: -1;
+	z-index: 10;
+	border-bottom: var(--rule);
+	background: Canvas;
+	color: CanvasText;
 }
 
-.home-intro {
-	margin-bottom: 3.2rem;
+:where(.sticky-bar .inner) {
+	max-width: var(--measure-wide);
+	margin-inline: auto;
+	padding-inline: var(--page-pad);
+	padding-block: 0.6rem;
+	display: flex;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+	align-items: center;
 }
 
-.home-grid {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 2.4rem;
-	margin-top: 2.4rem;
+/* Make forms inside sticky bar compact */
+:where(.sticky-bar input, .sticky-bar select, .sticky-bar button) {
+	padding: 0.35rem 0.5rem;
+	border-radius: 8px;
 }
 
-.home-group {
-	padding: 1.6rem;
-	border: 1px solid var(--flexoki-150);
-	border-radius: 12px;
+/* 11) Details / summary: helpful for "On this page" */
+:where(details) {
+	border: var(--rule);
+	border-radius: var(--radius);
+	padding: 0.6rem 0.75rem;
 }
 
-:root.theme-dark .home-group {
-	border-color: var(--flexoki-850);
+:where(summary) {
+	cursor: pointer;
 }
 
-.home-group h2 {
-	margin-bottom: 0.8rem;
-}
-
-.home-group ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-.home-group li {
-	margin: 0 0 1.2rem;
-}
-
-.home-group p {
-	margin: 0.4rem 0 0;
-	color: var(--text-secondary);
-	font-size: 1rem;
-	line-height: 1;
-}
-
-@media (max-width: 720px) {
-	.home-grid {
-		grid-template-columns: 1fr;
+/* 12) Print: clean, no sticky elements */
+@media print {
+	:where(.sticky-bar) {
+		position: static;
+		border: 0;
 	}
+	:where(a) {
+		text-decoration: underline;
+	}
+	:where(a[href^="http"])::after {
+		content: " (" attr(href) ")";
+		font-size: 0.9em;
+	}
+}
+
+/* 13) Optional: "Plain mode"
+   Add <html class="plain"> to strip nearly everything but keep focus + measure.
+*/
+:where(html.plain) :where(header.site-header, footer.site-footer, .sticky-bar) {
+	display: none;
+}
+:where(html.plain) :where(h2) {
+	border-top: 0;
+	padding-block-start: 0;
+}
+:where(html.plain) :where(code, pre, fieldset, details, table, th, td) {
+	border: 0;
+	border-radius: 0;
+	padding: 0;
 }
