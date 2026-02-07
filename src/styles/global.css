@@ -310,7 +310,7 @@ html:not(.theme-dark) {
 	padding-inline: 0.25rem;
 }
 
-:where(label) {
+:where(form) :where(label) {
 	display: inline-block;
 	margin-block: 0.2rem;
 }

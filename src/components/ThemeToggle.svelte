@@ -26,17 +26,6 @@
     rootEl.classList.toggle('theme-dark', theme === 'dark')
   }
 
-  const icons = [
-    /* light */
-    `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-      <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
-    </svg>`,
-
-    /* dark */
-    `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-      <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-    </svg>`
-  ]
 </script>
 
 <fieldset class="theme-toggle">
@@ -54,7 +43,7 @@
       />
 
       <span aria-hidden="true">
-        {@html icons[i]}
+        <span class="btn-text">{t}</span>
       </span>
     </label>
   {/each}
@@ -74,8 +63,8 @@
   label {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
     cursor: pointer;
+    position: relative;
   }
 
   /* Visually hide the legend but keep it accessible */
@@ -97,15 +86,47 @@
   */
   input {
     margin: 0;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
   }
 
   /*
     Small visual hint for the current theme,
     without introducing colours.
   */
-  input:checked + span {
-    outline: 1px solid currentColor;
-    outline-offset: 3px;
-    border-radius: 6px;
+  span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+    border: 0;
+    background: transparent;
+    opacity: 0.8;
+    line-height: 1;
+    transition: opacity 120ms ease, background-color 120ms ease;
   }
+
+  label:hover span {
+    opacity: 0.9;
+  }
+
+  input:checked + span {
+    opacity: 1;
+    background-color: rgba(127, 127, 127, 0.12);
+  }
+
+  input:focus-visible + span {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .btn-text {
+    text-transform: capitalize;
+    font-size: 0.9em;
+    letter-spacing: 0.01em;
+  }
+
 </style>
