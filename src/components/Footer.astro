@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import logoImage from '../assets/vegetalope.webp';
+import ThemeToggle from './ThemeToggle.svelte';
+---
+
+<footer class="site-footer">
+	<div class="inner home-footer">
+		<div class="hello" aria-label="Hello, my name is vegetalope">
+			<div class="top">
+				<div>Hello</div>
+				<p>my name is</p>
+			</div>
+			<div class="name">
+				<Image
+					src={logoImage}
+					formats={['webp', 'avif']}
+					widths={[100, 200, 400, 800]}
+					alt="vegetalope written with a black Sharpie on white paper"
+					loading="lazy"
+				/>
+			</div>
+		</div>
+
+		<div class="footer-toggle">
+			<ThemeToggle client:only="svelte" />
+		</div>
+	</div>
+</footer>

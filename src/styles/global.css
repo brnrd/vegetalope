@@ -1,51 +1,58 @@
-/* global.css
-   "Raw HTML" look with modern layout, dark mode, accessibility, and minimal opinion.
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:opsz@8..72&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/*
+  Global styles aligned to americabydesign.gov: bold type, big scale, clean surfaces.
+  Minimal rules, lots of air, editorial hierarchy.
 */
 
-/* 1) Let the UA handle light/dark defaults and system colours */
 html {
 	color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-	html {
-		color-scheme: dark;
-	}
 }
 
 html.theme-dark {
 	color-scheme: dark;
 }
 
-html:not(.theme-dark) {
-	color-scheme: light;
-}
-
 :root {
-	color-scheme: light dark;
+	/* Typography */
+	--font-display: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+	--font-body: "Inter", "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-label: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+		"Courier New", monospace;
 
-	/* Layout tokens */
-	--page-pad: clamp(16px, 4vw, 28px);
-	--measure: 72ch;
-	--measure-wide: 92ch;
-	--radius: 10px;
+	/* Palette */
+	--color-ink: #14161a;
+	--color-ink-muted: #3b3f47;
+	--color-bg: #f6f1e8;
+	--color-accent: #1a2747;
+	--color-accent-2: #b33b2e;
+	--hairline: rgba(20, 22, 26, 0.14);
 
-	/* Vertical rhythm */
-	--stack-1: 0.5rem;
-	--stack-2: 1rem;
-	--stack-3: 1.5rem;
-	--stack-4: 2.25rem;
+	/* Layout */
+	--page-pad: clamp(18px, 4vw, 36px);
+	--measure: 104ch;
+	--measure-wide: 132ch;
 
-	/* Borders use currentColor so they work in both modes without a palette */
-	--rule: 1px solid color-mix(in oklab, currentColor 18%, transparent);
-	--rule-strong: 1px solid color-mix(in oklab, currentColor 28%, transparent);
+	/* Rhythm */
+	--stack-1: 0.6rem;
+	--stack-2: 1.2rem;
+	--stack-3: 2.4rem;
+	--stack-4: 3.6rem;
 
 	/* Focus */
-	--focus: 2px solid Highlight;
+	--focus: 3px solid color-mix(in oklab, var(--color-accent) 70%, white);
 	--focus-offset: 3px;
 }
 
-/* 2) Minimal reset, keep specificity low */
+html.theme-dark {
+	--color-ink: #f2eee4;
+	--color-ink-muted: #c9cfdd;
+	--color-bg: #0d1220;
+	--color-accent: #d5dced;
+	--color-accent-2: #e07062;
+	--hairline: rgba(240, 240, 240, 0.18);
+}
+
 *,
 *::before,
 *::after {
@@ -70,14 +77,12 @@ html:not(.theme-dark) {
 :where(body) {
 	margin: 0;
 	min-height: 100svh;
-	font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-		"Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-	line-height: 1.55;
-
-	/* Do not set background or text colour, so UA defaults + color-scheme drive it */
+	font-family: var(--font-body);
+	line-height: 1.7;
+	color: var(--color-ink);
+	background: var(--color-bg);
 }
 
-/* Reduce motion, keep it calm */
 @media (prefers-reduced-motion: reduce) {
 	:where(html) {
 		scroll-behavior: auto;
@@ -91,48 +96,74 @@ html:not(.theme-dark) {
 	}
 }
 
-/* 3) Main layout: simple centred column */
 :where(main),
 :where(.content) {
 	max-width: var(--measure);
-	margin-inline: auto;
-	padding-inline: var(--page-pad);
-	padding-block: var(--page-pad);
+	margin: clamp(42px, 8vw, 96px) auto;
+	padding: 0 var(--page-pad);
 }
 
-/* Optional wider pages for tables/lists (eg Movies) */
 :where(.content--wide),
 :where(main.content--wide) {
 	max-width: var(--measure-wide);
 }
 
-/* Small top strip / header */
 :where(header.site-header) {
 	padding-inline: var(--page-pad);
-	padding-block: 0.75rem;
-	border-bottom: var(--rule);
+	padding-block: 0.6rem 0.4rem;
+	background: transparent;
 }
 
 :where(header.site-header .inner) {
 	max-width: var(--measure-wide);
 	margin-inline: auto;
 	display: flex;
-	gap: 1rem;
+	gap: 1.25rem;
 	flex-wrap: wrap;
-	align-items: baseline;
+	align-items: center;
 	justify-content: space-between;
+}
+
+:where(header.site-header h2) {
+	margin: 0;
+	font-family: var(--font-display);
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	line-height: 1.1;
+}
+
+:where(header.site-header h2 a) {
+	color: inherit;
+	text-decoration: none;
 }
 
 :where(nav.site-nav) {
 	display: flex;
-	gap: 0.75rem;
+	gap: 0.8rem;
 	flex-wrap: wrap;
+	align-items: center;
+	transform: translateY(-2px);
+	margin-block: var(--stack-4) 0;
+}
+
+:where(nav.site-nav a) {
+	color: var(--color-ink);
+	text-decoration: none;
+	font-size: 0.7rem;
+	font-family: var(--font-label);
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	transition: color 160ms ease;
+}
+
+:where(nav.site-nav a:hover) {
+	color: var(--color-accent-2);
 }
 
 :where(footer.site-footer) {
 	padding-inline: var(--page-pad);
-	padding-block: 1.25rem;
-	border-top: var(--rule);
+	padding-block: 2rem 2.8rem;
+	color: var(--color-ink-muted);
 }
 
 :where(footer.site-footer .inner) {
@@ -140,7 +171,6 @@ html:not(.theme-dark) {
 	margin-inline: auto;
 }
 
-/* 4) Typography: keep it raw, just improve spacing and wrapping */
 :where(p, ul, ol, dl, blockquote, pre, table, figure) {
 	margin: 0;
 }
@@ -151,23 +181,25 @@ html:not(.theme-dark) {
 
 :where(h1, h2, h3, h4, h5, h6) {
 	margin: 0;
-	line-height: 1.2;
+	line-height: 1.05;
 	text-wrap: balance;
+	color: var(--color-ink);
+	font-family: var(--font-display);
 }
 
 :where(h1) {
-	font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+	font-size: clamp(3.1rem, 5.6vw, 5.4rem);
 	margin-block: var(--stack-3) var(--stack-2);
+	letter-spacing: -0.02em;
 }
 
 :where(h2) {
-	font-size: 1.35rem;
+	font-size: clamp(1.9rem, 3.2vw, 2.7rem);
 	margin-block: var(--stack-4) var(--stack-2);
-	padding-block-start: var(--stack-2);
 }
 
 :where(h3) {
-	font-size: 1.15rem;
+	font-size: 1.35rem;
 	margin-block: var(--stack-3) var(--stack-1);
 }
 
@@ -176,21 +208,21 @@ html:not(.theme-dark) {
 	margin-block: var(--stack-2) var(--stack-1);
 }
 
-:where(p) {
+:where(p, li) {
 	text-wrap: pretty;
 	hyphens: auto;
+	color: var(--color-ink-muted);
+	font-size: 1.5rem;
 }
 
-/* Lists: slightly nicer rhythm, still very HTML */
 :where(ul, ol) {
-	padding-inline-start: 1.25rem;
+	padding-inline-start: 1.2rem;
 }
 
 :where(li + li) {
-	margin-block-start: 0.25rem;
+	margin-block-start: 0.35rem;
 }
 
-/* Definition list: good for directory-style home page */
 :where(dl) {
 	display: grid;
 	grid-template-columns: 1fr;
@@ -212,52 +244,53 @@ html:not(.theme-dark) {
 	margin: 0;
 }
 
-/* Blockquotes: subtle, not "designed" */
 :where(blockquote) {
-	padding-inline-start: 1rem;
-	border-inline-start: var(--rule-strong);
+	padding: 1rem 1.4rem;
+	border-left: 2px solid var(--hairline);
+	color: var(--color-ink-muted);
 }
 
-/* Small metadata */
 :where(.meta) {
-	font-size: 0.95em;
-	color: GrayText;
+	font-size: 0.7rem;
+	font-family: var(--font-label);
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: color-mix(in oklab, var(--color-ink-muted) 80%, transparent);
 }
 
-/* 5) Links: keep native, just improve underline behaviour */
 :where(a) {
+	color: var(--color-accent);
 	text-decoration-thickness: from-font;
 	text-underline-offset: 0.18em;
+	transition: color 150ms ease;
 }
 
 :where(a:hover) {
-	text-decoration-thickness: 2px;
+	color: var(--color-accent-2);
 }
 
 :where(a:visited) {
-	color: VisitedText;
+	color: color-mix(in oklab, var(--color-accent) 70%, var(--color-accent-2));
 }
 
-/* 6) Code and pre: readable without theming */
 :where(code, kbd, samp, pre) {
-	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-		"Liberation Mono", "Courier New", monospace;
+	font-family: var(--font-label);
 	font-size: 0.95em;
 }
 
 :where(code) {
-	padding-inline: 0.25em;
-	padding-block: 0.1em;
-	border: var(--rule);
-	border-radius: 6px;
+	padding-inline: 0.2em;
+	padding-block: 0.05em;
+	border-radius: 4px;
+	background: rgba(20, 22, 26, 0.06);
 }
 
 :where(pre) {
-	padding: 0.9rem 1rem;
-	border: var(--rule);
-	border-radius: var(--radius);
+	padding: 1rem 1.1rem;
+	border-radius: 12px;
 	overflow: auto;
 	tab-size: 4;
+	background: rgba(20, 22, 26, 0.06);
 }
 
 :where(pre code) {
@@ -266,7 +299,6 @@ html:not(.theme-dark) {
 	border-radius: 0;
 }
 
-/* 7) Tables: minimal grid */
 :where(table) {
 	width: 100%;
 	border-collapse: collapse;
@@ -276,38 +308,36 @@ html:not(.theme-dark) {
 
 :where(th, td) {
 	text-align: left;
-	padding: 0.5rem 0.6rem;
+	padding: 0.6rem 0.7rem;
 	vertical-align: top;
-	border-bottom: var(--rule);
+	border-bottom: 1px solid var(--hairline);
 }
 
 :where(th) {
-	border-bottom: var(--rule-strong);
+	font-weight: 600;
 }
 
-/* Wrap tables on small screens */
 :where(.table-wrap) {
 	overflow-x: auto;
-	border: var(--rule);
-	border-radius: var(--radius);
+	border-radius: 12px;
 }
 :where(.table-wrap table) {
 	margin: 0;
 }
 
-/* 8) Forms: keep native controls, just align and space nicely */
 :where(form) {
 	margin-block: var(--stack-2);
 }
 
 :where(fieldset) {
-	border: var(--rule);
-	border-radius: var(--radius);
-	padding: 0.8rem 1rem;
+	border: 0;
+	border-radius: 12px;
+	padding: 0;
 }
 
 :where(legend) {
-	padding-inline: 0.25rem;
+	padding-inline: 0.3rem;
+	font-weight: 600;
 }
 
 :where(form) :where(label) {
@@ -321,13 +351,11 @@ html:not(.theme-dark) {
 
 :where(input[type="text"], input[type="search"], input[type="number"], select, textarea) {
 	max-width: 100%;
-	padding: 0.45rem 0.55rem;
-	border: var(--rule-strong);
-	border-radius: 8px;
-
-	/* Let UA pick colours in light/dark */
-	background: Canvas;
-	color: CanvasText;
+	padding: 0.55rem 0.7rem;
+	border: 0;
+	border-radius: 10px;
+	background: rgba(20, 22, 26, 0.06);
+	color: var(--color-ink);
 }
 
 :where(textarea) {
@@ -336,23 +364,27 @@ html:not(.theme-dark) {
 }
 
 :where(button) {
-	padding: 0.45rem 0.75rem;
-	border: var(--rule-strong);
-	border-radius: 10px;
-	background: Canvas;
-	color: CanvasText;
+	padding: 0.55rem 1.05rem;
+	border: 0;
+	border-radius: 999px;
+	background: var(--color-ink);
+	color: #f6f1e8;
 	cursor: pointer;
+	font-family: var(--font-label);
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+	font-size: 0.7rem;
+	transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 :where(button:hover) {
-	border-color: color-mix(in oklab, currentColor 45%, transparent);
+	background: var(--color-accent);
 }
 
 :where(button:active) {
 	transform: translateY(0.5px);
 }
 
-/* 9) Focus: highly visible, works in forced colours */
 :where(a, button, input, select, textarea, summary):focus {
 	outline: none;
 }
@@ -362,50 +394,159 @@ html:not(.theme-dark) {
 	outline-offset: var(--focus-offset);
 }
 
-/* Better anchor navigation for headings */
 :where(h2, h3, h4, h5, h6)[id] {
 	scroll-margin-top: 5rem;
 }
 
-/* 10) Utility: a sticky filter bar for the Movies page without looking "designed" */
 :where(.sticky-bar) {
 	position: sticky;
 	top: 0;
 	z-index: 10;
-	border-bottom: var(--rule);
-	background: Canvas;
-	color: CanvasText;
+	background: var(--color-bg);
+	color: var(--color-ink);
 }
 
 :where(.sticky-bar .inner) {
 	max-width: var(--measure-wide);
 	margin-inline: auto;
 	padding-inline: var(--page-pad);
-	padding-block: 0.6rem;
+	padding-block: 0.7rem;
 	display: flex;
 	gap: 0.75rem;
 	flex-wrap: wrap;
 	align-items: center;
 }
 
-/* Make forms inside sticky bar compact */
 :where(.sticky-bar input, .sticky-bar select, .sticky-bar button) {
 	padding: 0.35rem 0.5rem;
 	border-radius: 8px;
 }
 
-/* 11) Details / summary: helpful for "On this page" */
 :where(details) {
-	border: var(--rule);
-	border-radius: var(--radius);
-	padding: 0.6rem 0.75rem;
+	border: 0;
+	border-radius: 12px;
+	padding: 0.7rem 0;
+	background: transparent;
 }
 
 :where(summary) {
 	cursor: pointer;
+	font-weight: 600;
 }
 
-/* 12) Print: clean, no sticky elements */
+.site-index {
+	max-width: 92ch;
+	margin-inline: auto;
+}
+
+.site-index header {
+	margin-bottom: clamp(24px, 4vw, 48px);
+}
+
+.site-index .nav-sections {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(2.2rem, 4vw, 4rem);
+}
+
+.site-index .nav-section {
+	padding: 0;
+}
+
+.site-index .nav-section h2 {
+	margin-top: 0;
+}
+
+.card-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: grid;
+	gap: 1.4rem;
+}
+
+.card-list li {
+	padding: 0.2rem 0;
+}
+
+.card-list a {
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.card-list p {
+	font-size: inherit;
+}
+
+
+.home-footer {
+	margin-top: clamp(2.6rem, 6vw, 5rem);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.6rem;
+}
+
+.hello {
+	font-size: 1em;
+	font-family: sans-serif;
+	width: 13em;
+	border-radius: 1em;
+	border-bottom: solid 1em var(--color-accent-2);
+	text-align: center;
+	box-shadow: 0 0 1em rgba(0,0,0,0.3);
+	margin: 1em auto 2em;
+	transform: rotate(-2deg);
+}
+
+.hello .top {
+	border-radius: 1em 1em 0 0;
+	background: var(--color-accent-2);
+	color: #fffefc;
+	padding: 1em 0 0.3em;
+}
+
+.hello .top div {
+	font-weight: bold;
+	font-size: 1em;
+	line-height: 0.5em;
+	text-transform: uppercase;
+}
+
+.hello .top p {
+	margin: 0;
+	color: #fffefc;
+}
+
+.hello .name {
+	background-color: #fffefc;
+	color: var(--color-ink);
+	width: 100%;
+	height: 100%;
+	display: flex;
+	padding: 0 1em;
+}
+
+.hello .name picture {
+	width: 100%;
+	height: 100%;
+	display: flex;
+}
+
+.hello .name picture img {
+	object-fit: cover;
+	height: auto;
+	width: 80%;
+	margin: 0 auto;
+}
+
+.footer-toggle {
+	display: flex;
+	align-items: center;
+	margin-left: 0.2rem;
+}
+
 @media print {
 	:where(.sticky-bar) {
 		position: static;
@@ -420,9 +561,6 @@ html:not(.theme-dark) {
 	}
 }
 
-/* 13) Optional: "Plain mode"
-   Add <html class="plain"> to strip nearly everything but keep focus + measure.
-*/
 :where(html.plain) :where(header.site-header, footer.site-footer, .sticky-bar) {
 	display: none;
 }

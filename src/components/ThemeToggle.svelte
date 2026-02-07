@@ -57,7 +57,9 @@
     padding: 0;
     margin: 0;
     display: inline-flex;
-    gap: 0.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
   }
 
   label {
@@ -100,13 +102,14 @@
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
-    padding: 0.1rem 0.3rem;
-    border-radius: 4px;
+    padding: 0.1rem 0.25rem;
+    border-radius: 0;
     border: 0;
     background: transparent;
     opacity: 0.8;
     line-height: 1;
     transition: opacity 120ms ease, background-color 120ms ease;
+    white-space: nowrap;
   }
 
   label:hover span {
@@ -115,7 +118,7 @@
 
   input:checked + span {
     opacity: 1;
-    background-color: rgba(127, 127, 127, 0.12);
+    text-decoration: underline;
   }
 
   input:focus-visible + span {
@@ -125,8 +128,9 @@
 
   .btn-text {
     text-transform: capitalize;
-    font-size: 0.9em;
-    letter-spacing: 0.01em;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
   }
 
 </style>

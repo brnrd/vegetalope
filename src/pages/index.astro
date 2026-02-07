@@ -1,8 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
-import { Image } from 'astro:assets';
-import logoImage from '../assets/vegetalope.webp'
+import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 ---
 
@@ -13,24 +12,17 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 	</head>
 	<body>
 		<Header title={SITE_TITLE} />
-		<main class="content stack">
+		<main class="content stack site-index">
 			<header class="stack">
-				<Image
-					src={logoImage}
-					formats={['webp', 'avif']}
-					widths={[100, 200, 400, 800]}
-					alt="vegetalope written with a black Sharpie on white paper"
-					loading="eager"
-				/>
 				<p>
 					I build small tools, write about software engineering, and keep a curated media watchlist.
 				</p>
 			</header>
 		
-			<section aria-label="Site navigation" class="stack">
-				<section class="stack">
+			<section aria-label="Site navigation" class="stack nav-sections">
+				<section class="stack nav-section">
 					<h2>Write</h2>
-					<ul>
+					<ul class="card-list">
 						<li>
 							<a href="/write/punk">PUNK</a>
 							<p>Pragmatic, Unconventional, Nimble, Keen.</p>
@@ -46,9 +38,9 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 					</ul>
 				</section>
 		
-				<section class="stack">
+				<section class="stack nav-section">
 					<h2>Watch</h2>
-					<ul>
+					<ul class="card-list">
 						<li>
 							<a href="/watch/movies">Movies</a>
 							<p>Films I consider genuinely great and worth your time.</p>
@@ -64,9 +56,9 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 					</ul>
 				</section>
 
-				<section class="stack">
+				<section class="stack nav-section">
 					<h2>Build</h2>
-					<ul>
+					<ul class="card-list">
 						<li>
 							<a href="https://github.com/brnrd">GitHub</a>
 							<p>It's all happening there</p>
@@ -82,9 +74,9 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 					</ul>
 				</section>
 
-				<section class="stack">
+				<section class="stack nav-section">
 					<h2>Make</h2>
-					<ul>
+					<ul class="card-list">
 						<li>
 							<a href="https://makerworld.com/en/@vegetalope">MakerWorld</a>
 							<p>Bambu-focused projects and print profiles.</p>
@@ -96,6 +88,8 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 					</ul>
 				</section>
 			</section>
+
 		</main>
+		<Footer />
 	</body>
 </html>

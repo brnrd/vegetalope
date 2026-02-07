@@ -1,5 +1,4 @@
 ---
-import ThemeToggle from './ThemeToggle.svelte'
 import { SITE_TITLE } from '../consts'
 ---
 
@@ -12,25 +11,10 @@ import { SITE_TITLE } from '../consts'
 			<a href="https://x.com/vegetalope">X</a>
 			<a href="https://www.linkedin.com/in/bernarddebecker/">LinkedIn</a>
 			<a href="https://www.github.com/brnrd">GitHub</a>
-
-			<span class="theme-toggle">
-				<ThemeToggle client:only="svelte" />
-			</span>
 		</nav>
 	</div>
 </header>
 
 <style>
-	/* Keep this file almost unstyled.
-	   Only solve small structural problems specific to the theme toggle. */
-
-	.theme-toggle {
-		display: inline-flex;
-		align-items: center;
-	}
-
-	/* If the toggle has a fixed width requirement */
-	.theme-toggle :global(*) {
-		max-width: 80px;
-	}
+	/* Keep this file almost unstyled. */
 </style>
