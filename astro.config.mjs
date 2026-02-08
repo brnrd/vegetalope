@@ -6,6 +6,9 @@ import mdx from '@astrojs/mdx';
 export default defineConfig({
 	output: 'static',
 	site: 'https://vegetalope.com',
+	build: {
+		inlineStylesheets: 'always'
+	},
 	integrations: [svelte(), mdx()],
 	redirects: {
 		'/blog/brian-viner-100-classic-films': {
