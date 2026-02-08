@@ -6,7 +6,12 @@ import { SITE_TITLE } from '../consts'
 	<div class="inner">
 		<h2><a href="/">{SITE_TITLE}</a></h2>
 
-		<nav class="site-nav" aria-label="Site">
+		<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="menu-lines" aria-hidden="true"></span>
+		</button>
+
+		<nav id="site-nav" class="site-nav" aria-label="Site">
 			<a href="https://moments.vegetalope.com">Moment Tracker</a>
 			<a href="https://x.com/vegetalope">X</a>
 			<a href="https://www.linkedin.com/in/bernarddebecker/">LinkedIn</a>
@@ -18,3 +23,34 @@ import { SITE_TITLE } from '../consts'
 <style>
 	/* Keep this file almost unstyled. */
 </style>
+
+<script is:inline>
+	const header = document.querySelector('.site-header');
+	const button = document.querySelector('.menu-toggle');
+	const nav = document.querySelector('#site-nav');
+
+	if (header && button && nav) {
+		const closeMenu = () => {
+			header.classList.remove('menu-open');
+			button.setAttribute('aria-expanded', 'false');
+		};
+
+		button.addEventListener('click', () => {
+			const isOpen = header.classList.toggle('menu-open');
+			button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+		});
+
+		nav.addEventListener('click', (event) => {
+			const target = event.target;
+			if (target && target.matches('a')) {
+				closeMenu();
+			}
+		});
+
+		window.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') {
+				closeMenu();
+			}
+		});
+	}
+</script>

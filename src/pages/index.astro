@@ -14,14 +14,15 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 		<Header title={SITE_TITLE} />
 		<main class="content stack site-index">
 			<header class="stack">
+				<h1 class="sr-only">{SITE_TITLE}</h1>
 				<p>
 					I build small tools, write about software engineering, and keep a curated media watchlist.
 				</p>
 			</header>
 		
-			<section aria-label="Site navigation" class="stack nav-sections">
-				<section class="stack nav-section">
-					<h2>Write</h2>
+			<nav aria-label="Site navigation" class="stack nav-sections">
+				<section class="stack nav-section" aria-labelledby="nav-write">
+					<h2 id="nav-write">Write</h2>
 					<ul class="card-list">
 						<li>
 							<a href="/write/punk">PUNK</a>
@@ -38,17 +39,9 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 					</ul>
 				</section>
 		
-				<section class="stack nav-section">
-					<h2>Watch</h2>
+				<section class="stack nav-section" aria-labelledby="nav-watch">
+					<h2 id="nav-watch">Watch</h2>
 					<ul class="card-list">
-						<li>
-							<a href="/watch/movies">Movies</a>
-							<p>Films I consider genuinely great and worth your time.</p>
-						</li>
-						<li>
-							<a href="/watch/tv-shows">TV series</a>
-							<p>Non-exhaustive list of series we loved.</p>
-						</li>
 						<li>
 							<a href="/watch/brian-viner-100-classic-films">Brian Viner: 100 classic films</a>
 							<p>External canon, not my list, but unordinary classics.</p>
@@ -56,8 +49,8 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 					</ul>
 				</section>
 
-				<section class="stack nav-section">
-					<h2>Build</h2>
+				<section class="stack nav-section" aria-labelledby="nav-build">
+					<h2 id="nav-build">Build</h2>
 					<ul class="card-list">
 						<li>
 							<a href="https://github.com/brnrd">GitHub</a>
@@ -74,8 +67,8 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 					</ul>
 				</section>
 
-				<section class="stack nav-section">
-					<h2>Make</h2>
+				<section class="stack nav-section" aria-labelledby="nav-make">
+					<h2 id="nav-make">Make</h2>
 					<ul class="card-list">
 						<li>
 							<a href="https://makerworld.com/en/@vegetalope">MakerWorld</a>
@@ -87,7 +80,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 						</li>
 					</ul>
 				</section>
-			</section>
+			</nav>
 
 		</main>
 		<Footer />

@@ -15,7 +15,7 @@ html.theme-dark {
 
 :root {
 	/* Typography */
-	--font-display: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+	--font-display: "Instrument Serif", "Palatino Linotype", "Book Antiqua", serif;
 	--font-body: "Inter", "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
 	--font-label: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
 		"Courier New", monospace;
@@ -25,7 +25,7 @@ html.theme-dark {
 	--color-ink-muted: #3b3f47;
 	--color-bg: #f6f1e8;
 	--color-accent: #1a2747;
-	--color-accent-2: #b33b2e;
+	--color-accent-2: #c21f2b;
 	--hairline: rgba(20, 22, 26, 0.14);
 
 	/* Layout */
@@ -68,6 +68,18 @@ html.theme-dark {
 	display: block;
 }
 
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
 :where(html) {
 	text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
@@ -99,7 +111,7 @@ html.theme-dark {
 :where(main),
 :where(.content) {
 	max-width: var(--measure);
-	margin: clamp(42px, 8vw, 96px) auto;
+	margin: clamp(42px, 4vw, 96px) auto;
 	padding: 0 var(--page-pad);
 }
 
@@ -110,7 +122,7 @@ html.theme-dark {
 
 :where(header.site-header) {
 	padding-inline: var(--page-pad);
-	padding-block: 0.6rem 0.4rem;
+	padding-block: var(--page-pad);
 	background: transparent;
 }
 
@@ -124,17 +136,47 @@ html.theme-dark {
 	justify-content: space-between;
 }
 
-:where(header.site-header h2) {
+header.site-header h2 {
 	margin: 0;
 	font-family: var(--font-display);
 	font-weight: 500;
 	letter-spacing: 0.02em;
 	line-height: 1.1;
+	padding: 0;
+	border: 0;
 }
 
-:where(header.site-header h2 a) {
+@media (max-width: 720px) {
+	:where(header.site-header) {
+		padding-block: var(--page-pad);
+	}
+
+	:where(header.site-header h2) {
+		margin-block: 0;
+	}
+
+	main header h1 {
+		margin-block: var(--stack-1);
+	}
+
+	:where(main),
+	:where(.content) {
+		margin: clamp(18px, 4vw, 32px) auto;
+	}
+}
+
+header.site-header a {
 	color: inherit;
 	text-decoration: none;
+}
+
+header.site-header a:hover,
+header.site-header a:visited {
+	text-decoration: none;
+}
+
+header.site-header a:hover {
+	color: var(--color-accent-2);
 }
 
 :where(nav.site-nav) {
@@ -142,8 +184,7 @@ html.theme-dark {
 	gap: 0.8rem;
 	flex-wrap: wrap;
 	align-items: center;
-	transform: translateY(-2px);
-	margin-block: var(--stack-4) 0;
+	margin-block: var(--stack-1) 0;
 }
 
 :where(nav.site-nav a) {
@@ -158,6 +199,95 @@ html.theme-dark {
 
 :where(nav.site-nav a:hover) {
 	color: var(--color-accent-2);
+}
+
+:where(nav.site-nav a:visited) {
+	color: var(--color-ink);
+}
+
+.menu-toggle {
+	border: 0;
+	background: transparent;
+	padding: 0.4rem;
+	margin-left: auto;
+	display: none;
+	cursor: pointer;
+}
+
+.menu-lines {
+	display: inline-block;
+	position: relative;
+	width: 28px;
+	height: 18px;
+}
+
+.menu-lines::before,
+.menu-lines::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: var(--color-ink);
+	transition: transform 220ms ease, top 220ms ease, opacity 220ms ease;
+}
+
+.menu-lines::before {
+	top: 4px;
+}
+
+.menu-lines::after {
+	top: 12px;
+}
+
+@media (max-width: 720px) {
+	.menu-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--color-ink);
+		position: relative;
+		z-index: 20;
+	}
+
+	:where(nav.site-nav) {
+		position: fixed;
+		inset: 0;
+		background: var(--color-bg);
+		z-index: 10;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+		gap: 1.4rem;
+		padding: clamp(5rem, 10vh, 7rem) var(--page-pad) 2rem;
+		margin: 0;
+		transform: translateY(8px);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 220ms ease, transform 220ms ease;
+	}
+
+	:where(nav.site-nav a) {
+		font-size: 1.1rem;
+		letter-spacing: 0.14em;
+	}
+
+	.site-header.menu-open :where(nav.site-nav) {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+
+	.site-header.menu-open .menu-lines::before {
+		top: 8px;
+		transform: rotate(45deg);
+	}
+
+	.site-header.menu-open .menu-lines::after {
+		top: 8px;
+		transform: rotate(-45deg);
+	}
 }
 
 :where(footer.site-footer) {
@@ -259,18 +389,25 @@ html.theme-dark {
 }
 
 :where(a) {
-	color: var(--color-accent);
-	text-decoration-thickness: from-font;
-	text-underline-offset: 0.18em;
-	transition: color 150ms ease;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
+	text-decoration-color: currentColor;
+	text-decoration-skip-ink: auto;
 }
 
 :where(a:hover) {
 	color: var(--color-accent-2);
+	text-decoration-color: currentColor;
 }
 
 :where(a:visited) {
-	color: color-mix(in oklab, var(--color-accent) 70%, var(--color-accent-2));
+	color: var(--color-accent);
+}
+
+:where(a:visited:hover) {
+	color: var(--color-accent-2);
+	text-decoration-color: currentColor;
 }
 
 :where(code, kbd, samp, pre) {
@@ -399,9 +536,6 @@ html.theme-dark {
 }
 
 :where(.sticky-bar) {
-	position: sticky;
-	top: 0;
-	z-index: 10;
 	background: var(--color-bg);
 	color: var(--color-ink);
 }
