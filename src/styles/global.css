@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:opsz@8..72&family=Inter:wght@300;400;500;600;700&display=swap');
-
 /*
   Global styles aligned to americabydesign.gov: bold type, big scale, clean surfaces.
   Minimal rules, lots of air, editorial hierarchy.
@@ -15,8 +13,9 @@ html.theme-dark {
 
 :root {
 	/* Typography */
-	--font-display: "Instrument Serif", "Palatino Linotype", "Book Antiqua", serif;
-	--font-body: "Inter", "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Times New Roman",
+		"Georgia", "Cambria", serif;
+	--font-body: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 	--font-label: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
 		"Courier New", monospace;
 
