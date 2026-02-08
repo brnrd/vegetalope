@@ -3,7 +3,6 @@ title: The Modern Engineering Manager
 description: Use AI to remove friction, not responsibility.
 layout: ../../layouts/Article.astro
 pubDate: '2025-12-14'
-
 ---
 
 

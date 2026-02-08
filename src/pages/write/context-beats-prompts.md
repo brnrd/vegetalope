@@ -1,6 +1,6 @@
 ---
 title: 'Context beats prompts'
-description: 'Why data and context matter more than clever wording when using AI as an engineering manager.'
+description: 'Why context matters more than a clever prompt.'
 layout: ../../layouts/Article.astro
 pubDate: '2026-02-08'
 ---

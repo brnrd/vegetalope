@@ -1,6 +1,6 @@
 ---
 title: Speed over perfection
-description: Shipping matters more than elegance, ego, or ownership.
+description: Delivery-first engineering, fast feedback, and shared ownership.
 layout: ../../layouts/Article.astro
 pubDate: '2025-12-13'
 ---

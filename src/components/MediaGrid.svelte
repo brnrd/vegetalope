@@ -1,5 +1,6 @@
 <script>
 	import { fade, fly } from 'svelte/transition'
+	import { cubicOut } from 'svelte/easing'
 	import { onMount } from 'svelte'
 
 	export let movies = []
@@ -312,7 +313,7 @@
 {#if selectedMovie}
 	<div
 		class="modal-backdrop"
-		transition:fade
+		transition:fade={{ duration: 120, easing: cubicOut }}
 		on:click={closeMovie}
 		role="button"
 		tabindex="0"
@@ -321,11 +322,13 @@
 	>
 		<div
 			class="modal-content"
-			transition:fly={{ y: 50, duration: 250 }}
+			transition:fly={{ y: 24, duration: 140, easing: cubicOut }}
 			on:click|stopPropagation
+			on:keydown|stopPropagation
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby="modal-title"
+			tabindex="-1"
 		>
 			<button class="modal-close" type="button" on:click={closeMovie}>
 				Close
@@ -370,6 +373,55 @@
 {/if}
 
 <style>
+	.sticky-bar .inner {
+		display: grid;
+		grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(140px, 1fr));
+		gap: 0.75rem 1rem;
+		align-items: end;
+	}
+
+	.sticky-bar label {
+		display: block;
+		font-family: var(--font-label);
+		font-size: 0.75rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-ink-muted);
+		margin-bottom: 0.35rem;
+	}
+
+	.sticky-bar input,
+	.sticky-bar select,
+	.sticky-bar button {
+		border-radius: 0;
+		height: 2.4rem;
+		line-height: 2.4rem;
+	}
+
+	.sticky-bar input,
+	.sticky-bar select {
+		width: 100%;
+		border: 1px solid var(--hairline);
+		background: var(--color-bg);
+		color: var(--color-ink);
+		padding: 0 0.5rem;
+	}
+
+	.sticky-bar button {
+		border: 1px solid var(--hairline);
+		background: var(--color-bg);
+		color: var(--color-ink);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		padding: 0 0.75rem;
+	}
+
+	.sticky-bar button:hover {
+		background: color-mix(in oklab, var(--color-bg) 92%, var(--color-ink));
+	}
+
 	.row {
 		display: flex;
 		gap: 0.5rem;
@@ -381,30 +433,64 @@
 		min-width: 0;
 	}
 
+	@media (max-width: 720px) {
+		.sticky-bar .inner {
+			grid-template-columns: 1fr;
+		}
+	}
+
 	.media-list {
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		border-top: var(--rule);
+		display: grid;
+		gap: 0;
 	}
 
 	.media-item {
-		border-bottom: var(--rule);
+		background: var(--color-bg);
+		border-top: 1px solid var(--hairline);
+		margin: 0;
 	}
 
 	.media-button {
 		display: block;
 		width: 100%;
 		text-align: left;
-		padding: 0.75rem 0;
+		padding: 1.1rem 1.4rem;
 		background: transparent;
 		border: 0;
 		cursor: pointer;
+		position: relative;
+		color: var(--color-ink);
+		margin: 0;
+	}
+
+	.media-button:hover {
+		background: color-mix(in oklab, var(--color-bg) 92%, var(--color-ink));
+	}
+
+	.media-button:focus-visible {
+		outline: var(--focus);
+		outline-offset: var(--focus-offset);
+	}
+
+	@media (min-width: 720px) {
+		.media-button {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto;
+			gap: 0.6rem 1.5rem;
+			align-items: start;
+		}
 	}
 
 	.media-title {
 		display: block;
 		font-weight: 700;
+		font-family: var(--font-display);
+		font-size: 1.05rem;
+		letter-spacing: 0.01em;
+		color: var(--color-ink);
 	}
 
 	.media-meta {
@@ -412,12 +498,34 @@
 		gap: 0.75rem;
 		flex-wrap: wrap;
 		margin-top: 0.25rem;
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-ink-muted);
 	}
 
 	.summary {
 		display: block;
 		margin-top: 0.5rem;
 		opacity: 0.95;
+		max-width: 70ch;
+		color: var(--color-ink-muted);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	@media (min-width: 720px) {
+		.media-meta {
+			justify-content: flex-end;
+			text-align: right;
+		}
+
+		.summary {
+			grid-column: 1 / -1;
+		}
 	}
 
 	.original-title {
@@ -428,8 +536,7 @@
 	.empty {
 		margin-top: 1rem;
 		padding: 1rem;
-		border: var(--rule);
-		border-radius: var(--radius);
+		border: 1px solid var(--hairline);
 		opacity: 0.85;
 	}
 
@@ -438,9 +545,9 @@
 		inset: 0;
 		background: color-mix(in oklab, CanvasText 60%, transparent);
 		display: flex;
-		align-items: start;
+		align-items: center;
 		justify-content: center;
-		padding: 1rem;
+		padding: 2rem;
 		overflow: auto;
 		z-index: 1000;
 	}
@@ -448,10 +555,13 @@
 	.modal-content {
 		background: Canvas;
 		color: CanvasText;
-		border: var(--rule-strong);
+		border: 2px solid color-mix(in oklab, var(--color-ink) 30%, transparent);
 		max-width: 72ch;
 		width: 100%;
-		padding: 1rem;
+		padding: 1.25rem 1.5rem;
+		max-height: min(80vh, 900px);
+		overflow: auto;
+		transform-origin: center;
 	}
 
 	.modal-close {
@@ -462,7 +572,25 @@
 		padding-top: 0.5rem;
 	}
 
+	.modal-body h2 {
+		margin-top: 0.25rem;
+	}
+
 	.modal-summary {
 		white-space: pre-wrap;
+	}
+
+	@media (max-width: 720px) {
+		.modal-backdrop {
+			padding: 0;
+		}
+
+		.modal-content {
+			width: 100%;
+			height: 100%;
+			max-width: none;
+			max-height: none;
+			border: 0;
+		}
 	}
 </style>

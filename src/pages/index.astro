@@ -3,6 +3,15 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
+
+const writeArticleModules = import.meta.glob('./write/*.md');
+const writeArticles = (await Promise.all(
+	Object.values(writeArticleModules).map((load) => load())
+)).sort((a, b) => {
+	const aDate = new Date(a.frontmatter.pubDate ?? 0);
+	const bDate = new Date(b.frontmatter.pubDate ?? 0);
+	return aDate.getTime() - bDate.getTime();
+});
 ---
 
 <!DOCTYPE html>
@@ -16,7 +25,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 			<header class="stack">
 				<h1 class="sr-only">{SITE_TITLE}</h1>
 				<p>
-					I build small tools, write about software engineering, and keep a curated media watchlist.
+					I write about software engineering, and build small tools for fun.
 				</p>
 			</header>
 		
@@ -24,32 +33,12 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 				<section class="stack nav-section" aria-labelledby="nav-write">
 					<h2 id="nav-write">Write</h2>
 					<ul class="card-list">
-						<li>
-							<a href="/write/punk">PUNK</a>
-							<p>Pragmatic, Unconventional, Nimble, Keen.</p>
-						</li>
-						<li>
-							<a href="/write/speed-over-perfection">Speed over perfection</a>
-							<p>Delivery-first engineering, fast feedback, and shared ownership.</p>
-						</li>
-						<li>
-							<a href="/write/modern-em">The Modern Engineering Manager</a>
-							<p>Use AI to remove friction, not responsibility.</p>
-						</li>
-						<li>
-							<a href="/write/context-beats-prompts">Context beats prompts</a>
-							<p>Why context matters more than a clever prompt.</p>
-						</li>
-					</ul>
-				</section>
-		
-				<section class="stack nav-section" aria-labelledby="nav-watch">
-					<h2 id="nav-watch">Watch</h2>
-					<ul class="card-list">
-						<li>
-							<a href="/watch/brian-viner-100-classic-films">Brian Viner: 100 classic films</a>
-							<p>External canon, not my list, but unordinary classics.</p>
-						</li>
+						{writeArticles.map((article) => (
+							<li>
+								<a href={article.url}>{article.frontmatter.title}</a>
+								<p>{article.frontmatter.description}</p>
+							</li>
+						))}
 					</ul>
 				</section>
 
@@ -67,20 +56,6 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 						<li>
 							<a href="https://addons.mozilla.org/en-US/firefox/addon/prompttube/">PromptTube</a>
 							<p>A tiny extension to copy to clipboard a prompt and the transcript of a YouTube video.</p>
-						</li>
-					</ul>
-				</section>
-
-				<section class="stack nav-section" aria-labelledby="nav-make">
-					<h2 id="nav-make">Make</h2>
-					<ul class="card-list">
-						<li>
-							<a href="https://makerworld.com/en/@vegetalope">MakerWorld</a>
-							<p>Bambu-focused projects and print profiles.</p>
-						</li>
-						<li>
-							<a href="https://www.printables.com/@vegetalope_2497925">Printables</a>
-							<p>Mirrors of selected finished models.</p>
 						</li>
 					</ul>
 				</section>
