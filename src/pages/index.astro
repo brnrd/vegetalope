@@ -1,8 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
-import { Image } from 'astro:assets';
-import logoImage from '../assets/vegetalope.webp'
+import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 ---
 
@@ -10,87 +9,21 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 <html lang="en">
 	<head>
 		<BaseHead title="vegetalope" description={SITE_DESCRIPTION} image={SITE_IMAGE}/>
-		<style>
-			.hello {
-				font-size: 100%;
-				width: 10em;
-				border-radius: 1em;
-				border-bottom: solid 1em var(--flexoki-red-600);
-				text-align: center;
-				box-shadow: 0 0 1em rgba(0,0,0,0.3);
-				margin: 1em auto 2em;
-				transform: rotate(-2deg);
-			}
-
-			.hello .top {
-				border-radius: 1em 1em 0 0;
-				background: var(--flexoki-red-600);
-				color: #fffefc;
-				padding: 1em 0 0.3em;
-			}
-			
-			.hello .top div {
-				font-weight: bold;
-				font-size: 1em;
-				line-height: 0.5em;
-				text-transform: uppercase;
-			}
-
-			.hello .top p {
-				margin: 0;
-			}
-
-			.hello .name {
-				background-color: #fffefc;
-				color: var(--flexoki-black);
-				width: 100%;
-				height: 100%;
-				display: flex;
-				padding: 0 1em;
-			}
-
-			.hello .name picture {
-				width: 100%;
-				height: 100%;
-				display: flex;
-			}
-			
-			.hello .name picture img {
-				object-fit: cover;
-				height: auto;
-				width: 80%;
-				margin: 0 auto;
-			}
-		</style>
 	</head>
 	<body>
 		<Header title={SITE_TITLE} />
-		<main>
-			<header class="home-intro">
-				<div class="hello">
-					<div class="top">
-						<div>Hello</div>
-						<p>my name is</p>
-					</div>
-					<div class="name">
-						<Image
-							src={logoImage}
-							formats={['webp', 'avif']}
-							widths={[100, 200, 400, 800]}
-							alt="vegetalope written with a black Sharpie on white paper"
-							loading="eager"
-						/>
-					</div>
-				</div>
+		<main class="content stack site-index">
+			<header class="stack">
+				<h1 class="sr-only">{SITE_TITLE}</h1>
 				<p>
 					I build small tools, write about software engineering, and keep a curated media watchlist.
 				</p>
 			</header>
 		
-			<section class="home-grid" aria-label="Site navigation">
-				<div class="home-group">
-					<h2>Write</h2>
-					<ul>
+			<nav aria-label="Site navigation" class="stack nav-sections">
+				<section class="stack nav-section" aria-labelledby="nav-write">
+					<h2 id="nav-write">Write</h2>
+					<ul class="card-list">
 						<li>
 							<a href="/write/punk">PUNK</a>
 							<p>Pragmatic, Unconventional, Nimble, Keen.</p>
@@ -104,29 +37,21 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 							<p>Use AI to remove friction, not responsibility.</p>
 						</li>
 					</ul>
-				</div>
+				</section>
 		
-				<div class="home-group">
-					<h2>Watch</h2>
-					<ul>
-						<li>
-							<a href="/watch/movies">Movies</a>
-							<p>Films I consider genuinely great and worth your time.</p>
-						</li>
-						<li>
-							<a href="/watch/tv-shows">TV series</a>
-							<p>Non-exhaustive list of series we loved.</p>
-						</li>
+				<section class="stack nav-section" aria-labelledby="nav-watch">
+					<h2 id="nav-watch">Watch</h2>
+					<ul class="card-list">
 						<li>
 							<a href="/watch/brian-viner-100-classic-films">Brian Viner: 100 classic films</a>
 							<p>External canon, not my list, but unordinary classics.</p>
 						</li>
 					</ul>
-				</div>
+				</section>
 
-				<div class="home-group">
-					<h2>Build</h2>
-					<ul>
+				<section class="stack nav-section" aria-labelledby="nav-build">
+					<h2 id="nav-build">Build</h2>
+					<ul class="card-list">
 						<li>
 							<a href="https://github.com/brnrd">GitHub</a>
 							<p>It's all happening there</p>
@@ -140,11 +65,11 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 							<p>A tiny extension to copy to clipboard a prompt and the transcript of a YouTube video.</p>
 						</li>
 					</ul>
-				</div>
+				</section>
 
-				<div class="home-group">
-					<h2>Make</h2>
-					<ul>
+				<section class="stack nav-section" aria-labelledby="nav-make">
+					<h2 id="nav-make">Make</h2>
+					<ul class="card-list">
 						<li>
 							<a href="https://makerworld.com/en/@vegetalope">MakerWorld</a>
 							<p>Bambu-focused projects and print profiles.</p>
@@ -154,8 +79,10 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
 							<p>Mirrors of selected finished models.</p>
 						</li>
 					</ul>
-				</div>
-			</section>
+				</section>
+			</nav>
+
 		</main>
+		<Footer />
 	</body>
 </html>

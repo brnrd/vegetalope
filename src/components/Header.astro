@@ -1,77 +1,56 @@
 ---
-import HeaderLink from './HeaderLink.astro'
-import ThemeToggle from './ThemeToggle.svelte'
 import { SITE_TITLE } from '../consts'
 ---
 
-<header>
-	<nav>
+<header class="site-header">
+	<div class="inner">
 		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="social-links">
+
+		<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="menu-lines" aria-hidden="true"></span>
+		</button>
+
+		<nav id="site-nav" class="site-nav" aria-label="Site">
 			<a href="https://moments.vegetalope.com">Moment Tracker</a>
 			<a href="https://x.com/vegetalope">X</a>
 			<a href="https://www.linkedin.com/in/bernarddebecker/">LinkedIn</a>
 			<a href="https://www.github.com/brnrd">GitHub</a>
-			<div class="theme-toggle-container">
-				<Fragment>
-					<ThemeToggle client:only="svelte" />
-				</Fragment>
-			</div>
-		</div>
-	</nav>
+		</nav>
+	</div>
 </header>
+
 <style>
-	header {
-		padding: 0 1em;
-		background: var(--background-body);
-		box-shadow: 0 2px 8px rgba(var(--ink-black), 5%);
-	}
-
-	@media (max-width: 720px) {
-		header {
-			margin-top: 1em;
-		}
-	}
-
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	nav a {
-		padding: 1em 0.2em;
-		color: var(--text-main);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
-	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--flexoki-red-600);
-	}
-
-	nav h2 {
-		padding: 0;
-	}
-	.social-links,
-	.social-links a {
-		display: flex;
-	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
-		}
-	}
-
-	.theme-toggle-container {
-		width: 75px;
-	}
+	/* Keep this file almost unstyled. */
 </style>
+
+<script is:inline>
+	const header = document.querySelector('.site-header');
+	const button = document.querySelector('.menu-toggle');
+	const nav = document.querySelector('#site-nav');
+
+	if (header && button && nav) {
+		const closeMenu = () => {
+			header.classList.remove('menu-open');
+			button.setAttribute('aria-expanded', 'false');
+		};
+
+		button.addEventListener('click', () => {
+			const isOpen = header.classList.toggle('menu-open');
+			button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+		});
+
+		nav.addEventListener('click', (event) => {
+			const target = event.target;
+			if (target && target.matches('a')) {
+				closeMenu();
+			}
+		});
+
+		window.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') {
+				closeMenu();
+			}
+		});
+	}
+</script>

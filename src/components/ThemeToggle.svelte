@@ -1,76 +1,136 @@
-<!-- This theme toggle is taken from Charca's astro-blog-template.
-src/components/ThemeToggleButton.svelte
-License MIT: https://github.com/Charca/astro-blog-template/blob/main/LICENSE -->
-
 <script>
-    import { onMount } from 'svelte';
-    
-    const rootEl = document.documentElement;
-    const themes = ['light', 'dark'];
-    let theme = ''
-  
-    // Initialize theme from localStorage or system preference
-    onMount(() => {
-      const storedTheme = localStorage.getItem('theme');
-      if (storedTheme) {
-        theme = storedTheme;
-      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        theme = 'dark';
-      }
-    });
-  
-    function handleChange(event) {
-      theme = event.target.value;
-      localStorage.setItem('theme', theme);
+  import { onMount } from 'svelte'
+
+  const rootEl = document.documentElement
+  const themes = ['light', 'dark']
+  let theme = ''
+
+  onMount(() => {
+    const storedTheme = localStorage.getItem('theme')
+
+    if (storedTheme === 'light' || storedTheme === 'dark') {
+      theme = storedTheme
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      theme = 'dark'
+    } else {
+      theme = 'light'
     }
-  
-    $: if (theme === 'light') {
-      rootEl.classList.remove('theme-dark');
-    } else if (theme === 'dark') {
-      rootEl.classList.add('theme-dark');
-    }
-  
-    const icons = [
-      `<svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-          clip-rule="evenodd"
-        />
-      </svg>`,
-      `<svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-      </svg>`,
-    ];
-  </script>
-  
-  
-  <div class="theme-toggle">
-    {#each themes as t, i}
-      <label class={theme === t ? 'checked' : ''}>
-        {@html icons[i]}
-        <input
-          type="radio"
-          name="theme-toggle"
-          checked={theme === t}
-          value={t}
-          title={`Use ${t} theme`}
-          aria-label={`Use ${t} theme`}
-          on:change={handleChange}
-        />
-      </label>
-    {/each}
-  </div>
-  
+  })
+
+  function handleChange(event) {
+    theme = event.target.value
+    localStorage.setItem('theme', theme)
+  }
+
+  $: {
+    rootEl.classList.toggle('theme-dark', theme === 'dark')
+  }
+
+</script>
+
+<fieldset class="theme-toggle">
+  <legend class="sr-only">Colour theme</legend>
+
+  {#each themes as t, i}
+    <label>
+      <input
+        type="radio"
+        name="theme"
+        value={t}
+        checked={theme === t}
+        on:change={handleChange}
+        aria-label={`Use ${t} theme`}
+      />
+
+      <span aria-hidden="true">
+        <span class="btn-text">{t}</span>
+      </span>
+    </label>
+  {/each}
+</fieldset>
+
+<style>
+  /* Keep this component visually neutral */
+
+  fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
+  label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+  }
+
+  /* Visually hide the legend but keep it accessible */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /*
+    Do NOT remove the radios from the accessibility tree.
+    Just make them unobtrusive visually.
+  */
+  input {
+    margin: 0;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /*
+    Small visual hint for the current theme,
+    without introducing colours.
+  */
+  span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.1rem 0.25rem;
+    border-radius: 0;
+    border: 0;
+    background: transparent;
+    opacity: 0.8;
+    line-height: 1;
+    transition: opacity 120ms ease, background-color 120ms ease;
+    white-space: nowrap;
+  }
+
+  label:hover span {
+    opacity: 0.9;
+  }
+
+  input:checked + span {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  input:focus-visible + span {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .btn-text {
+    text-transform: capitalize;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+</style>
