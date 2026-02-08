@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logoImage from '../assets/vegetalope.webp';
-import ThemeToggle from './ThemeToggle.svelte';
+import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <footer class="site-footer">
@@ -23,7 +23,7 @@ import ThemeToggle from './ThemeToggle.svelte';
 		</div>
 
 		<div class="footer-toggle">
-			<ThemeToggle client:only="svelte" />
+			<ThemeToggle />
 		</div>
 	</div>
 </footer>
