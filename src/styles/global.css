@@ -388,11 +388,16 @@ header.site-header a:hover {
 }
 
 :where(a) {
+	color: var(--color-accent);
 	text-decoration: underline;
 	text-decoration-thickness: 1px;
 	text-underline-offset: 0.2em;
 	text-decoration-color: currentColor;
 	text-decoration-skip-ink: auto;
+}
+
+:where(a:link) {
+	color: var(--color-accent);
 }
 
 :where(a:hover) {
@@ -401,7 +406,7 @@ header.site-header a:hover {
 }
 
 :where(a:visited) {
-	color: var(--color-accent);
+	color: color-mix(in oklab, var(--color-accent) 70%, var(--color-ink));
 }
 
 :where(a:visited:hover) {
