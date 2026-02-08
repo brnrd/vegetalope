@@ -40,13 +40,13 @@ const resolvedImage = new URL(image ?? fallbackImage, baseForImages);
 <meta property="og:description" content={description} />
 <meta property="og:image" content={resolvedImage} />
 
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:site" content="@vegetalope" />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={resolvedImage} />
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={Astro.url} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:site" content="@vegetalope" />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={resolvedImage} />
 
 <!-- Tracking -->
 <script defer src="https://umami.vegetalope.com/script.js" data-website-id="75cd0945-8e28-45e1-8a52-006373da5261"></script>
