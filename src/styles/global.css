@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:opsz@8..72&family=Inter:wght@300;400;500;600;700&display=swap');
-
 /*
   Global styles aligned to americabydesign.gov: bold type, big scale, clean surfaces.
   Minimal rules, lots of air, editorial hierarchy.
@@ -15,8 +13,9 @@ html.theme-dark {
 
 :root {
 	/* Typography */
-	--font-display: "Instrument Serif", "Palatino Linotype", "Book Antiqua", serif;
-	--font-body: "Inter", "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Times New Roman",
+		"Georgia", "Cambria", serif;
+	--font-body: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 	--font-label: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
 		"Courier New", monospace;
 
@@ -389,11 +388,16 @@ header.site-header a:hover {
 }
 
 :where(a) {
+	color: var(--color-accent);
 	text-decoration: underline;
 	text-decoration-thickness: 1px;
 	text-underline-offset: 0.2em;
 	text-decoration-color: currentColor;
 	text-decoration-skip-ink: auto;
+}
+
+:where(a:link) {
+	color: var(--color-accent);
 }
 
 :where(a:hover) {
@@ -402,7 +406,7 @@ header.site-header a:hover {
 }
 
 :where(a:visited) {
-	color: var(--color-accent);
+	color: color-mix(in oklab, var(--color-accent) 70%, var(--color-ink));
 }
 
 :where(a:visited:hover) {
