@@ -1,5 +1,5 @@
 ---
-title: 'Ask. And do.'
+title: 'Shy bairns get nowt'
 description: 'Why expressing what you want is a prerequisite for change, not a weakness.'
 layout: ../../layouts/Article.astro
 pubDate: '2026-02-09'
@@ -8,10 +8,13 @@ pubDate: '2026-02-09'
 There is an old line:
 > Ask and you shall receive.
 
-It’s usually presented as a moral or spiritual idea. In practice, it’s much more concrete than that. At work, at home, and in life more broadly, many outcomes simply never happen because they were never clearly asked for.
+It comes from the Gospel of Matthew (7:7), where it is paired with "seek and you shall find and knock and the door shall be opened". In context, it is not a promise of reward, but an invitation to act: nothing is given to those who do not ask.
+
+It’s usually presented as a moral or spiritual idea. But in practice, it’s much more concrete than that. At work, at home, and in life more broadly, many outcomes simply never happen because they were never clearly asked for.
 
 Another saying in Scotland puts it more bluntly:  
-> Shy bairns get naught.
+> Shy bairns get nowt.
+Shy children get nothing, if you don't ask, you don't get.
 
 ## Asking is a prerequisite, not a guarantee
 

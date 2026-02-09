@@ -34,6 +34,10 @@ export default defineConfig({
 		'/blog/2022-01-05-tv-shows': {
 			status: 302,
 			destination: '/watch/tv-shows'
+		},
+		'/write/ask-and-do': {
+			status: 302,
+			destination: '/write/shy-bairns-get-nowt'
 		}
 	  }
 });
