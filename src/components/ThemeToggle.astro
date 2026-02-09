@@ -1,5 +1,5 @@
 ---
-const themes = ['light', 'dark'];
+const themes = ['auto', 'light', 'dark'];
 ---
 
 <fieldset class="theme-toggle" data-theme-toggle>
@@ -26,14 +26,17 @@ const themes = ['light', 'dark'];
 		const inputs = Array.from(container.querySelectorAll('input[name="theme"]'));
 		if (!inputs.length) return;
 
+		const media = window.matchMedia('(prefers-color-scheme: dark)');
+
 		const getStoredTheme = () => {
 			const stored = localStorage.getItem('theme');
-			if (stored === 'light' || stored === 'dark') return stored;
-			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+			if (stored === 'light' || stored === 'dark' || stored === 'auto') return stored;
+			return 'auto';
 		};
 
 		const applyTheme = (theme) => {
-			root.classList.toggle('theme-dark', theme === 'dark');
+			const isDark = theme === 'dark' || (theme === 'auto' && media.matches);
+			root.classList.toggle('theme-dark', isDark);
 			localStorage.setItem('theme', theme);
 			for (const input of inputs) {
 				input.checked = input.value === theme;
@@ -45,6 +48,12 @@ const themes = ['light', 'dark'];
 		for (const input of inputs) {
 			input.addEventListener('change', () => applyTheme(input.value));
 		}
+
+		media.addEventListener('change', () => {
+			if (getStoredTheme() === 'auto') {
+				applyTheme('auto');
+			}
+		});
 	})();
 </script>
 
@@ -100,22 +109,22 @@ const themes = ['light', 'dark'];
 		align-items: center;
 		justify-content: center;
 		gap: 0.25rem;
-		padding: 0.1rem 0.25rem;
+		padding: 0.2rem 0.45rem;
 		border-radius: 0;
 		border: 0;
 		background: transparent;
-		opacity: 0.8;
+		opacity: 1;
+		color: var(--color-ink);
 		line-height: 1;
-		transition: opacity 120ms ease, background-color 120ms ease;
+		transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
 		white-space: nowrap;
 	}
 
 	label:hover span {
-		opacity: 0.9;
+		text-decoration: underline;
 	}
 
 	input:checked + span {
-		opacity: 1;
 		text-decoration: underline;
 	}
 
@@ -126,7 +135,7 @@ const themes = ['light', 'dark'];
 
 	.btn-text {
 		text-transform: capitalize;
-		font-size: 0.65rem;
+		font-size: 0.7rem;
 		letter-spacing: 0.18em;
 		text-transform: uppercase;
 	}

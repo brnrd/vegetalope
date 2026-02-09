@@ -56,7 +56,8 @@ const resolvedImage = new URL(image ?? fallbackImage, baseForImages);
 	if (typeof document !== 'undefined' && typeof localStorage !== 'undefined' && typeof window !== 'undefined') {
 		const root = document.documentElement;
 		const theme = localStorage.getItem('theme');
-		if (theme === 'dark' || (!theme) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		if (theme === 'dark' || ((theme === 'auto' || !theme) && prefersDark)) {
 			root.classList.add('theme-dark');
 		} else {
 			root.classList.remove('theme-dark');
