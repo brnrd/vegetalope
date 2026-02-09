@@ -2,7 +2,7 @@
 title: 'Ask. And do.'
 description: 'Why expressing what you want is a prerequisite for change, not a weakness.'
 layout: ../../layouts/Article.astro
-pubDate: '2026-02-08'
+pubDate: '2026-02-09'
 ---
 
 There is an old line:
