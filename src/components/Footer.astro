@@ -2,6 +2,9 @@
 import { Image } from 'astro:assets';
 import logoImage from '../assets/vegetalope.webp';
 import ThemeToggle from './ThemeToggle.astro';
+
+const pathname = Astro.url.pathname;
+const showRss = pathname === '/' || pathname.startsWith('/write');
 ---
 
 <footer class="site-footer">
@@ -24,6 +27,9 @@ import ThemeToggle from './ThemeToggle.astro';
 
 		<div class="footer-toggle">
 			<ThemeToggle />
+			{showRss && (
+				<a class="footer-rss" href="/rss.xml">RSS</a>
+			)}
 		</div>
 	</div>
 </footer>
