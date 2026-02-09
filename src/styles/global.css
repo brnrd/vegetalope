@@ -639,6 +639,7 @@ header.site-header a:hover {
 }
 
 .hello {
+	display: inline-block;
 	font-size: 1em;
 	font-family: sans-serif;
 	width: 13em;
@@ -648,6 +649,8 @@ header.site-header a:hover {
 	box-shadow: 0 0 1em rgba(0,0,0,0.3);
 	margin: 1em auto 2em;
 	transform: rotate(-2deg);
+	text-decoration: none;
+	color: inherit;
 }
 
 .hello .top {
