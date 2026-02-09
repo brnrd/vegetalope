@@ -14,6 +14,7 @@ It’s usually presented as a moral or spiritual idea. But in practice, it’s m
 
 Another saying in Scotland puts it more bluntly:  
 > Shy bairns get nowt.
+
 Shy children get nothing, if you don't ask, you don't get.
 
 ## Asking is a prerequisite, not a guarantee

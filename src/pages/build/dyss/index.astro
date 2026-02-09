@@ -1,0 +1,81 @@
+---
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const pageTitle = 'dyss examples';
+const pageDescription = 'Runtime CSS experiments built with the dyss npm package.';
+
+const examples = [
+	{
+		title: 'Pie chart playground',
+		href: '/build/dyss/examples/pie-chart',
+		description:
+			'Dynamic conic-gradient slices with live controls, stream updates, and runtime FPS feedback.'
+	}
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main class="content stack">
+			<article class="stack">
+				<header class="stack">
+					<h1>{pageTitle}</h1>
+					<p>{pageDescription}</p>
+				</header>
+
+				<p>
+					<a href="https://github.com/brnrd/dyss">dyss</a> is a tiny runtime stylesheet utility. This page
+					is the entry point for practical examples.
+				</p>
+
+				<section class="stack" aria-labelledby="dyss-example-list">
+					<h2 id="dyss-example-list">Examples</h2>
+					<ul class="dyss-example-list">
+						{examples.map((example) => (
+							<li>
+								<a href={example.href}>{example.title}</a>
+								<p>{example.description}</p>
+							</li>
+						))}
+					</ul>
+				</section>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.dyss-example-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.dyss-example-list li {
+		border: 1px solid var(--hairline);
+		padding: 0.9rem;
+		background: color-mix(in oklab, var(--color-bg) 94%, white);
+	}
+
+	.dyss-example-list a {
+		font-family: var(--font-label);
+		font-size: 0.76rem;
+		letter-spacing: 0.11em;
+		text-transform: uppercase;
+	}
+
+	.dyss-example-list p {
+		font-size: 1.05rem;
+		margin-top: 0.5rem;
+	}
+</style>
