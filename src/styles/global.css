@@ -594,6 +594,14 @@ header.site-header a:hover {
 	margin-top: 0;
 }
 
+.site-index .nav-section h2 .section-rss {
+	font-family: var(--font-label);
+	font-size: 0.6rem;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	margin-left: 0.6rem;
+}
+
 .card-list {
 	list-style: none;
 	padding: 0;

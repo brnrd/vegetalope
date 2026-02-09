@@ -1,6 +1,41 @@
 User-agent: *
-Allow: 
+Disallow: /
+Allow: /write/
+Allow: /write
+Allow: /$
+Allow: /rss.xml
 
-User-agent: *
-Disallow: /articles
-Noindex: /articles
+User-agent: GPTBot
+Disallow: /
+Allow: /write/
+Allow: /write
+Allow: /$
+Allow: /rss.xml
+
+User-agent: ChatGPT-User
+Disallow: /
+Allow: /write/
+Allow: /write
+Allow: /$
+Allow: /rss.xml
+
+User-agent: CCBot
+Disallow: /
+Allow: /write/
+Allow: /write
+Allow: /$
+Allow: /rss.xml
+
+User-agent: ClaudeBot
+Disallow: /
+Allow: /write/
+Allow: /write
+Allow: /$
+Allow: /rss.xml
+
+User-agent: Google-Extended
+Disallow: /
+Allow: /write/
+Allow: /write
+Allow: /$
+Allow: /rss.xml

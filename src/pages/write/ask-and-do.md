@@ -3,13 +3,15 @@ title: 'Ask. And do.'
 description: 'Why expressing what you want is a prerequisite for change, not a weakness.'
 layout: ../../layouts/Article.astro
 pubDate: '2026-02-08'
-There is an old line: *ask and you shall receive*.
 ---
+
+There is an old line:
+> Ask and you shall receive.
 
 It’s usually presented as a moral or spiritual idea. In practice, it’s much more concrete than that. At work, at home, and in life more broadly, many outcomes simply never happen because they were never clearly asked for.
 
 Another saying in Scotland puts it more bluntly:  
-> shy bairns get naught.
+> Shy bairns get naught.
 
 ## Asking is a prerequisite, not a guarantee
 

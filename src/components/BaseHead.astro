@@ -15,6 +15,8 @@ const { title, description, image } = Astro.props;
 const fallbackImage = '/vegetalope.webp';
 const baseForImages = Astro.site ?? Astro.url;
 const resolvedImage = new URL(image ?? fallbackImage, baseForImages);
+const pathname = Astro.url.pathname;
+const allowIndex = pathname === '/' || pathname.startsWith('/write');
 ---
 
 <!-- Global Metadata -->
@@ -32,6 +34,8 @@ const resolvedImage = new URL(image ?? fallbackImage, baseForImages);
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+{!allowIndex && <meta name="robots" content="noindex, nofollow" />}
+<link rel="alternate" type="application/rss+xml" title="vegetalope Write Feed" href="/rss.xml" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
