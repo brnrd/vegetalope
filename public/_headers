@@ -1,5 +1,5 @@
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://umami.vegetalope.com; connect-src 'self' https://umami.vegetalope.com; upgrade-insecure-requests; block-all-mixed-content; require-trusted-types-for 'script'
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://umami.vegetalope.com; connect-src 'self' https://umami.vegetalope.com; upgrade-insecure-requests
   Cross-Origin-Opener-Policy: same-origin
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff

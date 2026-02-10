@@ -36,6 +36,7 @@ function mountDemo(root) {
 	let colors = defaultColors.map((color) => ({ ...color }));
 	let activeColorId = colors[0]?.id ?? null;
 	const highlights = new Map();
+	const hasTrustedTypes = typeof window !== 'undefined' && 'trustedTypes' in window;
 
 	function updateColorRule(color) {
 		sheet.updateSet(`.hl-${color.id}`, {
@@ -44,37 +45,68 @@ function mountDemo(root) {
 	}
 
 	function renderPalette() {
-		palette.innerHTML = colors
-			.map((color) => {
-				const isActive = color.id === activeColorId;
-				return `
-					<div class="dyss-color" data-color-id="${color.id}">
-						<button type="button" class="dyss-swatch" aria-pressed="${isActive}" style="background:${color.value}"></button>
-						<input type="text" data-field="label" value="${escapeHTML(color.label)}" aria-label="Color label" />
-						<input type="color" data-field="value" value="${color.value}" aria-label="Color value" />
-						<button type="button" class="dyss-remove" aria-label="Remove color">Remove</button>
-					</div>
-				`;
-			})
-			.join('');
+		palette.replaceChildren();
+		for (const color of colors) {
+			const isActive = color.id === activeColorId;
+			const row = document.createElement('div');
+			row.className = 'dyss-color';
+			row.dataset.colorId = color.id;
+
+			const swatch = document.createElement('button');
+			swatch.type = 'button';
+			swatch.className = 'dyss-swatch';
+			swatch.setAttribute('aria-pressed', String(isActive));
+			swatch.style.background = color.value;
+
+			const labelInput = document.createElement('input');
+			labelInput.type = 'text';
+			labelInput.dataset.field = 'label';
+			labelInput.value = color.label;
+			labelInput.setAttribute('aria-label', 'Color label');
+
+			const colorInput = document.createElement('input');
+			colorInput.type = 'color';
+			colorInput.dataset.field = 'value';
+			colorInput.value = color.value;
+			colorInput.setAttribute('aria-label', 'Color value');
+
+			const removeButton = document.createElement('button');
+			removeButton.type = 'button';
+			removeButton.className = 'dyss-remove';
+			removeButton.setAttribute('aria-label', 'Remove color');
+			removeButton.textContent = 'Remove';
+
+			row.append(swatch, labelInput, colorInput, removeButton);
+			palette.append(row);
+		}
 
 		colors.forEach(updateColorRule);
 	}
 
 	function renderWords() {
-		wordsContainer.innerHTML = tokens
-			.map((word, index) => {
-				const layers = Array.from(highlights.get(index) ?? [])
-					.map((colorId) => `<span class="hl-layer hl-${colorId}"></span>`)
-					.join('');
-				return `
-					<span class="word" data-word-index="${index}">
-						<span class="word-layers">${layers}</span>
-						<span class="word-text">${escapeHTML(word)}</span>
-					</span>
-				`;
-			})
-			.join(' ');
+		wordsContainer.replaceChildren();
+		tokens.forEach((word, index) => {
+			const wordEl = document.createElement('span');
+			wordEl.className = 'word';
+			wordEl.dataset.wordIndex = String(index);
+
+			const layersEl = document.createElement('span');
+			layersEl.className = 'word-layers';
+			const layerIds = Array.from(highlights.get(index) ?? []);
+			for (const colorId of layerIds) {
+				const layer = document.createElement('span');
+				layer.className = `hl-layer hl-${colorId}`;
+				layersEl.append(layer);
+			}
+
+			const textEl = document.createElement('span');
+			textEl.className = 'word-text';
+			textEl.textContent = word;
+
+			wordEl.append(layersEl, textEl);
+			wordsContainer.append(wordEl);
+			wordsContainer.append(document.createTextNode(' '));
+		});
 	}
 
 	function applyHighlight(range) {
@@ -156,7 +188,8 @@ function mountDemo(root) {
 		if (target.getAttribute('data-field') === 'value') {
 			color.value = target.value;
 			updateColorRule(color);
-			colorRow.querySelector('.dyss-swatch')?.setAttribute('style', `background:${color.value}`);
+			const swatch = colorRow.querySelector('.dyss-swatch');
+			if (swatch instanceof HTMLElement) swatch.style.background = color.value;
 		}
 	});
 

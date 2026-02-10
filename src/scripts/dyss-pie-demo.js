@@ -78,20 +78,44 @@ function mountDemo(root) {
 	pie.classList.add(className);
 
 	function renderRows() {
-		rowsContainer.innerHTML = rows
-			.map((row) => {
-				const removeDisabled = rows.length === 1 ? 'disabled' : '';
-				return `
-					<div class="dyss-row" data-row-id="${row.id}">
-						<input type="text" data-field="label" value="${escapeHTML(row.label)}" aria-label="Service label" />
-						<input type="range" min="0" max="100" data-field="value" value="${row.value}" aria-label="Service value" />
-						<output>${row.value}</output>
-						<input type="color" data-field="color" value="${row.color}" aria-label="Service color" />
-						<button type="button" data-remove ${removeDisabled}>Remove</button>
-					</div>
-				`;
-			})
-			.join('');
+		rowsContainer.replaceChildren();
+		for (const row of rows) {
+			const rowEl = document.createElement('div');
+			rowEl.className = 'dyss-row';
+			rowEl.dataset.rowId = row.id;
+
+			const labelInput = document.createElement('input');
+			labelInput.type = 'text';
+			labelInput.dataset.field = 'label';
+			labelInput.value = row.label;
+			labelInput.setAttribute('aria-label', 'Service label');
+
+			const valueInput = document.createElement('input');
+			valueInput.type = 'range';
+			valueInput.min = '0';
+			valueInput.max = '100';
+			valueInput.dataset.field = 'value';
+			valueInput.value = String(row.value);
+			valueInput.setAttribute('aria-label', 'Service value');
+
+			const output = document.createElement('output');
+			output.textContent = String(row.value);
+
+			const colorInput = document.createElement('input');
+			colorInput.type = 'color';
+			colorInput.dataset.field = 'color';
+			colorInput.value = row.color;
+			colorInput.setAttribute('aria-label', 'Service color');
+
+			const removeButton = document.createElement('button');
+			removeButton.type = 'button';
+			removeButton.dataset.remove = '';
+			removeButton.textContent = 'Remove';
+			if (rows.length === 1) removeButton.disabled = true;
+
+			rowEl.append(labelInput, valueInput, output, colorInput, removeButton);
+			rowsContainer.append(rowEl);
+		}
 	}
 
 	function syncValueInputs() {
@@ -137,22 +161,37 @@ function mountDemo(root) {
 			backgroundImage: `conic-gradient(${stops})`
 		});
 
-		legend.innerHTML =
-			slices.length === 0
-				? '<li><span class="swatch" style="background:#d9d9d9"></span><span>No data</span><strong>0</strong><em>0.0%</em></li>'
-				: slices
-						.map((slice) => {
-							const pctText = total <= 0 ? '0.0' : slice.pct.toFixed(1);
-							return `
-								<li>
-									<span class="swatch" style="background:${slice.color}"></span>
-									<span>${escapeHTML(slice.label)}</span>
-									<strong>${slice.value}</strong>
-									<em>${pctText}%</em>
-								</li>
-							`;
-						})
-						.join('');
+		legend.replaceChildren();
+		if (slices.length === 0) {
+			const li = document.createElement('li');
+			const swatch = document.createElement('span');
+			swatch.className = 'swatch';
+			swatch.style.background = '#d9d9d9';
+			const label = document.createElement('span');
+			label.textContent = 'No data';
+			const valueEl = document.createElement('strong');
+			valueEl.textContent = '0';
+			const pct = document.createElement('em');
+			pct.textContent = '0.0%';
+			li.append(swatch, label, valueEl, pct);
+			legend.append(li);
+		} else {
+			for (const slice of slices) {
+				const li = document.createElement('li');
+				const swatch = document.createElement('span');
+				swatch.className = 'swatch';
+				swatch.style.background = slice.color;
+				const label = document.createElement('span');
+				label.textContent = slice.label;
+				const valueEl = document.createElement('strong');
+				valueEl.textContent = String(slice.value);
+				const pct = document.createElement('em');
+				const pctText = total <= 0 ? '0.0' : slice.pct.toFixed(1);
+				pct.textContent = `${pctText}%`;
+				li.append(swatch, label, valueEl, pct);
+				legend.append(li);
+			}
+		}
 
 		updateCode(stops);
 	}
