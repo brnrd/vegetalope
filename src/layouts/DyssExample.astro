@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import dyssModuleUrl from 'dyss?url';
 
 const { title, description, backHref = '/build/dyss', backLabel = 'Back to dyss examples' } = Astro.props;
 ---
@@ -10,10 +11,15 @@ const { title, description, backHref = '/build/dyss', backLabel = 'Back to dyss 
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
+		<script
+			type="importmap"
+			is:inline
+			set:html={JSON.stringify({ imports: { dyss: dyssModuleUrl } })}
+		></script>
 	</head>
 	<body>
 		<Header />
-		<main class="content stack">
+	<main class="content stack">
 			<article class="stack dyss-example">
 				<header class="stack">
 					<h1>{title}</h1>
@@ -28,7 +34,7 @@ const { title, description, backHref = '/build/dyss', backLabel = 'Back to dyss 
 					<slot />
 				</section>
 			</article>
-		</main>
+	</main>
 		<Footer />
 		<slot name="scripts" />
 	</body>
