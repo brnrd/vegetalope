@@ -13,7 +13,6 @@
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/svelte": "7.2.3",
     "astro": "5.16.5",
-    "dyss": "^1.1.1",
     "sharp": "0.32.6",
     "svelte": "^5.49.1"
   },
