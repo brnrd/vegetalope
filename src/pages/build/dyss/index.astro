@@ -3,8 +3,8 @@ import BaseHead from '../../../components/BaseHead.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 
-const pageTitle = 'dyss examples';
-const pageDescription = 'Runtime CSS experiments built with the dyss npm package.';
+const pageTitle = 'dyss';
+const pageDescription = 'A tiny utility to dynamically create and update CSS stylesheets from JavaScript.';
 
 const examples = [
 	{
@@ -37,8 +37,24 @@ const examples = [
 				</header>
 
 				<p>
-					<a href="https://github.com/brnrd/dyss">dyss</a> is a tiny runtime stylesheet utility. This page
-					is the entry point for practical examples.
+					<a href="https://github.com/brnrd/dyss">dyss</a> is a tiny runtime stylesheet utility I originally built while working at Textensor, on products such as Opus 2 Magnum and Annotate. At the time, I was looking for a cleaner way to generate and update styles dynamically in complex interfaces, without relying on large amounts of inline styles or string-based templating.
+					I first presented the idea at <a href="https://groups.google.com/g/edinburghjs/c/2UGDKE9qPJ0">Edinburgh JS</a> on 9 April 2015, in a talk called “Dynamic CSS with JavaScript”.
+					The original implementation was written in CoffeeScript and, almost ten years later, I finally rewrote it in modern JavaScript, with some welcome help from OpenAI Codex.
+				</p>
+
+				<p>
+					The core principle has not changed. dyss is built on a little-known but extremely useful feature of the browser: every <code>&lt;style&gt;</code> element exposes a live stylesheet object through the DOM.
+					From JavaScript, this stylesheet can be queried and, more importantly, mutated using the standard CSS Object Model (CSSOM).
+				</p>
+
+				<p>
+					Concretely, dyss creates its own <code>&lt;style&gt;</code> element, attaches it to the document, and then inserts and updates rules directly on the underlying stylesheet using APIs such as <code>insertRule</code> and <code>cssRules</code>.
+					This means styles are stored and managed exactly like regular CSS rules, not as inline styles on elements.
+				</p>
+
+				<p>
+					This approach makes it possible to generate selectors or classes at runtime, update their declarations efficiently, and reuse them across many elements, while keeping a clean separation between structure and presentation.
+					In practice, dyss acts as a very small, focused layer on top of the browser’s native CSS engine, letting JavaScript drive styling logic without bypassing the CSS cascade or the browser’s own optimisation mechanisms.
 				</p>
 
 				<section class="stack" aria-labelledby="dyss-example-list">
