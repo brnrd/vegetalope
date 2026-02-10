@@ -1,0 +1,103 @@
+---
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const pageTitle = 'dyss';
+const pageDescription = 'A tiny utility to dynamically create and update CSS stylesheets from JavaScript.';
+
+const examples = [
+	{
+		title: 'Pie chart playground',
+		href: '/build/dyss/examples/pie-chart',
+		description:
+			'Dynamic conic-gradient slices with live controls, stream updates, and runtime FPS feedback.'
+	},
+	{
+		title: 'Text highlights',
+		href: '/build/dyss/examples/text-highlights',
+		description:
+			'Pretend OCR word spans with overlapping highlight layers and editable color palette.'
+	}
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main class="content stack">
+			<article class="stack">
+				<header class="stack">
+					<h1>{pageTitle}</h1>
+					<p>{pageDescription}</p>
+				</header>
+
+				<p>
+					<a href="https://github.com/brnrd/dyss">dyss</a> is a tiny runtime stylesheet utility I originally built while working at Textensor, on products such as Opus 2 Magnum and Annotate. At the time, I was looking for a cleaner way to generate and update styles dynamically in complex interfaces, without relying on large amounts of inline styles or string-based templating.
+					I first presented the idea at <a href="https://groups.google.com/g/edinburghjs/c/2UGDKE9qPJ0">Edinburgh JS</a> on 9 April 2015, in a talk called “Dynamic CSS with JavaScript”.
+					The original implementation was written in CoffeeScript and, almost ten years later, I finally rewrote it in modern JavaScript, with some welcome help from OpenAI Codex.
+				</p>
+
+				<p>
+					The core principle has not changed. dyss is built on a little-known but extremely useful feature of the browser: every <code>&lt;style&gt;</code> element exposes a live stylesheet object through the DOM.
+					From JavaScript, this stylesheet can be queried and, more importantly, mutated using the standard CSS Object Model (CSSOM).
+				</p>
+
+				<p>
+					Concretely, dyss creates its own <code>&lt;style&gt;</code> element, attaches it to the document, and then inserts and updates rules directly on the underlying stylesheet using APIs such as <code>insertRule</code> and <code>cssRules</code>.
+					This means styles are stored and managed exactly like regular CSS rules, not as inline styles on elements.
+				</p>
+
+				<p>
+					This approach makes it possible to generate selectors or classes at runtime, update their declarations efficiently, and reuse them across many elements, while keeping a clean separation between structure and presentation.
+					In practice, dyss acts as a very small, focused layer on top of the browser’s native CSS engine, letting JavaScript drive styling logic without bypassing the CSS cascade or the browser’s own optimisation mechanisms.
+				</p>
+
+				<section class="stack" aria-labelledby="dyss-example-list">
+					<h2 id="dyss-example-list">Examples</h2>
+					<ul class="dyss-example-list">
+						{examples.map((example) => (
+							<li>
+								<a href={example.href}>{example.title}</a>
+								<p>{example.description}</p>
+							</li>
+						))}
+					</ul>
+				</section>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.dyss-example-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.dyss-example-list li {
+		border: 1px solid var(--hairline);
+		padding: 0.9rem;
+		background: color-mix(in oklab, var(--color-bg) 94%, white);
+	}
+
+	.dyss-example-list a {
+		font-family: var(--font-label);
+		font-size: 0.76rem;
+		letter-spacing: 0.11em;
+		text-transform: uppercase;
+	}
+
+	.dyss-example-list p {
+		font-size: 1.05rem;
+		margin-top: 0.5rem;
+	}
+</style>
