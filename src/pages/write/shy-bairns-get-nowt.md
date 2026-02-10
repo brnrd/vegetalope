@@ -4,93 +4,51 @@ description: 'Why expressing what you want is a prerequisite for change, not a w
 layout: ../../layouts/Article.astro
 pubDate: '2026-02-09'
 ---
+Jesus says in the Gospel of Matthew 7:7: 
+> ask and you shall receive.
 
-There is an old line:
-> Ask and you shall receive.
+The phrase appears alongside “seek and you shall find” and “knock and the door shall be opened”. In context, it is not a promise of reward. It is a statement about action. Nothing is given if nothing is asked.
 
-It comes from the Gospel of Matthew (7:7), where it is paired with "seek and you shall find and knock and the door shall be opened". In context, it is not a promise of reward, but an invitation to act: nothing is given to those who do not ask.
+We often treat this as a spiritual idea, but it applies very concretely to everyday life. At work, at home, and in relationships, many outcomes never happen simply because they were never clearly requested.
 
-It’s usually presented as a moral or spiritual idea. But in practice, it’s much more concrete than that. At work, at home, and in life more broadly, many outcomes simply never happen because they were never clearly asked for.
+There is a Scottish saying that expresses the same idea more bluntly: 
+> Shy bairns get nowt. 
 
-Another saying in Scotland puts it more bluntly:  
-> Shy bairns get nowt.
+Shy children get nothing. If you do not ask, you should not expect to receive.
 
-Shy children get nothing, if you don't ask, you don't get.
+## Doing comes before asking, most of the time
 
-## Asking is a prerequisite, not a guarantee
+In professional settings, asking only works when it follows action.
 
-Asking does not mean demanding.  
-It does not mean entitlement.  
-And it does not guarantee a yes.
+You don’t ask for more scope before showing you can handle it.  
+You don’t ask for trust before behaving in a trustworthy way.  
+You don’t ask for a promotion before already operating at the next level.
 
-What it does is make change possible.
+Action creates credibility. Asking makes that credibility visible.
 
-A promotion.  
-A change of scope.  
-More responsibility.  
-Less responsibility.  
-A move to a different team.  
-A salary adjustment.  
+But there is an important exception. Sometimes, you cannot act until you are given the opportunity to do so. Scope does not always present itself on its own. In those cases, the first thing to ask for is not a title or a reward, but a chance.
 
-None of these happen reliably by waiting, hoping, or doing good work in silence. Systems do not infer intent. People do not read minds.
+A chance to try.  
+A chance to own a problem.  
+A chance to operate at a slightly higher level.
 
-If something matters to you, it has to be expressed.
+That ask is not premature. It is what makes action possible.
 
-## Being proactive about your own trajectory
+## Do. Then ask. Or ask to do.
 
-Careers stall most often not because of lack of talent, but because of lack of explicit direction.
+Careers most often stall not because of lack of ability, but because direction remains implicit. People do the work, but never connect it to what they want next. Or they wait for opportunities that never come.
 
-People stay stuck in roles where they can’t shine, not because there is no alternative, but because no one was told that they wanted one. Or because they assumed someone else would notice.
+Your manager has a view of the organisation. You have a view of your own trajectory. Those two only align through conversation, once intentions are explicit.
 
-Your manager has a view of the organisation.  
-You have a view of yourself.
+Sometimes this means talking beyond your direct line manager, not as politics, but as exploration. Understanding where needs exist, where opportunities could be created, and where you are willing to step in.
 
-Those two views only align if they are put on the table.
+The same logic applies to promotions and compensation. Organisations respond to risk and incentives. The cost of losing someone who creates leverage is often higher than the cost of keeping them aligned and fairly compensated. That equation only works when contribution is visible and intent is known.
 
-This sometimes means talking beyond your direct line manager.  
-Not as politics, but as exploration. Understanding where needs exist, where your skills might fit, and what paths are realistically available.
+So the sequence matters, but it is flexible.
 
-Movement rarely starts with permission.  
-It starts with a conversation.
-
-## Promotions and compensation are conversations too
-
-Promotions and salary raises are often framed as things that happen to you.
-
-Sometimes they do. Often they don’t.
-
-The uncomfortable truth is that organisations respond to risk and incentives. The cost of losing someone who performs and creates leverage is frequently higher than the cost of keeping them well-aligned and fairly compensated.
-
-That equation only works in your favour if your intentions are visible.
-
-Asking does not weaken your position.  
-Silence usually does.
-
-## This applies outside of work as well
-
-The same pattern exists at home.
-
-Needs that are not expressed turn into frustration.  
-Desires that are not voiced turn into resentment.  
-Assumptions replace clarity.
-
-Asking is not selfish. It is a form of respect. It gives the other side something concrete to respond to instead of guessing.
-
-## Ask. Then do.
-
-Asking alone is not enough.
-
-You ask, and you act in ways that make the ask coherent.  
-You ask for scope, and you grow into it.  
-You ask for trust, and you behave accordingly.  
-You ask for change, and you participate in making it work.
-
-This is not transactional. It’s directional.
-
-Ask, clearly and honestly.  
-Then do the work that makes the answer obvious.
-
-Because in the end, the old sayings hold for a reason.
+Do the work when you can.  
+Ask for the opportunity when you can’t.  
+Then ask, clearly and honestly, for what comes next.
 
 Ask and you shall receive.  
-And shy bairns get naught.
+Shy bairns get nowt.
