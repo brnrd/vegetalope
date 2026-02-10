@@ -1,0 +1,146 @@
+---
+import DyssExample from '../../../../layouts/DyssExample.astro';
+import dyssTextDemoScript from '../../../../scripts/dyss-text-highlights.js?url&no-inline';
+
+const title = 'dyss: text highlights';
+const description = 'Mock OCR text highlighting with overlapping colors and live palette edits.';
+---
+
+<DyssExample title={title} description={description}>
+	<p>
+		Each word below is wrapped like a pretend OCR output. Select text to apply the active highlight color. You
+		can edit colors at any time and highlights update instantly. Overlaps are visual: multiple translucent layers
+		stack on top of each other.
+	</p>
+
+	<div class="dyss-highlight-demo stack" data-dyss-highlight-demo>
+		<div class="dyss-highlight-toolbar">
+			<div class="dyss-palette" data-dyss-palette></div>
+			<div class="dyss-toolbar-actions">
+				<button type="button" data-dyss-add-color>Add color</button>
+				<button type="button" data-dyss-clear>Clear highlights</button>
+			</div>
+		</div>
+
+		<div class="dyss-ocr" data-dyss-words></div>
+	</div>
+
+	<script slot="scripts" type="module" src={dyssTextDemoScript}></script>
+</DyssExample>
+
+<style>
+	.dyss-highlight-demo {
+		padding: 1rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0.75rem;
+		background: color-mix(in oklab, var(--color-bg) 92%, white);
+	}
+
+	.dyss-highlight-toolbar {
+		display: grid;
+		gap: 0.8rem;
+	}
+
+	.dyss-palette {
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	:global(.dyss-color) {
+		display: grid;
+		grid-template-columns: 32px minmax(120px, 160px) 48px auto;
+		gap: 0.5rem;
+		align-items: center;
+	}
+
+	:global(.dyss-color input[type='text']) {
+		inline-size: 100%;
+	}
+
+	:global(.dyss-color input[type='color']) {
+		inline-size: 42px;
+		block-size: 32px;
+		padding: 0;
+		border: 1px solid var(--hairline);
+		background: transparent;
+	}
+
+	:global(.dyss-swatch) {
+		inline-size: 28px;
+		block-size: 28px;
+		border-radius: 999px;
+		border: 1px solid var(--hairline);
+		padding: 0;
+		background: transparent;
+	}
+
+	:global(.dyss-swatch[aria-pressed='true']) {
+		outline: 2px solid var(--color-ink);
+		outline-offset: 2px;
+	}
+
+	:global(.dyss-remove) {
+		padding: 0.35rem 0.6rem;
+		font-size: 0.62rem;
+		background: transparent;
+		color: var(--color-ink);
+		border: 1px solid var(--hairline);
+	}
+
+	.dyss-toolbar-actions {
+		display: inline-flex;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+	}
+
+	.dyss-toolbar-actions button {
+		padding: 0.45rem 0.75rem;
+		font-size: 0.62rem;
+		background: transparent;
+		color: var(--color-ink);
+		border: 1px solid var(--hairline);
+	}
+
+	.dyss-ocr {
+		padding: 1.1rem;
+		border: 1px dashed var(--hairline);
+		border-radius: 0.6rem;
+		min-height: 180px;
+		font-size: 1.15rem;
+		line-height: 1.7;
+	}
+
+	:global(.word) {
+		display: inline-flex;
+		position: relative;
+		padding: 0 0.02rem;
+		margin-inline: -0.04rem;
+	}
+
+	:global(.word-layers) {
+		position: absolute;
+		inset: 0.06rem -0.12rem;
+		pointer-events: none;
+		display: block;
+	}
+
+	:global(.hl-layer) {
+		position: absolute;
+		inset: 0;
+		border-radius: 0;
+		opacity: 0.35;
+		transform: skewX(-6deg);
+		transform-origin: center;
+	}
+
+	:global(.word-text) {
+		position: relative;
+		z-index: 1;
+	}
+
+	@media (min-width: 1080px) {
+		:global(.dyss-color) {
+			grid-template-columns: 32px minmax(160px, 220px) 48px auto;
+		}
+	}
+</style>
