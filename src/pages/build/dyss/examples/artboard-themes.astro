@@ -1,0 +1,252 @@
+---
+import DyssExample from '../../../../layouts/DyssExample.astro';
+import dyssArtboardScript from '../../../../scripts/dyss-artboard-themes.js?url&no-inline';
+
+const title = 'dyss: live artboard themes';
+const description = 'Swap complete UI themes in one click using live stylesheet updates.';
+---
+
+<DyssExample title={title} description={description}>
+	<p>
+		This artboard swaps between full UI themes. dyss updates the CSS rules so the components restyle instantly
+		without inline styles.
+	</p>
+
+	<div class="artboard-demo stack" data-dyss-artboard>
+		<div class="artboard-toolbar">
+			<span class="artboard-label">Themes</span>
+			<div class="artboard-buttons" role="group" aria-label="Theme presets">
+				<button type="button" data-theme="signal" aria-pressed="true">Signal</button>
+				<button type="button" data-theme="noir">Noir</button>
+				<button type="button" data-theme="studio">Studio</button>
+			</div>
+		</div>
+
+		<section class="artboard" data-dyss-preview>
+			<header class="artboard-header">
+				<div>
+					<p class="artboard-kicker">Launch console</p>
+					<h3>Signal Campaign</h3>
+					<p>Live themes update the whole interface without touching markup.</p>
+				</div>
+				<div class="artboard-actions">
+					<button class="ab-button primary" type="button">Publish</button>
+					<button class="ab-button ghost" type="button">Preview</button>
+				</div>
+			</header>
+
+			<div class="artboard-grid">
+				<article class="ab-card">
+					<h4>Status</h4>
+					<p>Everything on track. Audience growth up 12% week over week.</p>
+					<div class="ab-tags">
+						<span>Ready</span>
+						<span>Audience</span>
+						<span>+12%</span>
+					</div>
+				</article>
+				<article class="ab-card">
+					<h4>Next steps</h4>
+					<ul class="ab-list">
+						<li><strong>Creative</strong><span>Finalize visuals</span></li>
+						<li><strong>Copy</strong><span>Lock headlines</span></li>
+						<li><strong>QA</strong><span>Test sequences</span></li>
+					</ul>
+					<button class="ab-button subtle" type="button">Open checklist</button>
+				</article>
+			</div>
+		</section>
+
+		<section class="artboard-code stack" aria-label="Live code preview">
+			<h3>Live code</h3>
+			<pre><code data-dyss-code></code></pre>
+		</section>
+	</div>
+
+	<script slot="scripts" type="module" src={dyssArtboardScript}></script>
+</DyssExample>
+
+<style>
+	.artboard-demo {
+		padding: 1rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0.75rem;
+		background: color-mix(in oklab, var(--color-bg) 92%, white);
+	}
+
+	.artboard-toolbar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.8rem;
+	}
+
+	.artboard-label {
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.artboard-buttons {
+		display: flex;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+	}
+
+	.artboard-buttons button {
+		padding: 0.4rem 0.8rem;
+		font-size: 0.62rem;
+		background: transparent;
+		color: var(--color-ink);
+		border: 1px solid var(--hairline);
+	}
+
+	.artboard-buttons button[aria-pressed='true'] {
+		border-color: var(--color-ink);
+	}
+
+	.artboard {
+		--ab-bg: #f6f1e8;
+		--ab-ink: #14161a;
+		--ab-accent: #c21f2b;
+		--ab-surface: #fff7ee;
+		--ab-border: rgba(20, 22, 26, 0.14);
+		--ab-shadow: rgba(12, 14, 16, 0.12);
+		background: var(--ab-bg);
+		color: var(--ab-ink);
+		border: 1px solid var(--ab-border);
+		box-shadow: 0 18px 30px var(--ab-shadow);
+		padding: 1rem;
+		border-radius: 0.8rem;
+		display: grid;
+		gap: 1rem;
+	}
+
+	.artboard-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.artboard-kicker {
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		margin: 0;
+		opacity: 0.7;
+	}
+
+	.artboard-header h3 {
+		margin: 0.3rem 0 0.4rem;
+		font-size: 1.4rem;
+	}
+
+	.artboard-header p {
+		margin: 0;
+		max-width: 42ch;
+	}
+
+	.artboard-actions {
+		display: flex;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+	}
+
+	.ab-button {
+		font-family: var(--font-label);
+		font-size: 0.62rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		padding: 0.5rem 0.85rem;
+		border: 1px solid transparent;
+		background: transparent;
+		cursor: pointer;
+	}
+
+	.ab-button.primary {
+		background: var(--ab-accent);
+		color: #fff;
+	}
+
+	.ab-button.ghost {
+		border-color: var(--ab-border);
+		color: var(--ab-ink);
+	}
+
+	.ab-button.subtle {
+		border-color: transparent;
+		color: var(--ab-accent);
+	}
+
+	.artboard-grid {
+		display: grid;
+		gap: 0.9rem;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	}
+
+	.ab-card {
+		background: var(--ab-surface);
+		border: 1px solid var(--ab-border);
+		padding: 0.9rem;
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.ab-card h4 {
+		margin: 0;
+	}
+
+	.ab-card p {
+		margin: 0;
+	}
+
+	.ab-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.ab-tags span {
+		font-family: var(--font-label);
+		font-size: 0.6rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		padding: 0.2rem 0.5rem;
+		border: 1px solid var(--ab-border);
+	}
+
+	.ab-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.ab-list li {
+		display: grid;
+		gap: 0.2rem;
+		border-top: 1px dashed var(--ab-border);
+		padding-top: 0.4rem;
+	}
+
+	.ab-list span {
+		opacity: 0.7;
+		font-size: 0.85rem;
+	}
+
+	.artboard-code pre {
+		background: color-mix(in oklab, var(--color-bg) 88%, black);
+		padding: 0.9rem;
+		overflow-x: auto;
+	}
+
+	.artboard-code code {
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+	}
+</style>

@@ -1,0 +1,293 @@
+---
+import DyssExample from '../../../../layouts/DyssExample.astro';
+import dyssThemeMixerScript from '../../../../scripts/dyss-theme-mixer.js?url&no-inline';
+
+const title = 'dyss: theme mixer';
+const description = 'Tune theme tokens and watch a preview UI restyle itself in real time.';
+---
+
+<DyssExample title={title} description={description}>
+	<p>
+		Adjust the tokens below and the preview will update immediately. dyss updates runtime CSS rules instead of
+		inlining styles everywhere.
+	</p>
+
+	<div class="theme-mixer stack" data-dyss-theme-demo>
+		<form class="theme-controls" data-dyss-controls>
+			<fieldset>
+				<legend>Theme tokens</legend>
+				<div class="theme-grid">
+					<label class="theme-control">
+						<span>Background</span>
+						<input type="color" value="#f6f1e8" data-token="bg" aria-label="Background color" />
+					</label>
+					<label class="theme-control">
+						<span>Text</span>
+						<input type="color" value="#14161a" data-token="ink" aria-label="Text color" />
+					</label>
+					<label class="theme-control">
+						<span>Accent</span>
+						<input type="color" value="#c21f2b" data-token="accent" aria-label="Accent color" />
+					</label>
+					<label class="theme-control">
+						<span>Surface mix</span>
+						<input type="range" min="70" max="98" step="1" value="92" data-token="surfaceMix" />
+						<output data-output="surfaceMix">92%</output>
+					</label>
+					<label class="theme-control">
+						<span>Type scale</span>
+						<input type="range" min="0.85" max="1.3" step="0.01" value="1" data-token="typeScale" />
+						<output data-output="typeScale">1.00x</output>
+					</label>
+					<label class="theme-control">
+						<span>Space scale</span>
+						<input type="range" min="0.8" max="1.4" step="0.01" value="1" data-token="spaceScale" />
+						<output data-output="spaceScale">1.00x</output>
+					</label>
+				</div>
+			</fieldset>
+		</form>
+
+		<div class="theme-preview" data-theme-preview>
+			<header class="preview-header">
+				<div>
+					<p class="preview-kicker">Mix &amp; match</p>
+					<h3>Editorial Launch</h3>
+					<p>Dial the sliders to steer the theme. dyss keeps the rules clean.</p>
+				</div>
+				<button class="preview-button primary" type="button">Primary action</button>
+			</header>
+
+			<div class="preview-grid">
+				<section class="preview-card">
+					<h4>Campaign summary</h4>
+					<p>Short content blocks are easy to restyle when the tokens move.</p>
+					<div class="preview-badges">
+						<span>New</span>
+						<span>Editor pick</span>
+						<span>2026</span>
+					</div>
+				</section>
+				<section class="preview-card">
+					<h4>Key metrics</h4>
+					<ul class="preview-list">
+						<li><strong>8.2%</strong><span>Engagement</span></li>
+						<li><strong>12.4k</strong><span>Subscribers</span></li>
+						<li><strong>4m 18s</strong><span>Avg. read</span></li>
+					</ul>
+					<button class="preview-button ghost" type="button">Secondary action</button>
+				</section>
+			</div>
+		</div>
+
+		<section class="theme-code stack" aria-label="Live code preview">
+			<h3>Live code</h3>
+			<pre><code data-dyss-code></code></pre>
+		</section>
+	</div>
+
+	<script slot="scripts" type="module" src={dyssThemeMixerScript}></script>
+</DyssExample>
+
+<style>
+	.theme-mixer {
+		padding: 1rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0.75rem;
+		background: color-mix(in oklab, var(--color-bg) 92%, white);
+	}
+
+	.theme-controls fieldset {
+		border: 1px solid var(--hairline);
+		padding: 0.9rem;
+		margin: 0;
+	}
+
+	.theme-controls legend {
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.theme-grid {
+		margin-top: 0.6rem;
+		display: grid;
+		gap: 0.75rem;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	}
+
+	.theme-control {
+		display: grid;
+		gap: 0.4rem;
+		font-size: 0.85rem;
+	}
+
+	.theme-control span {
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.theme-control input[type='color'] {
+		inline-size: 100%;
+		block-size: 38px;
+		padding: 0;
+		border: 1px solid var(--hairline);
+		background: transparent;
+	}
+
+	.theme-control input[type='range'] {
+		inline-size: 100%;
+	}
+
+	.theme-control output {
+		font-family: var(--font-label);
+		font-size: 0.75rem;
+		color: var(--color-ink-muted);
+	}
+
+	.theme-preview {
+		--tm-bg: #f6f1e8;
+		--tm-ink: #14161a;
+		--tm-accent: #c21f2b;
+		--tm-surface-mix: 92%;
+		--tm-type-scale: 1;
+		--tm-space-scale: 1;
+		background: var(--tm-bg);
+		color: var(--tm-ink);
+		border: 1px solid color-mix(in oklab, var(--tm-ink) 15%, transparent);
+		padding: calc(1.1rem * var(--tm-space-scale));
+		border-radius: 0.8rem;
+		display: grid;
+		gap: calc(1rem * var(--tm-space-scale));
+	}
+
+	.theme-preview h3,
+	.theme-preview h4 {
+		margin: 0;
+	}
+
+	.preview-kicker {
+		font-family: var(--font-label);
+		font-size: calc(0.7rem * var(--tm-type-scale));
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		margin: 0;
+		color: color-mix(in oklab, var(--tm-ink) 70%, transparent);
+	}
+
+	.preview-header {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.preview-header h3 {
+		font-size: calc(1.4rem * var(--tm-type-scale));
+	}
+
+	.preview-header p {
+		margin: 0.4rem 0 0;
+		font-size: calc(0.95rem * var(--tm-type-scale));
+		max-width: 42ch;
+	}
+
+	.preview-grid {
+		display: grid;
+		gap: calc(0.9rem * var(--tm-space-scale));
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	}
+
+	.preview-card {
+		background: color-mix(in oklab, var(--tm-bg) var(--tm-surface-mix), var(--tm-ink));
+		border: 1px solid color-mix(in oklab, var(--tm-ink) 12%, transparent);
+		padding: calc(0.9rem * var(--tm-space-scale));
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.preview-card p {
+		margin: 0;
+		font-size: calc(0.9rem * var(--tm-type-scale));
+	}
+
+	.preview-badges {
+		display: flex;
+		gap: 0.4rem;
+		flex-wrap: wrap;
+	}
+
+	.preview-badges span {
+		font-family: var(--font-label);
+		font-size: calc(0.6rem * var(--tm-type-scale));
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		padding: 0.25rem 0.5rem;
+		border: 1px solid color-mix(in oklab, var(--tm-ink) 20%, transparent);
+	}
+
+	.preview-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.preview-list li {
+		display: grid;
+		gap: 0.2rem;
+		border-top: 1px dashed color-mix(in oklab, var(--tm-ink) 18%, transparent);
+		padding-top: 0.4rem;
+	}
+
+	.preview-list strong {
+		font-size: calc(1.15rem * var(--tm-type-scale));
+	}
+
+	.preview-list span {
+		font-size: calc(0.75rem * var(--tm-type-scale));
+		color: color-mix(in oklab, var(--tm-ink) 70%, transparent);
+	}
+
+	.preview-button {
+		font-family: var(--font-label);
+		font-size: calc(0.65rem * var(--tm-type-scale));
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		padding: 0.55rem 0.8rem;
+		border: 1px solid transparent;
+		background: transparent;
+		cursor: pointer;
+	}
+
+	.preview-button.primary {
+		background: var(--tm-accent);
+		color: #fff;
+	}
+
+	.preview-button.ghost {
+		border-color: color-mix(in oklab, var(--tm-ink) 25%, transparent);
+		color: var(--tm-ink);
+	}
+
+	.theme-code pre {
+		background: color-mix(in oklab, var(--color-bg) 88%, black);
+		padding: 0.9rem;
+		overflow-x: auto;
+	}
+
+	.theme-code code {
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+	}
+	@media (max-width: 720px) {
+		.theme-preview {
+			padding: 0.9rem;
+		}
+	}
+</style>

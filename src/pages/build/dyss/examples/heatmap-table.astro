@@ -1,0 +1,147 @@
+---
+import DyssExample from '../../../../layouts/DyssExample.astro';
+import dyssHeatmapDemoScript from '../../../../scripts/dyss-heatmap-demo.js?url&no-inline';
+
+const title = 'dyss: engine map heatmap';
+const description = 'A live data heatmap table with dynamic CSS rules per cell.';
+---
+
+<DyssExample title={title} description={description}>
+	<p>
+		This example simulates an injection map: RPM columns, load rows, and live sensor values. dyss updates per-cell
+		styles through the CSSOM without touching inline styles.
+	</p>
+
+	<div class="heatmap-demo stack" data-dyss-heatmap>
+		<div class="heatmap-controls">
+			<button type="button" data-dyss-live aria-pressed="false">Start live data</button>
+			<label class="heatmap-interval">
+				<span>Interval</span>
+				<select data-dyss-interval>
+					<option value="10">10ms</option>
+					<option value="50" selected>50ms</option>
+					<option value="100">100ms</option>
+					<option value="250">250ms</option>
+					<option value="500">500ms</option>
+				</select>
+			</label>
+			<button type="button" data-dyss-reseed>Reseed grid</button>
+			<p class="heatmap-fps" data-dyss-fps>0.0 FPS</p>
+		</div>
+
+		<div class="heatmap-table-wrap">
+			<table class="heatmap-table" aria-label="Injection map heatmap">
+				<thead data-dyss-head></thead>
+				<tbody data-dyss-body></tbody>
+			</table>
+		</div>
+
+		<section class="heatmap-code stack" aria-label="Live code preview">
+			<h3>Live code</h3>
+			<pre><code data-dyss-code></code></pre>
+		</section>
+	</div>
+
+	<script slot="scripts" type="module" src={dyssHeatmapDemoScript}></script>
+</DyssExample>
+
+<style>
+	.heatmap-demo {
+		padding: 1rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0.75rem;
+		background: color-mix(in oklab, var(--color-bg) 92%, white);
+	}
+
+	.heatmap-controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		align-items: center;
+	}
+
+	.heatmap-controls button {
+		padding: 0.45rem 0.8rem;
+		font-size: 0.64rem;
+		background: transparent;
+		color: var(--color-ink);
+		border: 1px solid var(--hairline);
+	}
+
+	.heatmap-interval {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.heatmap-interval select {
+		padding: 0.35rem 0.5rem;
+		border-radius: 0;
+	}
+
+	.heatmap-fps {
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-ink-muted);
+		margin: 0;
+	}
+
+	.heatmap-table-wrap {
+		overflow-x: auto;
+		border: 1px solid var(--hairline);
+	}
+
+	.heatmap-table {
+		width: 100%;
+		border-collapse: collapse;
+		min-width: 620px;
+		font-size: 0.85rem;
+	}
+
+	.heatmap-table th,
+	.heatmap-table td {
+		border: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
+		padding: 0.45rem 0.5rem;
+		text-align: center;
+	}
+
+	.heatmap-table th {
+		font-family: var(--font-label);
+		font-size: 0.65rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		background: color-mix(in oklab, var(--color-bg) 88%, black);
+	}
+
+	.heatmap-table td {
+		font-variant-numeric: tabular-nums;
+		transition: background-color 120ms ease, color 120ms ease;
+	}
+
+	:global(.hm-cell) {
+		font-weight: 600;
+	}
+
+	.heatmap-code pre {
+		background: color-mix(in oklab, var(--color-bg) 88%, black);
+		padding: 0.9rem;
+		overflow-x: auto;
+	}
+
+	.heatmap-code code {
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+	}
+
+	@media (max-width: 760px) {
+		.heatmap-controls {
+			align-items: flex-start;
+		}
+	}
+</style>
