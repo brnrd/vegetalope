@@ -145,6 +145,24 @@ header.site-header h2 {
 	border: 0;
 }
 
+header.site-header .site-logo {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	text-decoration: none;
+}
+
+header.site-header .site-logo-mark {
+	inline-size: clamp(140px, 20vw, 200px);
+	block-size: auto;
+	filter: none;
+	transition: filter 160ms ease;
+}
+
+html.theme-dark header.site-header .site-logo-mark {
+	filter: invert(1) brightness(1.05) saturate(0.9);
+}
+
 @media (max-width: 720px) {
 	:where(header.site-header) {
 		padding-block: var(--page-pad);

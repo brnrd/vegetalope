@@ -2,6 +2,8 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import headerLogo from '../assets/vegetalope-transparent.webp';
 
 interface Props {
 	title: string;
@@ -17,6 +19,11 @@ const baseForImages = Astro.site ?? Astro.url;
 const resolvedImage = new URL(image ?? fallbackImage, baseForImages);
 const pathname = Astro.url.pathname;
 const allowIndex = pathname === '/' || pathname.startsWith('/write');
+const headerLogoImage = await getImage({
+	src: headerLogo,
+	widths: [140, 200, 280, 360],
+	formats: ['webp']
+});
 ---
 
 <!-- Global Metadata -->
@@ -36,6 +43,13 @@ const allowIndex = pathname === '/' || pathname.startsWith('/write');
 <meta name="description" content={description} />
 {!allowIndex && <meta name="robots" content="noindex, nofollow" />}
 <link rel="alternate" type="application/rss+xml" title="vegetalope Write Feed" href="/rss.xml" />
+<link
+	rel="preload"
+	as="image"
+	href={headerLogoImage.src}
+	imagesrcset={headerLogoImage.srcset}
+	imagesizes="(max-width: 720px) 140px, 200px"
+/>
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
