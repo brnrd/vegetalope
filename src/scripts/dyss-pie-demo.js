@@ -164,6 +164,7 @@ function mountDemo(root) {
 		legend.replaceChildren();
 		if (slices.length === 0) {
 			const li = document.createElement('li');
+			li.className = 'dyss-legend-item';
 			const swatch = document.createElement('span');
 			swatch.className = 'swatch';
 			swatch.style.background = '#d9d9d9';
@@ -178,6 +179,7 @@ function mountDemo(root) {
 		} else {
 			for (const slice of slices) {
 				const li = document.createElement('li');
+				li.className = 'dyss-legend-item';
 				const swatch = document.createElement('span');
 				swatch.className = 'swatch';
 				swatch.style.background = slice.color;

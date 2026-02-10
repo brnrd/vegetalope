@@ -260,23 +260,23 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 		gap: 0.75rem;
 	}
 
-	:global(.dyss-legend li) {
+	:global(.dyss-legend-item) {
 		display: grid;
-		grid-template-columns: 14px 1fr auto auto;
+		grid-template-columns: 14px minmax(140px, 1fr) minmax(40px, 64px) minmax(56px, 80px);
 		align-items: center;
-		gap: 0.75rem;
+		column-gap: 0.75rem;
 		font-size: 1rem;
 		line-height: 1.4;
 		padding-block: 0.1rem;
 	}
 
-	:global(.dyss-legend .swatch) {
+	:global(.dyss-legend-item .swatch) {
 		inline-size: 14px;
 		block-size: 14px;
 		border-radius: 3px;
 	}
 
-	:global(.dyss-legend em) {
+	:global(.dyss-legend-item em) {
 		font-style: normal;
 		color: var(--color-ink-muted);
 	}
