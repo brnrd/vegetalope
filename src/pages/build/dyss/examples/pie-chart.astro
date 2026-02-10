@@ -1,90 +1,71 @@
 ---
-import BaseHead from '../../../../components/BaseHead.astro';
-import Header from '../../../../components/Header.astro';
-import Footer from '../../../../components/Footer.astro';
+import DyssExample from '../../../../layouts/DyssExample.astro';
 import dyssPieDemoScript from '../../../../scripts/dyss-pie-demo.js?url&no-inline';
 
-const pageTitle = 'dyss: dynamic pie chart playground';
-const pageDescription = 'A small dyss use-case: tweak pie chart inputs and let CSS update itself.';
+const title = 'dyss: dynamic pie chart playground';
+const description = 'A small dyss use-case: tweak pie chart inputs and let CSS update itself.';
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={pageTitle} description={pageDescription} />
-	</head>
-	<body>
-		<Header />
-		<main class="content stack">
-			<article class="stack">
-				<header class="stack">
-					<h1>{pageTitle}</h1>
-					<p>{pageDescription}</p>
-				</header>
+<DyssExample title={title} description={description}>
+	<p>
+		This is a practical use-case for <a href="https://github.com/brnrd/dyss">dyss</a>, inspired by the CSS
+		pie-chart exploration on CSS-Tricks.
+	</p>
 
-				<p>
-					This is a practical use-case for <a href="https://github.com/brnrd/dyss">dyss</a>, inspired by
-					the CSS pie-chart exploration on CSS-Tricks.
-				</p>
+	<p>
+		The goal: adjust segment values without manually recalculating percentages or <code>conic-gradient</code>
+		stops.
+	</p>
 
-				<p>
-					The goal: adjust segment values without manually recalculating percentages or
-					<code>conic-gradient</code> stops.
-				</p>
-
-				<div class="dyss-demo stack" data-dyss-demo>
-					<form class="dyss-controls stack" data-dyss-controls>
-						<fieldset>
-							<legend>Pie chart values</legend>
-							<div class="dyss-rows stack" data-dyss-rows></div>
-							<div class="dyss-actions">
-								<button type="button" data-dyss-add>Add service</button>
-							</div>
-						</fieldset>
-					</form>
-
-					<div class="dyss-preview stack">
-						<figure class="dyss-chart-wrap">
-							<div class="dyss-pie" role="img" aria-label="Dynamic revenue split pie chart"></div>
-							<figcaption>Revenue split</figcaption>
-								<div class="dyss-runtime">
-									<button type="button" data-dyss-live aria-pressed="false">Start live data</button>
-									<label class="dyss-interval">
-										<span>Interval</span>
-										<select data-dyss-interval>
-											<option value="1">1ms</option>
-											<option value="10">10ms</option>
-											<option value="50" selected>50ms</option>
-											<option value="100">100ms</option>
-											<option value="500">500ms</option>
-											<option value="1000">1000ms</option>
-										</select>
-									</label>
-									<p data-dyss-fps>0.0 FPS</p>
-								</div>
-							</figure>
-						<ul class="dyss-legend" data-dyss-legend></ul>
-					</div>
-
-					<section class="dyss-code stack" aria-label="Live code preview">
-						<h3>Live code</h3>
-						<pre><code data-dyss-code></code></pre>
-					</section>
+	<div class="dyss-demo stack" data-dyss-demo>
+		<form class="dyss-controls stack" data-dyss-controls>
+			<fieldset>
+				<legend>Pie chart values</legend>
+				<div class="dyss-rows stack" data-dyss-rows></div>
+				<div class="dyss-actions">
+					<button type="button" data-dyss-add>Add service</button>
 				</div>
+			</fieldset>
+		</form>
 
-				<p class="dyss-note">
-					CSS-Tricks reference:
-					<a href="https://css-tricks.com/trying-to-make-the-perfect-pie-chart-in-css/"
-						>Trying to make the perfect pie chart in CSS</a
-					>
-				</p>
-			</article>
-		</main>
-		<Footer />
+		<div class="dyss-preview stack">
+			<figure class="dyss-chart-wrap">
+				<div class="dyss-pie" role="img" aria-label="Dynamic revenue split pie chart"></div>
+				<figcaption>Revenue split</figcaption>
+				<div class="dyss-runtime">
+					<button type="button" data-dyss-live aria-pressed="false">Start live data</button>
+					<label class="dyss-interval">
+						<span>Interval</span>
+						<select data-dyss-interval>
+							<option value="1">1ms</option>
+							<option value="10">10ms</option>
+							<option value="50" selected>50ms</option>
+							<option value="100">100ms</option>
+							<option value="500">500ms</option>
+							<option value="1000">1000ms</option>
+						</select>
+					</label>
+					<p data-dyss-fps>0.0 FPS</p>
+				</div>
+			</figure>
+			<ul class="dyss-legend" data-dyss-legend></ul>
+		</div>
 
-		<script type="module" src={dyssPieDemoScript}></script>
-	</body>
-</html>
+		<section class="dyss-code stack" aria-label="Live code preview">
+			<h3>Live code</h3>
+			<pre><code data-dyss-code></code></pre>
+		</section>
+	</div>
+
+	<p class="dyss-note">
+		CSS-Tricks reference:
+		<a href="https://css-tricks.com/trying-to-make-the-perfect-pie-chart-in-css/">
+			Trying to make the perfect pie chart in CSS
+		</a>
+	</p>
+
+	<script slot="scripts" type="module" src={dyssPieDemoScript}></script>
+</DyssExample>
 
 <style>
 	.dyss-demo {

@@ -1,0 +1,44 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const { title, description, backHref = '/build/dyss', backLabel = 'Back to dyss examples' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main class="content stack">
+			<article class="stack dyss-example">
+				<header class="stack">
+					<h1>{title}</h1>
+					<p>{description}</p>
+				</header>
+
+				<p class="dyss-back">
+					<a href={backHref}>{backLabel}</a>
+				</p>
+
+				<section class="stack">
+					<slot />
+				</section>
+			</article>
+		</main>
+		<Footer />
+		<slot name="scripts" />
+	</body>
+</html>
+
+<style>
+	.dyss-example .dyss-back {
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+</style>
