@@ -15,6 +15,9 @@ import logoImage from '../assets/vegetalope-transparent.webp'
 					formats={['webp', 'avif']}
 					widths={[140, 200, 280, 360]}
 					loading="eager"
+					decoding="async"
+					fetchpriority="high"
+					sizes="(max-width: 720px) 140px, 200px"
 				/>
 				<span class="sr-only">{SITE_TITLE}</span>
 			</a>
