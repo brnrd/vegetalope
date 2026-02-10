@@ -1,10 +1,24 @@
 ---
+import { Image } from 'astro:assets';
 import { SITE_TITLE } from '../consts'
+import logoImage from '../assets/vegetalope-transparent.webp'
 ---
 
 <header class="site-header">
 	<div class="inner">
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<h2>
+			<a class="site-logo" href="/" aria-label={SITE_TITLE}>
+				<Image
+					src={logoImage}
+					alt={SITE_TITLE}
+					class="site-logo-mark"
+					formats={['webp', 'avif']}
+					widths={[140, 200, 280, 360]}
+					loading="eager"
+				/>
+				<span class="sr-only">{SITE_TITLE}</span>
+			</a>
+		</h2>
 
 		<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
 			<span class="sr-only">Toggle navigation</span>
