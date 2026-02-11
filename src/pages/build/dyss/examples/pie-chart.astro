@@ -8,13 +8,12 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 
 <DyssExample title={title} description={description}>
 	<p>
-		This is a practical use-case for <a href="https://github.com/brnrd/dyss">dyss</a>, inspired by the CSS
-		pie-chart exploration on CSS-Tricks.
+		This version keeps the chart semantic first: the pie is an actual list of entries, each item exposing
+		<code>data-percentage</code> and <code>data-color</code>.
 	</p>
 
 	<p>
-		The goal: adjust segment values without manually recalculating percentages or <code>conic-gradient</code>
-		stops.
+		The controls update those list items live, and the chart redraws from the same HTML data structure.
 	</p>
 
 	<div class="dyss-demo stack" data-dyss-demo>
@@ -30,7 +29,7 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 
 		<div class="dyss-preview stack">
 			<figure class="dyss-chart-wrap">
-				<div class="dyss-pie" role="img" aria-label="Dynamic revenue split pie chart"></div>
+				<ul class="dyss-pie" data-dyss-pie aria-label="Revenue split pie chart data"></ul>
 				<figcaption>Revenue split</figcaption>
 				<div class="dyss-runtime">
 					<button type="button" data-dyss-live aria-pressed="false">Start live data</button>
@@ -48,7 +47,6 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 					<p data-dyss-fps>0.0 FPS</p>
 				</div>
 			</figure>
-			<ul class="dyss-legend" data-dyss-legend></ul>
 		</div>
 
 		<section class="dyss-code stack" aria-label="Live code preview">
@@ -175,7 +173,7 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 	.dyss-preview {
 		margin-top: 1rem;
 		display: grid;
-		grid-template-columns: minmax(180px, 230px) 1fr;
+		grid-template-columns: 1fr;
 		gap: 1rem;
 		align-items: start;
 	}
@@ -183,8 +181,10 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 	.dyss-chart-wrap {
 		margin: 0;
 		display: grid;
-		gap: 0.6rem;
+		gap: 0.7rem;
 		justify-items: center;
+		width: fit-content;
+		padding: 2.6rem 3rem 0.35rem;
 	}
 
 	.dyss-chart-wrap figcaption {
@@ -244,40 +244,75 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 	}
 
 	.dyss-pie {
-		inline-size: min(42vw, 220px);
-		aspect-ratio: 1;
-		border-radius: 50%;
-		border: 1px solid var(--hairline);
-		box-shadow: inset 0 0 0 1px color-mix(in oklab, black 10%, transparent);
-		background-image: conic-gradient(#ddd 0deg 360deg);
-	}
-
-	.dyss-legend {
+		--radius: min(22vmin, 110px);
+		--gap: 2.1rem;
 		list-style: none;
-		padding: 0;
 		margin: 0;
+		padding: 0;
 		display: grid;
-		gap: 0.75rem;
+		place-items: center;
+		position: relative;
+		inline-size: calc(var(--radius) * 2);
+		aspect-ratio: 1 / 1;
+		border-radius: 50%;
+		border: 0;
+		background: transparent;
+		box-shadow: none;
+		overflow: visible;
 	}
 
-	:global(.dyss-legend-item) {
+	:global(.dyss-pie-item) {
+		--accum: 0;
+		--weighing: 0;
+		--percentage: 0%;
+		--bg-color: #d9d9d9;
+		--slice-overlap: 0.18%;
+		--layer: 1;
+		--offset: calc(360deg * var(--accum) / 100);
+		--theta: calc((360deg * var(--weighing)) / 2 + var(--offset) - 90deg);
+		--pos-x: calc(cos(var(--theta)) * (var(--radius) + var(--gap)));
+		--pos-y: calc(sin(var(--theta)) * (var(--radius) + var(--gap)));
+		grid-row: 1;
+		grid-column: 1;
+		z-index: var(--layer);
+		inline-size: calc(var(--radius) * 2);
+		aspect-ratio: 1 / 1;
+		border-radius: 50%;
 		display: grid;
-		grid-template-columns: 14px minmax(140px, 1fr) minmax(40px, 64px) minmax(56px, 80px);
-		align-items: center;
-		column-gap: 0.75rem;
-		font-size: 1rem;
-		line-height: 1.4;
-		padding-block: 0.1rem;
+		place-items: center;
+		background: conic-gradient(
+			from var(--offset),
+			var(--bg-color) 0% calc(var(--percentage) + var(--slice-overlap)),
+			transparent calc(var(--percentage) + var(--slice-overlap)) 100%
+		);
 	}
 
-	:global(.dyss-legend-item .swatch) {
-		inline-size: 14px;
-		block-size: 14px;
-		border-radius: 3px;
+	:global(.dyss-pie-item[data-explode='true']) {
+		transform: translate(0, 3px);
 	}
 
-	:global(.dyss-legend-item em) {
-		font-style: normal;
+	:global(.dyss-pie-item strong),
+	:global(.dyss-pie-item::after) {
+		grid-row: 1;
+		grid-column: 1;
+		background: color-mix(in oklab, var(--color-bg) 85%, white);
+		padding: 0.1rem 0.35rem;
+		border: 1px solid var(--hairline);
+		font-size: 0.66rem;
+		line-height: 1.2;
+		white-space: nowrap;
+	}
+
+	:global(.dyss-pie-item strong) {
+		font-size: 0.68rem;
+		font-weight: 600;
+		transform: translateX(var(--pos-x)) translateY(var(--pos-y));
+	}
+
+	:global(.dyss-pie-item::after) {
+		content: attr(data-percentage) '%';
+		--pos-y: calc(sin(var(--theta)) * (var(--radius) + var(--gap)) + 1.4lh);
+		transform: translateX(var(--pos-x)) translateY(var(--pos-y));
 		color: var(--color-ink-muted);
 	}
 
@@ -294,11 +329,13 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 		:global(.dyss-row output) {
 			text-align: left;
 		}
-	}
 
-	@media (max-width: 760px) {
-		.dyss-preview {
-			grid-template-columns: 1fr;
+		.dyss-pie {
+			--gap: 1.5rem;
+		}
+
+		.dyss-chart-wrap {
+			padding: 2rem 1.8rem 0.2rem;
 		}
 	}
 

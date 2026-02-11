@@ -26,14 +26,6 @@ function clampValue(value) {
 	return Math.max(0, Math.min(100, Math.round(number)));
 }
 
-function escapeHTML(input) {
-	return input
-		.replaceAll('&', '&amp;')
-		.replaceAll('<', '&lt;')
-		.replaceAll('>', '&gt;')
-		.replaceAll('"', '&quot;');
-}
-
 function toSlices(rows) {
 	const total = rows.reduce((sum, row) => sum + row.value, 0);
 	if (total <= 0) {
@@ -41,11 +33,14 @@ function toSlices(rows) {
 	}
 
 	let cumulative = 0;
-	return rows.map((row) => {
-		const pct = (row.value / total) * 100;
+	return rows.map((row, index) => {
+		const remaining = Math.max(0, 100 - cumulative);
+		const rawPct = (row.value / total) * 100;
+		const pct = index === rows.length - 1 ? remaining : Math.max(0, Math.min(rawPct, remaining));
 		const start = cumulative;
-		cumulative += pct;
-		return { ...row, pct, start, end: cumulative };
+		const end = index === rows.length - 1 ? 100 : start + pct;
+		cumulative = end;
+		return { ...row, pct: end - start, start, end };
 	});
 }
 
@@ -56,26 +51,32 @@ function mountDemo(root) {
 	const liveButton = root.querySelector('[data-dyss-live]');
 	const intervalSelect = root.querySelector('[data-dyss-interval]');
 	const fpsOutput = root.querySelector('[data-dyss-fps]');
-	const pie = root.querySelector('.dyss-pie');
-	const legend = root.querySelector('[data-dyss-legend]');
+	const pieList = root.querySelector('[data-dyss-pie]');
 	const code = root.querySelector('[data-dyss-code]');
 
-	if (!controls || !rowsContainer || !addButton || !liveButton || !intervalSelect || !fpsOutput || !pie || !legend || !code) return;
+	if (
+		!controls ||
+		!rowsContainer ||
+		!addButton ||
+		!liveButton ||
+		!intervalSelect ||
+		!fpsOutput ||
+		!pieList ||
+		!code
+	) {
+		return;
+	}
 
 	const sheet = new Sheet();
-	const className = `dynamic-${Math.random().toString(36).slice(2, 10)}`;
-	const selector = `.dyss-pie.${className}`;
+	const chartClass = `dyss-chart-${Math.random().toString(36).slice(2, 10)}`;
+	pieList.classList.add(chartClass);
+
 	let rows = starterSegments.map((segment) => makeSegment(segment));
 	let liveDataTimer = null;
 	let liveIntervalMs = Number(intervalSelect.value) || 50;
 	let renderCount = 0;
 	let fpsWindowStart = performance.now();
 	let fpsRafId = 0;
-
-	sheet.add(selector, {
-		backgroundImage: 'conic-gradient(#d9d9d9 0deg 360deg)'
-	});
-	pie.classList.add(className);
 
 	function renderRows() {
 		rowsContainer.replaceChildren();
@@ -129,15 +130,58 @@ function mountDemo(root) {
 		}
 	}
 
-	function updateCode(stops) {
+	function updateCode(slices) {
 		const rowsCode = rows.map((row) => ({ label: row.label, value: row.value, color: row.color }));
+		const liSample = slices
+			.map(
+				(slice) =>
+					`<li data-percentage="${slice.pct.toFixed(1)}" data-color="${slice.color}"><strong>${slice.label}</strong></li>`
+			)
+			.join('\n');
+		const ruleSample = slices
+			.map((slice) => {
+				const itemSelector = `.dyss-pie-item-${slice.id}`;
+				return [
+					`rule = sheet.get('${itemSelector}');`,
+					`rule.style.setProperty('--accum', '${slice.start.toFixed(4)}');`,
+					`rule.style.setProperty('--percentage', '${slice.pct.toFixed(4)}%');`,
+					`rule.style.setProperty('--weighing', '${(slice.pct / 100).toFixed(6)}');`,
+					`rule.style.setProperty('--bg-color', '${slice.color}');`
+				].join('\n');
+			})
+			.join('\n\n');
+
 		code.textContent = [
 			`const values = ${JSON.stringify(rowsCode, null, 2)};`,
 			'',
-			`sheet.updateSet('${selector}', {`,
-			`  backgroundImage: 'conic-gradient(${stops})'`,
-			`});`
+			'<figure>',
+			'  <figcaption>Revenue split</figcaption>',
+			'  <ul class="pie-chart">',
+			liSample ? `    ${liSample}` : '    <li data-percentage="100" data-color="#d9d9d9"><strong>No data</strong></li>',
+			'  </ul>',
+			'</figure>',
+			'',
+			ruleSample || '// No data rule updates.'
 		].join('\n');
+	}
+
+	function ensureRule(selector) {
+		let rule = sheet.get(selector);
+		if (!rule) {
+			sheet.add(selector, {});
+			rule = sheet.get(selector);
+		}
+		return rule;
+	}
+
+	function applySliceRule(slice) {
+		const itemSelector = `.${chartClass} .dyss-pie-item-${slice.id}`;
+		const rule = ensureRule(itemSelector);
+		if (!rule) return;
+		rule.style.setProperty('--accum', String(slice.start));
+		rule.style.setProperty('--percentage', `${slice.pct}%`);
+		rule.style.setProperty('--weighing', String(slice.pct / 100));
+		rule.style.setProperty('--bg-color', slice.color);
 	}
 
 	function renderChart() {
@@ -145,57 +189,44 @@ function mountDemo(root) {
 
 		const slices = toSlices(rows);
 		const total = rows.reduce((sum, row) => sum + row.value, 0);
+		pieList.replaceChildren();
 
-		const stops =
-			total <= 0
-				? '#d9d9d9 0deg 360deg'
-				: slices
-						.map((slice) => {
-							const from = (slice.start * 3.6).toFixed(2);
-							const to = (slice.end * 3.6).toFixed(2);
-							return `${slice.color} ${from}deg ${to}deg`;
-						})
-						.join(', ');
-
-		sheet.updateSet(selector, {
-			backgroundImage: `conic-gradient(${stops})`
-		});
-
-		legend.replaceChildren();
-		if (slices.length === 0) {
+		if (rows.length === 0 || total <= 0) {
 			const li = document.createElement('li');
-			li.className = 'dyss-legend-item';
-			const swatch = document.createElement('span');
-			swatch.className = 'swatch';
-			swatch.style.background = '#d9d9d9';
-			const label = document.createElement('span');
+			li.className = 'dyss-pie-item dyss-pie-item-empty';
+			li.setAttribute('data-color', '#d9d9d9');
+			li.setAttribute('data-percentage', '100.0');
+			const label = document.createElement('strong');
 			label.textContent = 'No data';
-			const valueEl = document.createElement('strong');
-			valueEl.textContent = '0';
-			const pct = document.createElement('em');
-			pct.textContent = '0.0%';
-			li.append(swatch, label, valueEl, pct);
-			legend.append(li);
-		} else {
-			for (const slice of slices) {
-				const li = document.createElement('li');
-				li.className = 'dyss-legend-item';
-				const swatch = document.createElement('span');
-				swatch.className = 'swatch';
-				swatch.style.background = slice.color;
-				const label = document.createElement('span');
-				label.textContent = slice.label;
-				const valueEl = document.createElement('strong');
-				valueEl.textContent = String(slice.value);
-				const pct = document.createElement('em');
-				const pctText = total <= 0 ? '0.0' : slice.pct.toFixed(1);
-				pct.textContent = `${pctText}%`;
-				li.append(swatch, label, valueEl, pct);
-				legend.append(li);
+			li.append(label);
+			pieList.append(li);
+			const emptyRule = ensureRule(`.${chartClass} .dyss-pie-item-empty`);
+			if (emptyRule) {
+				emptyRule.style.setProperty('--accum', '0');
+				emptyRule.style.setProperty('--percentage', '100%');
+				emptyRule.style.setProperty('--weighing', '1');
+				emptyRule.style.setProperty('--bg-color', '#d9d9d9');
 			}
+			updateCode([]);
+			return;
 		}
 
-		updateCode(stops);
+		for (const [index, slice] of slices.entries()) {
+			const li = document.createElement('li');
+			li.className = `dyss-pie-item dyss-pie-item-${slice.id}`;
+			li.style.setProperty('--layer', String(slices.length - index));
+			const explode = index === 0;
+			li.setAttribute('data-explode', explode ? 'true' : 'false');
+			li.setAttribute('data-color', slice.color);
+			li.setAttribute('data-percentage', slice.pct.toFixed(1));
+			const label = document.createElement('strong');
+			label.textContent = slice.label;
+			li.append(label);
+			pieList.append(li);
+			applySliceRule(slice);
+		}
+
+		updateCode(slices);
 	}
 
 	function tickFPS(now) {

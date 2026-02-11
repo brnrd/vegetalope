@@ -1,21 +1,21 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
-import dyssHeatmapDemoScript from '../../../../scripts/dyss-heatmap-demo.js?url&no-inline';
+import dyssFuelMapDemoScript from '../../../../scripts/dyss-fuel-map-demo.js?url&no-inline';
 
-const title = 'dyss: engine map heatmap';
-const description = 'A live data heatmap table with dynamic CSS rules per cell.';
+const title = 'dyss: AFR fuel map';
+const description = 'A live AFR fuel map table with dynamic CSS rules per cell.';
 ---
 
 <DyssExample title={title} description={description}>
 	<p>
-		This example simulates an injection map: RPM columns, load rows, and live sensor values. dyss updates per-cell
-		styles through the CSSOM without touching inline styles.
+		This example simulates an AFR fuel map: RPM on the X axis, LOAD on the Y axis (low at top, high at bottom).
+		Live mode moves a coherent operating point and updates nearby cells smoothly.
 	</p>
 
-	<div class="heatmap-demo stack" data-dyss-heatmap>
-		<div class="heatmap-controls">
+	<div class="fuel-map-demo stack" data-dyss-fuel-map>
+		<div class="fuel-map-controls">
 			<button type="button" data-dyss-live aria-pressed="false">Start live data</button>
-			<label class="heatmap-interval">
+			<label class="fuel-map-interval">
 				<span>Interval</span>
 				<select data-dyss-interval>
 					<option value="10">10ms</option>
@@ -26,41 +26,42 @@ const description = 'A live data heatmap table with dynamic CSS rules per cell.'
 				</select>
 			</label>
 			<button type="button" data-dyss-reseed>Reseed grid</button>
-			<p class="heatmap-fps" data-dyss-fps>0.0 FPS</p>
+			<p class="fuel-map-fps" data-dyss-fps>0.0 FPS</p>
 		</div>
 
-		<div class="heatmap-table-wrap">
-			<table class="heatmap-table" aria-label="Injection map heatmap">
+		<div class="fuel-map-table-wrap">
+			<table class="fuel-map-table" aria-label="AFR fuel map table">
 				<thead data-dyss-head></thead>
 				<tbody data-dyss-body></tbody>
 			</table>
 		</div>
+		<p class="fuel-map-axis-note">X axis: RPM left to right. Y axis: LOAD low to high (top to bottom).</p>
 
-		<section class="heatmap-code stack" aria-label="Live code preview">
+		<section class="fuel-map-code stack" aria-label="Live code preview">
 			<h3>Live code</h3>
 			<pre><code data-dyss-code></code></pre>
 		</section>
 	</div>
 
-	<script slot="scripts" type="module" src={dyssHeatmapDemoScript}></script>
+	<script slot="scripts" type="module" src={dyssFuelMapDemoScript}></script>
 </DyssExample>
 
 <style>
-	.heatmap-demo {
+	.fuel-map-demo {
 		padding: 1rem;
 		border: 1px solid var(--hairline);
 		border-radius: 0.75rem;
 		background: color-mix(in oklab, var(--color-bg) 92%, white);
 	}
 
-	.heatmap-controls {
+	.fuel-map-controls {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.75rem;
 		align-items: center;
 	}
 
-	.heatmap-controls button {
+	.fuel-map-controls button {
 		padding: 0.45rem 0.8rem;
 		font-size: 0.64rem;
 		background: transparent;
@@ -68,7 +69,7 @@ const description = 'A live data heatmap table with dynamic CSS rules per cell.'
 		border: 1px solid var(--hairline);
 	}
 
-	.heatmap-interval {
+	.fuel-map-interval {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
@@ -78,12 +79,12 @@ const description = 'A live data heatmap table with dynamic CSS rules per cell.'
 		text-transform: uppercase;
 	}
 
-	.heatmap-interval select {
+	.fuel-map-interval select {
 		padding: 0.35rem 0.5rem;
 		border-radius: 0;
 	}
 
-	.heatmap-fps {
+	.fuel-map-fps {
 		font-family: var(--font-label);
 		font-size: 0.7rem;
 		letter-spacing: 0.12em;
@@ -92,55 +93,67 @@ const description = 'A live data heatmap table with dynamic CSS rules per cell.'
 		margin: 0;
 	}
 
-	.heatmap-table-wrap {
+	.fuel-map-table-wrap {
 		overflow-x: auto;
 		border: 1px solid var(--hairline);
 	}
 
-	.heatmap-table {
+	.fuel-map-table {
 		width: 100%;
 		border-collapse: collapse;
-		min-width: 620px;
-		font-size: 0.85rem;
+		min-width: 940px;
+		font-size: 0.79rem;
 	}
 
-	.heatmap-table th,
-	.heatmap-table td {
+	.fuel-map-table th,
+	.fuel-map-table td {
 		border: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
-		padding: 0.45rem 0.5rem;
+		padding: 0.34rem 0.38rem;
 		text-align: center;
 	}
 
-	.heatmap-table th {
+	.fuel-map-table th {
 		font-family: var(--font-label);
-		font-size: 0.65rem;
-		letter-spacing: 0.12em;
+		font-size: 0.58rem;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		background: color-mix(in oklab, var(--color-bg) 88%, black);
 	}
 
-	.heatmap-table td {
+	.fuel-map-table td {
 		font-variant-numeric: tabular-nums;
+		font-family: var(--font-label);
+		font-size: 0.69rem;
+		letter-spacing: 0.04em;
 		transition: background-color 120ms ease, color 120ms ease;
 	}
 
-	:global(.hm-cell) {
+	:global(.fm-cell) {
 		font-weight: 600;
 	}
 
-	.heatmap-code pre {
+	.fuel-map-code pre {
 		background: color-mix(in oklab, var(--color-bg) 88%, black);
 		padding: 0.9rem;
 		overflow-x: auto;
 	}
 
-	.heatmap-code code {
+	.fuel-map-code code {
 		font-family: var(--font-label);
 		font-size: 0.8rem;
 	}
 
+	.fuel-map-axis-note {
+		margin: 0;
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		color: var(--color-ink-muted);
+	}
+
 	@media (max-width: 760px) {
-		.heatmap-controls {
+		.fuel-map-controls {
 			align-items: flex-start;
 		}
 	}
