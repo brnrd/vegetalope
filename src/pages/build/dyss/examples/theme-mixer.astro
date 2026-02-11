@@ -19,15 +19,57 @@ const description = 'Tune theme tokens and watch a preview UI restyle itself in 
 				<div class="theme-grid">
 					<label class="theme-control">
 						<span>Background</span>
-						<input type="color" value="#f6f1e8" data-token="bg" aria-label="Background color" />
+						<div class="theme-color-fields">
+							<input type="color" value="#f6f1e8" data-token="bg" aria-label="Background color" />
+							<span class="theme-hex-wrap">
+								<input
+									type="text"
+									value="f6f1e8"
+									maxlength="6"
+									autocomplete="off"
+									autocapitalize="off"
+									spellcheck="false"
+									data-token="bg"
+									aria-label="Background color hex"
+								/>
+							</span>
+						</div>
 					</label>
 					<label class="theme-control">
 						<span>Text</span>
-						<input type="color" value="#14161a" data-token="ink" aria-label="Text color" />
+						<div class="theme-color-fields">
+							<input type="color" value="#14161a" data-token="ink" aria-label="Text color" />
+							<span class="theme-hex-wrap">
+								<input
+									type="text"
+									value="14161a"
+									maxlength="6"
+									autocomplete="off"
+									autocapitalize="off"
+									spellcheck="false"
+									data-token="ink"
+									aria-label="Text color hex"
+								/>
+							</span>
+						</div>
 					</label>
 					<label class="theme-control">
 						<span>Accent</span>
-						<input type="color" value="#c21f2b" data-token="accent" aria-label="Accent color" />
+						<div class="theme-color-fields">
+							<input type="color" value="#c21f2b" data-token="accent" aria-label="Accent color" />
+							<span class="theme-hex-wrap">
+								<input
+									type="text"
+									value="c21f2b"
+									maxlength="6"
+									autocomplete="off"
+									autocapitalize="off"
+									spellcheck="false"
+									data-token="accent"
+									aria-label="Accent color hex"
+								/>
+							</span>
+						</div>
 					</label>
 					<label class="theme-control">
 						<span>Surface mix</span>
@@ -131,11 +173,52 @@ const description = 'Tune theme tokens and watch a preview UI restyle itself in 
 	}
 
 	.theme-control input[type='color'] {
-		inline-size: 100%;
+		inline-size: 46px;
 		block-size: 38px;
 		padding: 0;
 		border: 1px solid var(--hairline);
+		border-right: 0;
+		border-radius: 0.35rem 0 0 0.35rem;
 		background: transparent;
+	}
+
+	.theme-color-fields {
+		--picker-size: 46px;
+		--hex-size: 108px;
+		display: grid;
+		grid-template-columns: var(--picker-size) var(--hex-size);
+		inline-size: calc(var(--picker-size) + var(--hex-size));
+		gap: 0;
+		align-items: center;
+	}
+
+	.theme-hex-wrap {
+		position: relative;
+		display: inline-flex;
+	}
+
+	.theme-hex-wrap::before {
+		content: '#';
+		position: absolute;
+		inset-inline-start: 0.5rem;
+		inset-block-start: 50%;
+		transform: translateY(-50%);
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		color: var(--color-ink-muted);
+		pointer-events: none;
+	}
+
+	.theme-control input[type='text'] {
+		inline-size: 100%;
+		block-size: 38px;
+		padding-inline: 1.1rem 0.5rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0 0.35rem 0.35rem 0;
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.06em;
+		text-transform: lowercase;
 	}
 
 	.theme-control input[type='range'] {

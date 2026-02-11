@@ -11,6 +11,38 @@ const colorPool = ['#0a7f78', '#ef6f6c', '#f8b133', '#2f3c5b', '#4181f2', '#7c5c
 
 let nextId = 1;
 
+function normalizeHex(value) {
+	const raw = value.trim().replace(/^#/, '');
+	if (raw.length === 3 && /^[0-9a-fA-F]{3}$/.test(raw)) {
+		return `#${raw
+			.split('')
+			.map((char) => char + char)
+			.join('')
+			.toLowerCase()}`;
+	}
+	if (raw.length === 6 && /^[0-9a-fA-F]{6}$/.test(raw)) {
+		return `#${raw.toLowerCase()}`;
+	}
+	return null;
+}
+
+function toHexFieldValue(value) {
+	return value.replace(/^#/, '');
+}
+
+function sanitizeHexInput(input) {
+	const cleaned = input.value.replace(/^#/, '').replace(/[^0-9a-fA-F]/g, '').slice(0, 6).toLowerCase();
+	if (input.value !== cleaned) input.value = cleaned;
+	return cleaned;
+}
+
+function parseHexInputValue(value, allowShort = false) {
+	const raw = value.trim().replace(/^#/, '');
+	if (raw.length === 6) return normalizeHex(raw);
+	if (allowShort && raw.length === 3) return normalizeHex(raw);
+	return null;
+}
+
 function makeSegment(partial = {}) {
 	return {
 		id: String(nextId++),
@@ -77,6 +109,17 @@ function mountDemo(root) {
 	let renderCount = 0;
 	let fpsWindowStart = performance.now();
 	let fpsRafId = 0;
+	const hexTimers = new WeakMap();
+
+	function commitRowHex(target, rowEl, row, allowShort = false) {
+		const normalized = parseHexInputValue(target.value, allowShort);
+		if (!normalized) return;
+		row.color = normalized;
+		target.value = toHexFieldValue(normalized);
+		const picker = rowEl.querySelector('input[data-field="color"]');
+		if (picker instanceof HTMLInputElement) picker.value = normalized;
+		renderChart();
+	}
 
 	function renderRows() {
 		rowsContainer.replaceChildren();
@@ -108,13 +151,32 @@ function mountDemo(root) {
 			colorInput.value = row.color;
 			colorInput.setAttribute('aria-label', 'Service color');
 
+			const colorPair = document.createElement('div');
+			colorPair.className = 'dyss-color-pair';
+
+			const colorHexInput = document.createElement('input');
+			colorHexInput.type = 'text';
+			colorHexInput.dataset.field = 'colorHex';
+			colorHexInput.value = toHexFieldValue(row.color);
+			colorHexInput.maxLength = 6;
+			colorHexInput.setAttribute('spellcheck', 'false');
+			colorHexInput.setAttribute('autocapitalize', 'off');
+			colorHexInput.setAttribute('autocomplete', 'off');
+			colorHexInput.setAttribute('aria-label', 'Service color hex');
+
+			const colorHexWrap = document.createElement('span');
+			colorHexWrap.className = 'dyss-hex-wrap';
+			colorHexWrap.append(colorHexInput);
+
+			colorPair.append(colorInput, colorHexWrap);
+
 			const removeButton = document.createElement('button');
 			removeButton.type = 'button';
 			removeButton.dataset.remove = '';
 			removeButton.textContent = 'Remove';
 			if (rows.length === 1) removeButton.disabled = true;
 
-			rowEl.append(labelInput, valueInput, output, colorInput, removeButton);
+			rowEl.append(labelInput, valueInput, output, colorPair, removeButton);
 			rowsContainer.append(rowEl);
 		}
 	}
@@ -286,10 +348,45 @@ function mountDemo(root) {
 		}
 		if (field === 'color' && target instanceof HTMLInputElement) {
 			row.color = target.value;
+			const hexInput = rowEl.querySelector('input[data-field="colorHex"]');
+			if (hexInput instanceof HTMLInputElement) hexInput.value = toHexFieldValue(row.color);
+		}
+		if (field === 'colorHex' && target instanceof HTMLInputElement) {
+			sanitizeHexInput(target);
+			const currentTimer = hexTimers.get(target);
+			if (currentTimer) window.clearTimeout(currentTimer);
+			const timer = window.setTimeout(() => {
+				commitRowHex(target, rowEl, row, false);
+				hexTimers.delete(target);
+			}, 180);
+			hexTimers.set(target, timer);
+			return;
 		}
 
 		renderChart();
 	});
+
+	controls.addEventListener(
+		'blur',
+		(event) => {
+			const target = event.target;
+			if (!(target instanceof HTMLInputElement)) return;
+			if (target.getAttribute('data-field') !== 'colorHex') return;
+			const rowEl = target.closest('[data-row-id]');
+			if (!rowEl) return;
+			const id = rowEl.getAttribute('data-row-id');
+			const row = rows.find((item) => item.id === id);
+			if (!row) return;
+			const currentTimer = hexTimers.get(target);
+			if (currentTimer) {
+				window.clearTimeout(currentTimer);
+				hexTimers.delete(target);
+			}
+			sanitizeHexInput(target);
+			commitRowHex(target, rowEl, row, true);
+		},
+		true
+	);
 
 	controls.addEventListener('click', (event) => {
 		const target = event.target;

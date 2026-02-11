@@ -9,6 +9,38 @@ const defaults = {
 	spaceScale: 1
 };
 
+function normalizeHex(value) {
+	const raw = value.trim().replace(/^#/, '');
+	if (raw.length === 3 && /^[0-9a-fA-F]{3}$/.test(raw)) {
+		return `#${raw
+			.split('')
+			.map((char) => char + char)
+			.join('')
+			.toLowerCase()}`;
+	}
+	if (raw.length === 6 && /^[0-9a-fA-F]{6}$/.test(raw)) {
+		return `#${raw.toLowerCase()}`;
+	}
+	return null;
+}
+
+function toHexFieldValue(value) {
+	return value.replace(/^#/, '');
+}
+
+function sanitizeHexInput(input) {
+	const cleaned = input.value.replace(/^#/, '').replace(/[^0-9a-fA-F]/g, '').slice(0, 6).toLowerCase();
+	if (input.value !== cleaned) input.value = cleaned;
+	return cleaned;
+}
+
+function parseHexInputValue(value, allowShort = false) {
+	const raw = value.trim().replace(/^#/, '');
+	if (raw.length === 6) return normalizeHex(raw);
+	if (allowShort && raw.length === 3) return normalizeHex(raw);
+	return null;
+}
+
 function toNumber(value, fallback) {
 	const number = Number(value);
 	return Number.isFinite(number) ? number : fallback;
@@ -68,6 +100,7 @@ function mountThemeMixer(root) {
 	preview.classList.add(className);
 
 	const tokens = { ...defaults };
+	const hexTimers = new WeakMap();
 
 	sheet.add(selector, {
 		'--tm-bg': tokens.bg,
@@ -99,7 +132,7 @@ function mountThemeMixer(root) {
 			const token = input.getAttribute('data-token');
 			if (!token) continue;
 			if (token === 'bg' || token === 'ink' || token === 'accent') {
-				input.value = tokens[token];
+				input.value = input.type === 'text' ? toHexFieldValue(tokens[token]) : tokens[token];
 			}
 			if (token === 'surfaceMix') {
 				input.value = String(tokens.surfaceMix);
@@ -113,6 +146,22 @@ function mountThemeMixer(root) {
 		}
 	}
 
+	function syncColorTokenInputs(token) {
+		const tokenInputs = controls.querySelectorAll(`[data-token="${token}"]`);
+		for (const input of tokenInputs) {
+			if (!(input instanceof HTMLInputElement)) continue;
+			input.value = input.type === 'text' ? toHexFieldValue(tokens[token]) : tokens[token];
+		}
+	}
+
+	function commitTokenHexInput(target, token, allowShort = false) {
+		const normalized = parseHexInputValue(target.value, allowShort);
+		if (!normalized) return;
+		tokens[token] = normalized;
+		syncColorTokenInputs(token);
+		applyTokens();
+	}
+
 	controls.addEventListener('input', (event) => {
 		const target = event.target;
 		if (!(target instanceof HTMLInputElement)) return;
@@ -120,7 +169,22 @@ function mountThemeMixer(root) {
 		if (!token) return;
 
 		if (token === 'bg' || token === 'ink' || token === 'accent') {
-			tokens[token] = target.value;
+			if (target.type === 'text') {
+				sanitizeHexInput(target);
+				const currentTimer = hexTimers.get(target);
+				if (currentTimer) window.clearTimeout(currentTimer);
+				const timer = window.setTimeout(() => {
+					commitTokenHexInput(target, token, false);
+					hexTimers.delete(target);
+				}, 180);
+				hexTimers.set(target, timer);
+				return;
+			} else {
+				tokens[token] = target.value;
+				syncColorTokenInputs(token);
+				applyTokens();
+				return;
+			}
 		}
 
 		if (token === 'surfaceMix') {
@@ -137,6 +201,25 @@ function mountThemeMixer(root) {
 
 		applyTokens();
 	});
+
+	controls.addEventListener(
+		'blur',
+		(event) => {
+			const target = event.target;
+			if (!(target instanceof HTMLInputElement)) return;
+			if (target.type !== 'text') return;
+			const token = target.getAttribute('data-token');
+			if (token !== 'bg' && token !== 'ink' && token !== 'accent') return;
+			const currentTimer = hexTimers.get(target);
+			if (currentTimer) {
+				window.clearTimeout(currentTimer);
+				hexTimers.delete(target);
+			}
+			sanitizeHexInput(target);
+			commitTokenHexInput(target, token, true);
+		},
+		true
+	);
 
 	syncControls();
 	applyTokens();

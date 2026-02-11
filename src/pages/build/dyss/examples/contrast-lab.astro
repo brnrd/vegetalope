@@ -1,0 +1,299 @@
+---
+import DyssExample from '../../../../layouts/DyssExample.astro';
+import dyssContrastLabScript from '../../../../scripts/dyss-contrast-lab.js?url&no-inline';
+
+const title = 'dyss: contrast lab';
+const description = 'Approximate contrast-color() with relative color syntax and dyss runtime rules.';
+---
+
+<DyssExample title={title} description={description}>
+	<p>
+		This lab applies a pure-CSS text-color formula to dynamic backgrounds:
+		<code>oklch(from bg round(threshold - l) 0 0)</code>. Use it to switch between dark and light text at
+		runtime.
+	</p>
+
+	<div class="contrast-lab-demo stack" data-dyss-contrast-lab>
+		<form class="contrast-lab-controls stack" data-dyss-controls>
+			<fieldset>
+				<legend>Contrast inputs</legend>
+				<label class="contrast-threshold">
+					<span>Threshold</span>
+					<input type="range" min="1.12" max="1.30" step="0.01" value="1.21" data-dyss-threshold />
+					<output data-dyss-threshold-output>1.21</output>
+				</label>
+				<div class="contrast-candidates">
+					<label>
+						<span>Light text</span>
+						<div class="contrast-color-fields">
+							<input type="color" value="#ffffff" data-dyss-light-text />
+							<span class="contrast-hex-wrap">
+								<input
+									type="text"
+									value="ffffff"
+									maxlength="6"
+									autocomplete="off"
+									autocapitalize="off"
+									spellcheck="false"
+									data-dyss-light-text-hex
+								/>
+							</span>
+						</div>
+					</label>
+					<label>
+						<span>Dark text</span>
+						<div class="contrast-color-fields">
+							<input type="color" value="#14161a" data-dyss-dark-text />
+							<span class="contrast-hex-wrap">
+								<input
+									type="text"
+									value="14161a"
+									maxlength="6"
+									autocomplete="off"
+									autocapitalize="off"
+									spellcheck="false"
+									data-dyss-dark-text-hex
+								/>
+							</span>
+						</div>
+					</label>
+				</div>
+				<div class="contrast-rows stack" data-dyss-rows></div>
+				<div class="contrast-actions">
+					<button type="button" data-dyss-add>Add swatch</button>
+				</div>
+			</fieldset>
+		</form>
+
+		<section class="contrast-preview stack">
+			<p class="contrast-support" data-dyss-support></p>
+			<div class="contrast-grid" data-dyss-preview></div>
+		</section>
+
+		<section class="contrast-code stack" aria-label="Live code preview">
+			<h3>Live code</h3>
+			<pre><code data-dyss-code></code></pre>
+		</section>
+	</div>
+
+	<script slot="scripts" type="module" src={dyssContrastLabScript}></script>
+</DyssExample>
+
+<style>
+	.contrast-lab-demo {
+		padding: 1rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0.75rem;
+		background: color-mix(in oklab, var(--color-bg) 92%, white);
+	}
+
+	.contrast-lab-controls fieldset {
+		border: 1px solid var(--hairline);
+		padding: 0.9rem;
+		margin: 0;
+	}
+
+	.contrast-lab-controls legend {
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.contrast-threshold {
+		display: grid;
+		grid-template-columns: auto minmax(160px, 1fr) auto;
+		align-items: center;
+		gap: 0.7rem;
+	}
+
+	.contrast-threshold span {
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.contrast-threshold output {
+		font-family: var(--font-label);
+		font-size: 0.75rem;
+		color: var(--color-ink-muted);
+	}
+
+	.contrast-candidates {
+		margin-top: 0.7rem;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+		gap: 0.7rem;
+	}
+
+	.contrast-candidates label {
+		display: grid;
+		gap: 0.35rem;
+	}
+
+	.contrast-candidates span {
+		font-family: var(--font-label);
+		font-size: 0.66rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.contrast-color-fields,
+	:global(.contrast-color-pair) {
+		--picker-size: 46px;
+		--hex-size: 108px;
+		display: grid;
+		grid-template-columns: var(--picker-size) var(--hex-size);
+		inline-size: calc(var(--picker-size) + var(--hex-size));
+		gap: 0;
+		align-items: center;
+	}
+
+	.contrast-candidates input[type='color'],
+	:global(.contrast-color-pair input[type='color']) {
+		inline-size: 46px;
+		block-size: 34px;
+		padding: 0;
+		border: 1px solid var(--hairline);
+		border-right: 0;
+		border-radius: 0.35rem 0 0 0.35rem;
+		background: transparent;
+	}
+
+	.contrast-hex-wrap,
+	:global(.contrast-hex-wrap) {
+		position: relative;
+		display: inline-flex;
+	}
+
+	.contrast-hex-wrap::before,
+	:global(.contrast-hex-wrap)::before {
+		content: '#';
+		position: absolute;
+		inset-inline-start: 0.5rem;
+		inset-block-start: 50%;
+		transform: translateY(-50%);
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		color: var(--color-ink-muted);
+		pointer-events: none;
+	}
+
+	.contrast-candidates input[type='text'],
+	:global(.contrast-hex-wrap input[type='text']) {
+		inline-size: 100%;
+		block-size: 34px;
+		padding-inline: 1.1rem 0.5rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0 0.35rem 0.35rem 0;
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.06em;
+		text-transform: lowercase;
+	}
+
+	.contrast-rows {
+		margin-top: 0.75rem;
+	}
+
+	:global(.contrast-row) {
+		display: grid;
+		grid-template-columns: minmax(120px, 170px) 154px minmax(120px, 1fr) auto;
+		gap: 0.5rem;
+		align-items: center;
+	}
+
+	:global(.contrast-row input[data-field='label']) {
+		inline-size: 100%;
+	}
+
+	:global(.contrast-row code) {
+		font-size: 0.68rem;
+	}
+
+	:global(.contrast-row button) {
+		padding: 0.38rem 0.6rem;
+		font-size: 0.62rem;
+		background: transparent;
+		color: var(--color-ink);
+		border: 1px solid var(--hairline);
+	}
+
+	.contrast-actions {
+		margin-top: 0.8rem;
+	}
+
+	.contrast-actions button {
+		padding: 0.45rem 0.75rem;
+		font-size: 0.62rem;
+		background: transparent;
+		color: var(--color-ink);
+		border: 1px solid var(--hairline);
+	}
+
+	.contrast-preview {
+		margin-top: 1rem;
+	}
+
+	.contrast-support {
+		margin: 0;
+		font-family: var(--font-label);
+		font-size: 0.66rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-ink-muted);
+	}
+
+	.contrast-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 0.75rem;
+	}
+
+	:global(.contrast-card) {
+		border: 1px solid var(--hairline);
+		padding: 0.75rem;
+		display: grid;
+		gap: 0.6rem;
+		color: var(--color-ink);
+	}
+
+	:global(.contrast-card h4) {
+		margin: 0;
+		font-size: 1rem;
+	}
+
+	:global(.contrast-card p) {
+		margin: 0;
+		font-size: 0.86rem;
+	}
+
+	:global(.contrast-card .contrast-chip) {
+		inline-size: fit-content;
+		font-family: var(--font-label);
+		font-size: 0.6rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		padding: 0.25rem 0.45rem;
+		border: 1px solid currentColor;
+	}
+
+	.contrast-code h3 {
+		margin: 0;
+		font-size: 1rem;
+	}
+
+	.contrast-code pre {
+		margin: 0;
+		font-size: 0.8rem;
+		line-height: 1.5;
+		max-block-size: 300px;
+	}
+
+	@media (max-width: 900px) {
+		:global(.contrast-row) {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

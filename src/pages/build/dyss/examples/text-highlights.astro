@@ -48,21 +48,62 @@ const description = 'Mock OCR text highlighting with overlapping colors and live
 
 	:global(.dyss-color) {
 		display: grid;
-		grid-template-columns: 32px minmax(120px, 160px) 48px auto;
+		grid-template-columns: 32px minmax(120px, 160px) 154px auto;
 		gap: 0.5rem;
 		align-items: center;
 	}
 
-	:global(.dyss-color input[type='text']) {
+	:global(.dyss-color input[data-field='label']) {
 		inline-size: 100%;
 	}
 
-	:global(.dyss-color input[type='color']) {
-		inline-size: 42px;
+	:global(.dyss-color-pair) {
+		--picker-size: 46px;
+		--hex-size: 108px;
+		display: grid;
+		grid-template-columns: var(--picker-size) var(--hex-size);
+		inline-size: calc(var(--picker-size) + var(--hex-size));
+		gap: 0;
+		align-items: center;
+	}
+
+	:global(.dyss-color-pair input[type='color']) {
+		inline-size: 46px;
 		block-size: 32px;
 		padding: 0;
 		border: 1px solid var(--hairline);
+		border-right: 0;
+		border-radius: 0.35rem 0 0 0.35rem;
 		background: transparent;
+	}
+
+	:global(.dyss-hex-wrap) {
+		position: relative;
+		display: inline-flex;
+	}
+
+	:global(.dyss-hex-wrap)::before {
+		content: '#';
+		position: absolute;
+		inset-inline-start: 0.5rem;
+		inset-block-start: 50%;
+		transform: translateY(-50%);
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		color: var(--color-ink-muted);
+		pointer-events: none;
+	}
+
+	:global(.dyss-hex-wrap input[data-field='valueHex']) {
+		inline-size: 100%;
+		block-size: 32px;
+		padding-inline: 1.1rem 0.5rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0 0.35rem 0.35rem 0;
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.06em;
+		text-transform: lowercase;
 	}
 
 	:global(.dyss-swatch) {
@@ -140,7 +181,7 @@ const description = 'Mock OCR text highlighting with overlapping colors and live
 
 	@media (min-width: 1080px) {
 		:global(.dyss-color) {
-			grid-template-columns: 32px minmax(160px, 220px) 48px auto;
+			grid-template-columns: 32px minmax(160px, 220px) 154px auto;
 		}
 	}
 </style>
