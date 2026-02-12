@@ -5,122 +5,87 @@ layout: ../../layouts/Article.astro
 pubDate: '2026-02-09'
 ---
 
-Most people underestimate how quickly work disappears.
+Work fades faster than you expect.
 
-Not because it wasn’t valuable, but because it became normal. Shipped features fade into the background. Refactors become invisible once they hold. Support given quietly, decisions unblocked, risks avoided all dissolve into “that’s just how things are”.
+Not because it wasn’t useful, but because it became normal. Features ship and become part of the product. Refactors hold and no one thinks about them again. The small decisions, the unblockings, the extra ownership quietly blend into the background.
 
-This is why keeping track of your own achievements matters, regardless of your role.
+After a few months, even you forget parts of it. That’s why I keep a record, and why you should too.
 
-## Memory is not a system
+## Memory is unreliable
 
-Managers are human. They forget.  
-Some are overwhelmed. Some are inexperienced. Some are simply bad at keeping a running picture of what actually happened over a year.
+Managers forget. So do we. A year is long. Context shifts. Priorities change. What felt important in March is hard to reconstruct in November.
 
-Even good managers struggle with scale, recency bias, and context switching.
+Even good managers rely, unintentionally, on what is recent or visible. That’s just how memory works.
 
-Relying on someone else’s memory to fairly represent your work is optimistic at best.
+Keeping your own notes isn’t about distrust. It’s about accepting that memory is not a system.
 
-Keeping your own record is not distrust.  
-It is realism.
+## It’s not about self-promotion
 
-## This is not about ego
+Tracking what you’ve done can feel awkward. It can look like you’re trying to build a case.
 
-Tracking achievements is often misread as self-promotion.
+In reality, it’s much simpler than that.
 
-It isn’t.
+At some point you will be asked:
+- How did the year go?
+- Did you meet your objectives?
+- Where did you stretch?
+- Are you already operating at the next level?
 
-It’s about being able to answer basic professional questions with evidence:
-- Did I meet my objectives?
-- Where did I go beyond them?
-- How did my impact evolve over time?
-- Am I operating at my current level, or already at the next one?
+Without notes, you end up reconstructing from fragments. With notes, you can see patterns. You can see where you took initiative, where you grew, where you carried more than expected.
 
-Without a record, these answers default to feelings and vague impressions. With a record, they become concrete.
+It becomes calmer. More factual. Less emotional.
 
-## What is worth tracking
+## What I actually write down
 
-This is not a list of tickets closed.
+I don’t track everything. I don’t list tickets.
 
-Track things that would be hard to reconstruct later:
-- Spontaneous refactors that reduced complexity or risk
-- Incidents prevented, not just incidents resolved
-- Cross-team support, mentoring, or unblockings
-- Presentations, demos, or showcases
-- Design or architectural decisions that held over time
-- Initiatives taken without being explicitly asked
-- Ownership assumed outside your formal scope
+I write down the things I know I won’t remember clearly in six months:
 
-If it felt slightly uncomfortable or required initiative, it probably belongs on the list.
+- Refactors that reduced complexity
+- Risks avoided before they became incidents
+- Cross-team help that wasn’t in my formal scope
+- Presentations or internal demos
+- Decisions that held over time
+- Moments where I stepped slightly beyond my level
 
-## Read the next level, not just your own
+If something required initiative or felt slightly uncomfortable, it’s usually worth noting.
 
-One of the most effective filters is this:
+## Read one level above
 
-> Would this be expected at my level, or at the next one?
+One habit that helps is reading the expectations for the level above yours.
 
-Career paths and role expectations exist for a reason. Reading only your current level keeps you reactive. Reading the next level gives you a direction.
+Not to claim it prematurely, but to orient yourself. If you consistently see your work mapping there, it’s useful to have examples ready. Not as a speech, just as evidence of a pattern.
 
-If you consistently find yourself doing work that maps to the next level, you want that to be visible. Not as a claim, but as a pattern.
+Patterns are easier to discuss than isolated wins.
 
-Patterns matter more than isolated wins.
+## When it matters
 
-## When this record becomes useful
+Most of the year, this document just sits there.
 
-You don’t collect this information to wave it around weekly.
+Then self-assessment season comes. Or compensation discussions. Or scope changes. Or a new manager joins.
 
-It becomes valuable when:
-- your manager asks you to self-assess
-- ratings are calibrated across teams
-- objectives are reviewed at the end of the year
-- compensation is discussed
-- scope or role changes are considered
-- a new manager joins mid-cycle
+That’s when it becomes useful.
 
-In those moments, having a clear, chronological record turns an emotional conversation into a grounded one.
+Instead of trying to remember what happened, you have a timeline. Instead of vague impressions, you have examples. You don’t need to oversell anything. The work speaks for itself.
 
-## This applies at every level
+You’ll be glad you kept it.
 
-Developers use it to grow and be recognised.  
-Engineering managers use it to avoid vague narratives.  
-Heads of Engineering use it to retain signal across time and scale.
+## How I keep mine
 
-The higher you go, the less your impact is visible in code and the more it lives in decisions, systems, and people. That makes it even easier to forget and even harder to reconstruct.
+I use a Slack Canvas.
 
-## How I do it, concretely
+Mainly because I’m already in Slack every day. It’s easy to update. If something notable happens, I can add a line while it’s still fresh.
 
-Personally, I keep this record directly in Slack, using a Canvas.
+I also set a small weekly reminder and bookmark conversations that might be relevant later.
 
-Slack is a tool I’m already in every day. That matters. The best system is the one you actually use, not the most elaborate one. Having it there means I don’t forget to update it, and I can quickly jot things down while context is still fresh.
+The tool doesn’t matter much. A document, a note, a private channel. What matters is that it’s close enough to your daily workflow that it doesn’t feel like extra work.
 
-I also rely on small habits:
-- a recurring reminder at the end of the week to add anything notable
-- bookmarks on discussions, decisions, or messages worth revisiting later
-- quick notes when something goes beyond what was expected, even if it felt minor at the time
+If it feels heavy, you won’t keep it up.
 
-The format doesn’t matter much.  
-A document, a note, a task list, a Canvas, a private channel. Whatever fits your workflow.
+## That’s it
 
-What matters is that it’s lightweight, close at hand, and revisited regularly. If it requires effort, it won’t survive the year.
+This isn’t about gaming reviews. It’s about not letting your own work dissolve into the background.
 
-You don’t do this for today.  
-You do it for your future self.
-
-When self-assessment season comes around, you’ll love yourself for having kept track. No guesswork, no vague memories, just facts and patterns you can rely on.
-
-## Professional hygiene
-
-Keeping track of your achievements is not about gaming the system.
-
-It is about:
-- fairness
-- clarity
-- continuity
-- and respecting your own work enough not to let it vanish
-
-You don’t need a fancy tool. A simple document, updated regularly, is enough.
-
-The important part is the habit.
-
-Do the work.  
-Keep the record.  
-Let the facts speak when it matters.
+Do your job.  
+Keep a light record.  
+Make future conversations easier.

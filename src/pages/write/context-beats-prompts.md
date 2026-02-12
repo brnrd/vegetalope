@@ -5,116 +5,58 @@ layout: ../../layouts/Article.astro
 pubDate: '2026-02-08'
 ---
 
-There is a lot of attention right now on prompt engineering.  
-The right wording. The right structure. The magic incantation that unlocks better answers from an LLM.
+There’s a lot of attention right now on prompt engineering. The right wording. The right structure. The idea that somewhere there is a perfect formulation that unlocks better answers from an LLM.
 
-Prompts matter. But they are not the main lever.
+Prompts matter. But they’re rarely the main lever.
 
-In practice, the quality of what you get out of an AI system is far more dependent on the quantity and quality of context you give it than on how clever your prompt is.
+In practice, the quality of what you get from an AI system depends far more on the context you provide than on how clever your phrasing is. For an engineering manager, that difference is significant.
 
-As an engineering manager, this matters a lot.
+## Context is the real leverage
 
-## Context is leverage
+An engineering manager lives inside a stream of fragmented information: pull requests across months, code reviews, Slack threads and DMs, one-to-one notes, shifting objectives, half-forgotten role expectations.
 
-An engineering manager operates in a constant stream of fragmented information.
+No one can reliably hold all of this in their head. When we try, we default to shortcuts: what happened recently, what was loud, what felt important.
 
-Pull requests spread across months.  
-Code review comments.  
-Slack discussions in public channels and DMs.  
-One-to-one notes.  
-Feedback from peers, product, and stakeholders.  
-Objectives that evolved mid-year.  
-Role expectations that were written once and never re-read.
+LLMs aren’t magical. But they are good at absorbing large volumes of mixed information and surfacing patterns that are difficult to see piece by piece if you give them enough material to work with.
 
-No human can hold all of this in working memory. When we try, we fall back to shortcuts: recency bias, vague impressions, and incomplete narratives.
+## Prompts guide structure. Context enables insight.
 
-LLMs are not magical. But they are exceptionally good at absorbing large volumes of heterogeneous information and surfacing patterns that are hard to see piecemeal.
+A good prompt still matters. It defines the structure of the output: summary, strengths and development areas, neutral framing, evidence-backed statements.
 
-Only if you give them the data.
+But no prompt compensates for missing context. A well-crafted instruction applied to shallow input produces shallow results. A simple instruction applied to rich context often produces something surprisingly useful.
 
-## The end-of-year review example
+As a manager, the leverage isn’t rhetorical. It’s curatorial.
 
-End-of-year reviews are a good illustration of the problem.
+## A practical example: performance reviews
 
-Most reviews are written from memory plus a handful of recent highlights. Even with the best intentions, this leads to distorted outcomes. Quiet contributors get overlooked. Early-year work fades. Behavioural patterns get reduced to anecdotes.
+End-of-year reviews make this obvious.
 
-A better approach is not to “write a better prompt”.
+Most are written from memory plus a few recent highlights. Even with good intentions, that skews the result. Quiet contributors get overlooked. Early work fades. Behaviour gets reduced to a couple of anecdotes.
 
-A better approach is to load the system with context.
+The improvement doesn’t come from crafting a better prompt.
 
-For example:
-- All pull requests authored or significantly contributed to
-- Code review comments left on other people’s work
-- Notable Slack discussions in team channels
-- Relevant DMs where decisions, mentoring, or support happened
-- Existing role expectations and career path documentation
-- Stated objectives for the period, even if they changed over time
+It comes from better input.
 
-Once this material is available, the AI can help surface trends:
-- consistency or volatility
-- ownership patterns
-- collaboration style
-- growth areas that emerge across months, not weeks
+Load the system with context:
+- Pull requests authored or significantly contributed to  
+- Code review comments  
+- Relevant Slack discussions  
+- Decisions or mentoring that happened in DMs  
+- Documented objectives  
+- Career path expectations  
 
-At that point, the prompt becomes almost secondary.
+Once that material is present, the AI can help surface themes: ownership patterns, collaboration style, consistency, growth areas that only appear over time.
 
-## Prompts shape output, data shapes insight
+At that point, the prompt shapes the format, but the insight comes from the data.
 
-A good prompt is still important. It tells the system *what kind of output you want*.
+## Context reduces bias, not responsibility
 
-Do you want:
-- a structured summary?
-- strengths and growth areas?
-- evidence-backed statements?
-- neutral wording versus developmental framing?
+This isn’t about outsourcing judgement. The manager still decides and owns the feedback.
 
-That is where prompt quality matters.
+What context does is widen the lens. It reduces blind spots created by memory and organisational noise. It gives you a broader base to reason from before you speak or write.
 
-But no prompt can compensate for missing context.
+The real limitation isn’t the model. It’s how little context we usually provide. We’re used to tools that operate on small inputs. LLMs reward completeness more than cleverness.
 
-A beautifully written instruction applied to shallow input produces shallow results. A simple instruction applied to rich context often produces surprisingly good ones.
-
-As a manager, your leverage is not rhetorical.  
-It is curatorial.
-
-## Context reduces bias, not judgement
-
-This is not about outsourcing evaluation to a machine.
-
-The manager still decides.  
-The manager still owns the feedback.  
-The manager still applies judgement.
-
-What context does is reduce blind spots.
-
-It makes patterns visible that would otherwise be drowned out by memory, emotion, or organisational noise. It gives you a broader, calmer surface to reason from before you speak or write.
-
-Used this way, AI does not replace judgement.  
-It sharpens it.
-
-## Think less like prompting, more like feeding
-
-The mental shift is subtle but important.
-
-Stop thinking in terms of:
-> “How do I ask the right question?”
-
-Start thinking in terms of:
-> “What would a fair observer need to see to understand this situation?”
-
-Documentation, history, expectations, artefacts, conversations. These are the raw materials.
-
-When those are present, even a simple prompt like “Help me identify themes and growth areas” is often enough.
-
-## The real constraint
-
-The real limitation today is not AI capability.  
-It is how little context we usually provide.
-
-We are used to tools that operate on small inputs. LLMs are different. They reward completeness, not cleverness.
-
-For engineering managers, this is an opportunity.
-
-Not to automate people management, but to practice it with more consistency, more fairness, and more depth than memory alone allows.
+For engineering managers, that’s an opportunity, not to automate people management, but to approach it with more consistency and less reliance on memory alone.
 
 Context beats prompts.
