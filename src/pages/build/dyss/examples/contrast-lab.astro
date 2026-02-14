@@ -1,5 +1,7 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
+import ColorPickerHex from '../../../../components/dyss/ColorPickerHex.svelte';
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
 import dyssContrastLabScript from '../../../../scripts/dyss-contrast-lab.js?url&no-inline';
 
 const title = 'dyss: contrast lab';
@@ -25,37 +27,23 @@ const description = 'Approximate contrast-color() with relative color syntax and
 				<div class="contrast-candidates">
 					<label>
 						<span>Light text</span>
-						<div class="contrast-color-fields">
-							<input type="color" value="#ffffff" data-dyss-light-text />
-							<span class="contrast-hex-wrap">
-								<input
-									type="text"
-									value="ffffff"
-									maxlength="6"
-									autocomplete="off"
-									autocapitalize="off"
-									spellcheck="false"
-									data-dyss-light-text-hex
-								/>
-							</span>
-						</div>
+							<ColorPickerHex
+								client:load
+								className="contrast-color-fields"
+								value="#ffffff"
+								pickerAttrs={{ 'data-dyss-light-text': '', 'aria-label': 'Light text color' }}
+							hexAttrs={{ 'data-dyss-light-text-hex': '', 'aria-label': 'Light text color hex' }}
+						/>
 					</label>
 					<label>
 						<span>Dark text</span>
-						<div class="contrast-color-fields">
-							<input type="color" value="#14161a" data-dyss-dark-text />
-							<span class="contrast-hex-wrap">
-								<input
-									type="text"
-									value="14161a"
-									maxlength="6"
-									autocomplete="off"
-									autocapitalize="off"
-									spellcheck="false"
-									data-dyss-dark-text-hex
-								/>
-							</span>
-						</div>
+							<ColorPickerHex
+								client:load
+								className="contrast-color-fields"
+								value="#14161a"
+								pickerAttrs={{ 'data-dyss-dark-text': '', 'aria-label': 'Dark text color' }}
+							hexAttrs={{ 'data-dyss-dark-text-hex': '', 'aria-label': 'Dark text color hex' }}
+						/>
 					</label>
 				</div>
 				<div class="contrast-rows stack" data-dyss-rows></div>
@@ -70,10 +58,7 @@ const description = 'Approximate contrast-color() with relative color syntax and
 			<div class="contrast-grid" data-dyss-preview></div>
 		</section>
 
-		<section class="contrast-code stack" aria-label="Live code preview">
-			<h3>Live code</h3>
-			<pre><code data-dyss-code></code></pre>
-		</section>
+		<LiveCodeSection className="contrast-code" />
 	</div>
 
 	<script slot="scripts" type="module" src={dyssContrastLabScript}></script>
@@ -132,14 +117,17 @@ const description = 'Approximate contrast-color() with relative color syntax and
 		gap: 0.35rem;
 	}
 
-	.contrast-candidates span {
+	.contrast-candidates > label > span {
 		font-family: var(--font-label);
 		font-size: 0.66rem;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 	}
 
-	.contrast-color-fields,
+	.contrast-color-fields {
+		--dyss-color-height: 34px;
+	}
+
 	:global(.contrast-color-pair) {
 		--picker-size: 46px;
 		--hex-size: 108px;
@@ -150,7 +138,6 @@ const description = 'Approximate contrast-color() with relative color syntax and
 		align-items: center;
 	}
 
-	.contrast-candidates input[type='color'],
 	:global(.contrast-color-pair input[type='color']) {
 		inline-size: 46px;
 		block-size: 34px;
@@ -161,13 +148,11 @@ const description = 'Approximate contrast-color() with relative color syntax and
 		background: transparent;
 	}
 
-	.contrast-hex-wrap,
 	:global(.contrast-hex-wrap) {
 		position: relative;
 		display: inline-flex;
 	}
 
-	.contrast-hex-wrap::before,
 	:global(.contrast-hex-wrap)::before {
 		content: '#';
 		position: absolute;
@@ -180,7 +165,6 @@ const description = 'Approximate contrast-color() with relative color syntax and
 		pointer-events: none;
 	}
 
-	.contrast-candidates input[type='text'],
 	:global(.contrast-hex-wrap input[type='text']) {
 		inline-size: 100%;
 		block-size: 34px;
@@ -279,16 +263,8 @@ const description = 'Approximate contrast-color() with relative color syntax and
 		border: 1px solid currentColor;
 	}
 
-	.contrast-code h3 {
-		margin: 0;
-		font-size: 1rem;
-	}
-
-	.contrast-code pre {
-		margin: 0;
-		font-size: 0.8rem;
-		line-height: 1.5;
-		max-block-size: 300px;
+	.contrast-code {
+		--dyss-code-max-height: 300px;
 	}
 
 	@media (max-width: 900px) {

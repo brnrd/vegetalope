@@ -1,5 +1,6 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
 import dyssArtboardScript from '../../../../scripts/dyss-artboard-themes.js?url&no-inline';
 
 const title = 'dyss: live artboard themes';
@@ -57,10 +58,7 @@ const description = 'Swap complete UI themes in one click using live stylesheet 
 			</div>
 		</section>
 
-		<section class="artboard-code stack" aria-label="Live code preview">
-			<h3>Live code</h3>
-			<pre><code data-dyss-code></code></pre>
-		</section>
+		<LiveCodeSection className="artboard-code" />
 	</div>
 
 	<script slot="scripts" type="module" src={dyssArtboardScript}></script>
@@ -239,14 +237,7 @@ const description = 'Swap complete UI themes in one click using live stylesheet 
 		font-size: 0.85rem;
 	}
 
-	.artboard-code pre {
-		background: color-mix(in oklab, var(--color-bg) 88%, black);
-		padding: 0.9rem;
-		overflow-x: auto;
-	}
-
-	.artboard-code code {
-		font-family: var(--font-label);
-		font-size: 0.8rem;
+	.artboard-code {
+		--dyss-code-max-height: 320px;
 	}
 </style>

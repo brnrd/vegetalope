@@ -1,5 +1,6 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
 import dyssFuelMapDemoScript from '../../../../scripts/dyss-fuel-map-demo.js?url&no-inline';
 
 const title = 'dyss: AFR fuel map';
@@ -37,10 +38,7 @@ const description = 'A live AFR fuel map table with dynamic CSS rules per cell.'
 		</div>
 		<p class="fuel-map-axis-note">X axis: RPM left to right. Y axis: LOAD low to high (top to bottom).</p>
 
-		<section class="fuel-map-code stack" aria-label="Live code preview">
-			<h3>Live code</h3>
-			<pre><code data-dyss-code></code></pre>
-		</section>
+		<LiveCodeSection className="fuel-map-code" />
 	</div>
 
 	<script slot="scripts" type="module" src={dyssFuelMapDemoScript}></script>
@@ -132,15 +130,8 @@ const description = 'A live AFR fuel map table with dynamic CSS rules per cell.'
 		font-weight: 600;
 	}
 
-	.fuel-map-code pre {
-		background: color-mix(in oklab, var(--color-bg) 88%, black);
-		padding: 0.9rem;
-		overflow-x: auto;
-	}
-
-	.fuel-map-code code {
-		font-family: var(--font-label);
-		font-size: 0.8rem;
+	.fuel-map-code {
+		--dyss-code-max-height: 320px;
 	}
 
 	.fuel-map-axis-note {

@@ -1,5 +1,41 @@
 import Sheet from 'dyss';
 
+function normalizeHex(value) {
+	const raw = String(value).trim().replace(/^#/, '');
+	if (raw.length === 3 && /^[0-9a-fA-F]{3}$/.test(raw)) {
+		return `#${raw
+			.split('')
+			.map((char) => char + char)
+			.join('')
+			.toLowerCase()}`;
+	}
+	if (raw.length === 6 && /^[0-9a-fA-F]{6}$/.test(raw)) {
+		return `#${raw.toLowerCase()}`;
+	}
+	return null;
+}
+
+function toHexFieldValue(value) {
+	return String(value).replace(/^#/, '');
+}
+
+function sanitizeHexInput(input) {
+	const cleaned = String(input.value)
+		.replace(/^#/, '')
+		.replace(/[^0-9a-fA-F]/g, '')
+		.slice(0, 6)
+		.toLowerCase();
+	if (input.value !== cleaned) input.value = cleaned;
+	return cleaned;
+}
+
+function parseHexInputValue(value, allowShort = false) {
+	const raw = String(value).trim().replace(/^#/, '');
+	if (raw.length === 6) return normalizeHex(raw);
+	if (allowShort && raw.length === 3) return normalizeHex(raw);
+	return null;
+}
+
 const defaultSwatches = [
 	{ id: 'c1', label: 'Primary', color: '#1f6feb' },
 	{ id: 'c2', label: 'Warning', color: '#f2b636' },
@@ -21,38 +57,6 @@ function clampThreshold(value) {
 	const number = Number(value);
 	if (!Number.isFinite(number)) return 1.21;
 	return Math.max(1.12, Math.min(1.3, number));
-}
-
-function normalizeHex(value) {
-	const raw = value.trim().replace(/^#/, '');
-	if (raw.length === 3 && /^[0-9a-fA-F]{3}$/.test(raw)) {
-		return `#${raw
-			.split('')
-			.map((char) => char + char)
-			.join('')
-			.toLowerCase()}`;
-	}
-	if (raw.length === 6 && /^[0-9a-fA-F]{6}$/.test(raw)) {
-		return `#${raw.toLowerCase()}`;
-	}
-	return null;
-}
-
-function toHexFieldValue(value) {
-	return value.replace(/^#/, '');
-}
-
-function sanitizeHexInput(input) {
-	const cleaned = input.value.replace(/^#/, '').replace(/[^0-9a-fA-F]/g, '').slice(0, 6).toLowerCase();
-	if (input.value !== cleaned) input.value = cleaned;
-	return cleaned;
-}
-
-function parseHexInputValue(value, allowShort = false) {
-	const raw = value.trim().replace(/^#/, '');
-	if (raw.length === 6) return normalizeHex(raw);
-	if (allowShort && raw.length === 3) return normalizeHex(raw);
-	return null;
 }
 
 function hexToRgb(hex) {

@@ -1,18 +1,7 @@
 import Sheet from 'dyss';
 
-const lorem =
-	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
-
-const defaultColors = [
-	{ id: 'c1', label: 'Blue', value: '#3b82f6' },
-	{ id: 'c2', label: 'Red', value: '#ef4444' },
-	{ id: 'c3', label: 'Green', value: '#22c55e' }
-];
-
-let nextColorId = 4;
-
 function normalizeHex(value) {
-	const raw = value.trim().replace(/^#/, '');
+	const raw = String(value).trim().replace(/^#/, '');
 	if (raw.length === 3 && /^[0-9a-fA-F]{3}$/.test(raw)) {
 		return `#${raw
 			.split('')
@@ -27,21 +16,36 @@ function normalizeHex(value) {
 }
 
 function toHexFieldValue(value) {
-	return value.replace(/^#/, '');
+	return String(value).replace(/^#/, '');
 }
 
 function sanitizeHexInput(input) {
-	const cleaned = input.value.replace(/^#/, '').replace(/[^0-9a-fA-F]/g, '').slice(0, 6).toLowerCase();
+	const cleaned = String(input.value)
+		.replace(/^#/, '')
+		.replace(/[^0-9a-fA-F]/g, '')
+		.slice(0, 6)
+		.toLowerCase();
 	if (input.value !== cleaned) input.value = cleaned;
 	return cleaned;
 }
 
 function parseHexInputValue(value, allowShort = false) {
-	const raw = value.trim().replace(/^#/, '');
+	const raw = String(value).trim().replace(/^#/, '');
 	if (raw.length === 6) return normalizeHex(raw);
 	if (allowShort && raw.length === 3) return normalizeHex(raw);
 	return null;
 }
+
+const lorem =
+	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+
+const defaultColors = [
+	{ id: 'c1', label: 'Blue', value: '#3b82f6' },
+	{ id: 'c2', label: 'Red', value: '#ef4444' },
+	{ id: 'c3', label: 'Green', value: '#22c55e' }
+];
+
+let nextColorId = 4;
 
 function tokenize(text) {
 	return text.split(/\s+/).filter(Boolean);

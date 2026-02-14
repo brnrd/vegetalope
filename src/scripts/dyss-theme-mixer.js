@@ -1,16 +1,7 @@
 import Sheet from 'dyss';
 
-const defaults = {
-	bg: '#f6f1e8',
-	ink: '#14161a',
-	accent: '#c21f2b',
-	surfaceMix: 92,
-	typeScale: 1,
-	spaceScale: 1
-};
-
 function normalizeHex(value) {
-	const raw = value.trim().replace(/^#/, '');
+	const raw = String(value).trim().replace(/^#/, '');
 	if (raw.length === 3 && /^[0-9a-fA-F]{3}$/.test(raw)) {
 		return `#${raw
 			.split('')
@@ -25,21 +16,34 @@ function normalizeHex(value) {
 }
 
 function toHexFieldValue(value) {
-	return value.replace(/^#/, '');
+	return String(value).replace(/^#/, '');
 }
 
 function sanitizeHexInput(input) {
-	const cleaned = input.value.replace(/^#/, '').replace(/[^0-9a-fA-F]/g, '').slice(0, 6).toLowerCase();
+	const cleaned = String(input.value)
+		.replace(/^#/, '')
+		.replace(/[^0-9a-fA-F]/g, '')
+		.slice(0, 6)
+		.toLowerCase();
 	if (input.value !== cleaned) input.value = cleaned;
 	return cleaned;
 }
 
 function parseHexInputValue(value, allowShort = false) {
-	const raw = value.trim().replace(/^#/, '');
+	const raw = String(value).trim().replace(/^#/, '');
 	if (raw.length === 6) return normalizeHex(raw);
 	if (allowShort && raw.length === 3) return normalizeHex(raw);
 	return null;
 }
+
+const defaults = {
+	bg: '#f6f1e8',
+	ink: '#14161a',
+	accent: '#c21f2b',
+	surfaceMix: 92,
+	typeScale: 1,
+	spaceScale: 1
+};
 
 function toNumber(value, fallback) {
 	const number = Number(value);

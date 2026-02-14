@@ -1,5 +1,6 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
 import dyssPieDemoScript from '../../../../scripts/dyss-pie-demo.js?url&no-inline';
 
 const title = 'dyss: dynamic pie chart playground';
@@ -49,10 +50,7 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 			</figure>
 		</div>
 
-		<section class="dyss-code stack" aria-label="Live code preview">
-			<h3>Live code</h3>
-			<pre><code data-dyss-code></code></pre>
-		</section>
+		<LiveCodeSection className="dyss-code" />
 	</div>
 
 	<p class="dyss-note">
@@ -199,16 +197,8 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 		margin-top: 1rem;
 	}
 
-	.dyss-code h3 {
-		font-size: 1rem;
-		margin: 0;
-	}
-
-	.dyss-code pre {
-		margin: 0;
-		font-size: 0.8rem;
-		line-height: 1.5;
-		max-block-size: 280px;
+	.dyss-code {
+		--dyss-code-max-height: 280px;
 	}
 
 	.dyss-preview {

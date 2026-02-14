@@ -1,0 +1,36 @@
+---
+interface Props {
+	className?: string;
+	title?: string;
+	codeAttrs?: Record<string, string>;
+}
+
+const { className = '', title = 'Live code', codeAttrs = { 'data-dyss-code': '' } } = Astro.props;
+---
+
+<section class:list={['dyss-live-code', 'stack', className]} aria-label="Live code preview">
+	<h3>{title}</h3>
+	<pre><code {...codeAttrs}></code></pre>
+</section>
+
+<style>
+	.dyss-live-code h3 {
+		margin: 0;
+		font-size: 1rem;
+	}
+
+	.dyss-live-code pre {
+		margin: 0;
+		font-size: 0.8rem;
+		line-height: 1.5;
+		background: color-mix(in oklab, var(--color-bg) 88%, black);
+		padding: 0.9rem;
+		overflow-x: auto;
+		max-block-size: var(--dyss-code-max-height, none);
+	}
+
+	.dyss-live-code code {
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+	}
+</style>
