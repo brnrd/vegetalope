@@ -60,6 +60,17 @@ const examples = [
 					<p>{pageDescription}</p>
 				</header>
 
+				<section class="stack" aria-labelledby="dyss-docs-link">
+					<h2 id="dyss-docs-link">Documentation</h2>
+					<div class="dyss-doc-card">
+						<a href="/build/dyss/docs">Read the full dyss docs</a>
+						<p>
+							Reference docs for every current method in the package, with signatures, notes, and practical
+							examples.
+						</p>
+					</div>
+				</section>
+
 				<section class="stack" aria-labelledby="dyss-example-list">
 					<h2 id="dyss-example-list">Examples</h2>
 					<ul class="dyss-example-list">
@@ -99,6 +110,25 @@ const examples = [
 </html>
 
 <style>
+	.dyss-doc-card {
+		border: 1px solid var(--hairline);
+		padding: 1rem;
+		border-radius: 0.75rem;
+		background: color-mix(in oklab, var(--color-bg) 93%, white);
+	}
+
+	.dyss-doc-card a {
+		font-family: var(--font-label);
+		font-size: 0.76rem;
+		letter-spacing: 0.11em;
+		text-transform: uppercase;
+	}
+
+	.dyss-doc-card p {
+		font-size: 1.05rem;
+		margin-top: 0.6rem;
+	}
+
 	.dyss-example-list {
 		list-style: none;
 		margin: 0;
