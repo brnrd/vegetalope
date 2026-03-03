@@ -1,0 +1,527 @@
+---
+import DyssExample from '../../../layouts/DyssExample.astro'
+import dyssBenchmarkScript from '../../../scripts/dyss-benchmark.js?url&no-inline'
+
+const codeSamples = [
+	{
+		id: 'inline',
+		label: 'Inline styles',
+		summary: 'Touches every element directly. This is the blunt-force baseline.',
+		code: `for (const node of nodes) {
+  node.style.backgroundColor = state.backgroundColor
+  node.style.borderColor = state.borderColor
+  node.style.outlineColor = state.outlineColor
+  node.style.boxShadow = state.boxShadow
+  node.style.transform = state.transform
+}`,
+	},
+	{
+		id: 'vars',
+		label: 'Parent CSS vars',
+		summary: 'Writes once on the container, then lets descendants inherit through CSS variables.',
+		code: `stage.style.setProperty('--bench-bg', state.backgroundColor)
+stage.style.setProperty('--bench-border', state.borderColor)
+stage.style.setProperty('--bench-outline', state.outlineColor)
+stage.style.setProperty('--bench-shadow', state.boxShadow)
+stage.style.setProperty('--bench-transform', state.transform)
+
+/* CSS */
+.bench-node {
+  background-color: var(--bench-bg)
+  border-color: var(--bench-border)
+  transform: var(--bench-transform)
+}`,
+	},
+	{
+		id: 'class-toggle',
+		label: 'Class toggle',
+		summary:
+			'Precomputes CSS classes, then swaps one state class on the parent. This models utility-class or token-class switches.',
+		code: `stage.classList.remove(previousClass)
+stage.classList.add(nextClass)
+
+/* CSS generated ahead of time */
+.dyss-benchmark-stage.is-class-toggle.bench-state-7 .bench-node {
+  background-color: hsl(...);
+  border-color: hsl(...);
+  outline-color: hsl(... / 0.48);
+  box-shadow: 0 4px 7px hsl(... / 0.18);
+  transform: translate3d(..., ..., 0) scale(...);
+}`,
+	},
+	{
+		id: 'cssom',
+		label: 'Raw CSSOM rule',
+		summary: 'Mutates a single live CSS rule through the browser CSSOM API.',
+		code: `cssomRule.style.setProperty('background-color', state.backgroundColor)
+cssomRule.style.setProperty('border-color', state.borderColor)
+cssomRule.style.setProperty('outline-color', state.outlineColor)
+cssomRule.style.setProperty('box-shadow', state.boxShadow)
+cssomRule.style.setProperty('transform', state.transform)`,
+	},
+	{
+		id: 'constructed',
+		label: 'Constructed sheet',
+		summary:
+			'Updates a rule inside a constructable stylesheet. Modern browsers only; skipped where unsupported.',
+		code: `const sheet = new CSSStyleSheet()
+sheet.replaceSync('.dyss-benchmark-stage.is-constructed .bench-node {}')
+document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet]
+
+const rule = sheet.cssRules[0]
+rule.style.setProperty('background-color', state.backgroundColor)
+rule.style.setProperty('border-color', state.borderColor)
+rule.style.setProperty('outline-color', state.outlineColor)
+rule.style.setProperty('box-shadow', state.boxShadow)
+rule.style.setProperty('transform', state.transform)`,
+	},
+	{
+		id: 'dyss',
+		label: 'dyss.updateSet()',
+		summary: 'Uses dyss as a small wrapper around CSSOM rule updates.',
+		code: `sheet.updateSet('.dyss-benchmark-stage.is-dyss .bench-node', {
+  backgroundColor: state.backgroundColor,
+  borderColor: state.borderColor,
+  outlineColor: state.outlineColor,
+  boxShadow: state.boxShadow,
+  transform: state.transform
+})`,
+	},
+	{
+		id: 'css-text',
+		label: 'CSS-in-JS style tag',
+		summary:
+			'Simulates the common runtime CSS-in-JS pattern of regenerating a <style> tag string each update.',
+		code: `styleEl.textContent = \`
+.dyss-benchmark-stage.is-css-text .bench-node {
+  background-color: \${state.backgroundColor};
+  border-color: \${state.borderColor};
+  outline-color: \${state.outlineColor};
+  box-shadow: \${state.boxShadow};
+  transform: \${state.transform};
+}\`
+
+/* Libraries add hashing, caching, and framework glue on top of this pattern. */`,
+	},
+	{
+		id: 'rerender',
+		label: 'Full rerender',
+		summary:
+			'Rebuilds the whole node list with fresh inline styles. This is a heavier stand-in for framework rerenders that recreate lots of DOM work.',
+		code: `const fragment = document.createDocumentFragment()
+
+for (let index = 0; index < count; index += 1) {
+  const node = document.createElement('div')
+  node.className = 'bench-node'
+  node.style.backgroundColor = state.backgroundColor
+  node.style.borderColor = state.borderColor
+  node.style.outlineColor = state.outlineColor
+  node.style.boxShadow = state.boxShadow
+  node.style.transform = state.transform
+  fragment.append(node)
+}
+
+stage.replaceChildren(fragment)`,
+	},
+]
+
+const title = 'dyss: benchmark'
+const description =
+	'Measure how different runtime styling strategies scale when one visual change fans out across many elements.'
+---
+
+<DyssExample title={title} description={description} backLabel="Back to dyss">
+	<p>
+		This page compares several ways to restyle a large batch of elements: direct inline writes,
+		shared CSS custom properties, parent class switches, raw CSSOM rule updates, constructable
+		stylesheets where supported, <code>dyss.updateSet()</code>, a simulated runtime CSS-in-JS
+		style-tag rewrite, and a heavier rerender path. It measures synchronous write time in the
+		browser, with an optional forced style read so the work is less theoretical.
+	</p>
+
+	<div class="benchmark-shell stack" data-dyss-benchmark>
+		<form class="benchmark-controls" data-benchmark-controls>
+			<fieldset>
+				<legend>Benchmark controls</legend>
+				<div class="benchmark-grid">
+					<label class="benchmark-field">
+						<span>Elements</span>
+						<input type="range" min="200" max="4000" step="200" value="1200" data-benchmark-count />
+						<output data-benchmark-count-output>1200</output>
+					</label>
+
+					<label class="benchmark-field">
+						<span>Samples / method</span>
+						<input type="range" min="6" max="36" step="2" value="18" data-benchmark-samples />
+						<output data-benchmark-samples-output>18</output>
+					</label>
+
+					<label class="benchmark-check">
+						<input type="checkbox" checked data-benchmark-flush />
+						<span>Force a computed-style read after each write</span>
+					</label>
+				</div>
+			</fieldset>
+		</form>
+
+		<div class="benchmark-actions">
+			<button type="button" data-benchmark-run>Run benchmark</button>
+			<p data-benchmark-status>Ready. Adjust the controls or run the default comparison.</p>
+		</div>
+		<p class="benchmark-support-note" data-benchmark-support-note></p>
+
+		<section class="benchmark-results stack" aria-live="polite">
+			<p class="benchmark-winner" data-benchmark-winner>
+				Results will appear here after the first run.
+			</p>
+
+			<div class="benchmark-table-wrap">
+				<table class="benchmark-table">
+					<thead>
+						<tr>
+							<th scope="col">Method</th>
+							<th scope="col">Avg</th>
+							<th scope="col">Median</th>
+							<th scope="col">Best</th>
+							<th scope="col">Worst</th>
+							<th scope="col">Relative</th>
+							<th scope="col">Writes</th>
+						</tr>
+					</thead>
+					<tbody data-benchmark-results></tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="benchmark-preview stack" aria-labelledby="benchmark-preview-heading">
+			<div class="benchmark-preview-copy">
+				<h2 id="benchmark-preview-heading">Live surface</h2>
+				<p>
+					The grid below is the target. Each sample applies the same visual change using a different
+					update strategy.
+				</p>
+				<p class="benchmark-active-method">
+					Active method: <strong data-benchmark-active-method>Idle</strong>
+				</p>
+			</div>
+
+			<div
+				class="dyss-benchmark-stage is-vars"
+				data-benchmark-stage
+				style="--bench-bg:#d7d1c4;--bench-border:#776b5f;--bench-outline:rgba(255,255,255,0.38);--bench-shadow:none;--bench-transform:translate3d(0, 0, 0) scale(1);"
+			>
+			</div>
+		</section>
+
+		<section class="benchmark-code stack" aria-labelledby="benchmark-code-heading">
+			<div class="benchmark-code-copy">
+				<h2 id="benchmark-code-heading">Implementation sketches</h2>
+				<p>
+					These tabs show the simplified code path each benchmark row represents. The CSS-in-JS
+					example is a runtime style-tag rewrite, not a specific package, and the rerender example
+					is a deliberately heavy proxy for framework-driven redraw work.
+				</p>
+			</div>
+
+			<div class="benchmark-tabs" role="tablist" aria-label="Benchmark methods">
+				{
+					codeSamples.map((sample, index) => (
+						<button
+							type="button"
+							role="tab"
+							id={`benchmark-tab-${sample.id}`}
+							class="benchmark-tab"
+							aria-controls={`benchmark-panel-${sample.id}`}
+							aria-selected={index === 0 ? 'true' : 'false'}
+							tabindex={index === 0 ? '0' : '-1'}
+							data-benchmark-code-tab={sample.id}
+						>
+							{sample.label}
+						</button>
+					))
+				}
+			</div>
+
+			{
+				codeSamples.map((sample, index) => (
+					<section
+						role="tabpanel"
+						id={`benchmark-panel-${sample.id}`}
+						class="benchmark-panel stack"
+						aria-labelledby={`benchmark-tab-${sample.id}`}
+						hidden={index !== 0}
+						data-benchmark-code-panel={sample.id}
+					>
+						<p class="benchmark-panel-summary">{sample.summary}</p>
+						<pre>
+							<code>{sample.code}</code>
+						</pre>
+					</section>
+				))
+			}
+		</section>
+
+		<p class="benchmark-note">
+			This is still a synthetic microbenchmark. It helps compare write patterns, but it does not
+			replace real profiling in your actual UI tree.
+		</p>
+	</div>
+
+	<script slot="scripts" type="module" src={dyssBenchmarkScript}></script>
+</DyssExample>
+
+<style>
+	.benchmark-shell {
+		padding: 1rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0.75rem;
+		background: linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-bg) 94%, white),
+				transparent
+			),
+			color-mix(in oklab, var(--color-bg) 90%, white);
+	}
+
+	.benchmark-controls fieldset {
+		margin: 0;
+		padding: 0.9rem;
+		border: 1px solid var(--hairline);
+	}
+
+	.benchmark-controls legend {
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.benchmark-grid {
+		margin-top: 0.65rem;
+		display: grid;
+		gap: 0.85rem;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	}
+
+	.benchmark-field {
+		display: grid;
+		gap: 0.35rem;
+	}
+
+	.benchmark-field > span,
+	.benchmark-check span {
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.benchmark-field output {
+		font-family: var(--font-label);
+		font-size: 0.76rem;
+		color: var(--color-ink-muted);
+	}
+
+	.benchmark-field input[type='range'] {
+		inline-size: 100%;
+	}
+
+	.benchmark-check {
+		display: flex;
+		gap: 0.6rem;
+		align-items: center;
+	}
+
+	.benchmark-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.8rem;
+		align-items: center;
+	}
+
+	.benchmark-actions button {
+		padding: 0.55rem 0.9rem;
+		border: 1px solid var(--hairline);
+		background: color-mix(in oklab, var(--color-bg) 78%, white);
+		color: var(--color-ink);
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.benchmark-actions p,
+	.benchmark-support-note,
+	.benchmark-note {
+		margin: 0;
+		font-size: 0.92rem;
+		color: var(--color-ink-muted);
+	}
+
+	.benchmark-support-note {
+		font-size: 0.82rem;
+	}
+
+	.benchmark-results {
+		gap: 0.7rem;
+	}
+
+	.benchmark-winner {
+		margin: 0;
+		font-size: 0.95rem;
+	}
+
+	.benchmark-table-wrap {
+		overflow-x: auto;
+	}
+
+	.benchmark-table {
+		inline-size: 100%;
+		border-collapse: collapse;
+		font-size: 0.85rem;
+	}
+
+	.benchmark-table th,
+	.benchmark-table td {
+		padding: 0.6rem 0.55rem;
+		border-bottom: 1px solid var(--hairline);
+		text-align: left;
+		white-space: nowrap;
+	}
+
+	.benchmark-table th {
+		font-family: var(--font-label);
+		font-size: 0.64rem;
+		letter-spacing: 0.11em;
+		text-transform: uppercase;
+		color: var(--color-ink-muted);
+	}
+
+	.benchmark-table td:first-child {
+		font-weight: 600;
+	}
+
+	.benchmark-preview {
+		gap: 0.8rem;
+	}
+
+	.benchmark-code {
+		gap: 0.8rem;
+	}
+
+	.benchmark-preview-copy h2 {
+		margin: 0;
+		font-size: 1rem;
+	}
+
+	.benchmark-preview-copy p,
+	.benchmark-code-copy p {
+		margin: 0.35rem 0 0;
+		font-size: 0.92rem;
+	}
+
+	.benchmark-code-copy h2 {
+		margin: 0;
+		font-size: 1rem;
+	}
+
+	.benchmark-active-method strong {
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.benchmark-tabs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+	}
+
+	.benchmark-tab {
+		padding: 0.45rem 0.7rem;
+		border: 1px solid var(--hairline);
+		background: color-mix(in oklab, var(--color-bg) 84%, white);
+		color: var(--color-ink-muted);
+		font-family: var(--font-label);
+		font-size: 0.64rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.benchmark-tab[aria-selected='true'] {
+		background: color-mix(in oklab, var(--color-bg) 60%, black);
+		color: white;
+		border-color: color-mix(in oklab, var(--color-bg) 35%, black);
+	}
+
+	.benchmark-panel {
+		margin: 0;
+		padding: 0.8rem;
+		border: 1px solid var(--hairline);
+		background: color-mix(in oklab, var(--color-bg) 90%, white);
+	}
+
+	.benchmark-panel-summary {
+		margin: 0;
+		font-size: 0.88rem;
+		color: var(--color-ink-muted);
+	}
+
+	.benchmark-panel pre {
+		margin: 0;
+		padding: 0.9rem;
+		overflow-x: auto;
+		background: color-mix(in oklab, var(--color-bg) 83%, black);
+	}
+
+	.benchmark-panel code {
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+		line-height: 1.5;
+	}
+
+	:global(.dyss-benchmark-stage) {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(18px, 1fr));
+		gap: 0.35rem;
+		padding: 0.75rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0.75rem;
+		background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.3), transparent 38%),
+			color-mix(in oklab, var(--color-bg) 86%, black);
+		max-block-size: 24rem;
+		overflow: auto;
+	}
+
+	:global(.dyss-benchmark-stage .bench-node) {
+		block-size: 18px;
+		border: 1px solid rgba(34, 34, 34, 0.15);
+		outline: 1px solid transparent;
+		outline-offset: -1px;
+		border-radius: 0.2rem;
+		background: #d7d1c4;
+		box-shadow: none;
+		transform: translate3d(0, 0, 0) scale(1);
+		will-change: transform, background-color, border-color;
+	}
+
+	:global(.dyss-benchmark-stage.is-vars .bench-node) {
+		background-color: var(--bench-bg, #d7d1c4);
+		border-color: var(--bench-border, #776b5f);
+		outline-color: var(--bench-outline, rgba(255, 255, 255, 0.38));
+		box-shadow: var(--bench-shadow, none);
+		transform: var(--bench-transform, translate3d(0, 0, 0) scale(1));
+	}
+
+	@media (max-width: 40rem) {
+		:global(.dyss-benchmark-stage) {
+			grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+			gap: 0.25rem;
+		}
+
+		:global(.dyss-benchmark-stage .bench-node) {
+			block-size: 14px;
+		}
+	}
+</style>
