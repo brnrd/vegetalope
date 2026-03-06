@@ -1,0 +1,195 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const pageTitle = 'add-ons';
+const pageDescription =
+	'Small browser add-ons with quick links to product pages, source repos, and issue reporting.';
+
+const addons = [
+	{
+		name: 'PromptTube',
+		description:
+			'Copies a prompt-ready package from a YouTube video, including transcript context.',
+		productUrl: 'https://addons.mozilla.org/en-US/firefox/addon/prompttube/',
+		repoUrl: 'https://github.com/brnrd/PromptTube',
+		issuesUrl: 'https://github.com/brnrd/PromptTube/issues/new/choose'
+	},
+	{
+		name: 'Amazon Search Focus',
+		description:
+			'Keeps the search field focused on Amazon pages so keyboard-first searching stays frictionless.',
+		productUrl: 'https://addons.mozilla.org/en-US/firefox/addon/amazon-search-focus/',
+		repoUrl: 'https://github.com/brnrd/amazon-search-focus',
+		issuesUrl: 'https://github.com/brnrd/amazon-search-focus/issues/new/choose'
+	}
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main class="content stack addons-page">
+			<article class="stack">
+				<header class="stack">
+					<p class="meta">Build</p>
+					<h1>{pageTitle}</h1>
+					<p>{pageDescription}</p>
+				</header>
+
+				<p class="addons-intro">
+					Each add-on card has three links: the live listing on Mozilla Firefox Add-ons, the
+					source repository, and a direct path to open a bug report.
+				</p>
+
+				<ul class="addons-list">
+					{addons.map((addon) => (
+						<li class="addons-card stack">
+							<div class="stack">
+								<h2>{addon.name}</h2>
+								<p>{addon.description}</p>
+							</div>
+
+							<nav aria-label={`${addon.name} links`}>
+								<ul class="addons-links">
+									<li>
+										<a href={addon.productUrl} target="_blank" rel="noopener noreferrer">
+											Firefox Add-ons
+										</a>
+									</li>
+									<li>
+										<a href={addon.repoUrl} target="_blank" rel="noopener noreferrer">
+											View source
+										</a>
+									</li>
+									<li>
+										<a href={addon.issuesUrl} target="_blank" rel="noopener noreferrer">
+											New issue
+										</a>
+									</li>
+								</ul>
+							</nav>
+						</li>
+					))}
+				</ul>
+
+				<p class="addons-back">
+					<a href="/">Back to home</a>
+				</p>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.addons-page .meta {
+		font-family: var(--font-label);
+		font-size: 0.66rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-ink-muted);
+		margin: 0;
+	}
+
+	.addons-page h1 {
+		margin: 0;
+	}
+
+	.addons-page .addons-intro {
+		margin: 0;
+		font-size: 0.98rem;
+		color: var(--color-ink-muted);
+	}
+
+	.addons-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.addons-card {
+		border: 1px solid var(--hairline);
+		border-radius: 0.8rem;
+		padding: 1rem;
+		background:
+			linear-gradient(155deg, color-mix(in oklab, var(--color-bg) 95%, white), transparent),
+			color-mix(in oklab, var(--color-bg) 93%, white);
+	}
+
+	.addons-card h2 {
+		margin: 0;
+		font-size: 1.1rem;
+	}
+
+	.addons-card p {
+		margin: 0;
+		font-size: 0.96rem;
+	}
+
+	.addons-links {
+		margin: 0.2rem 0 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.addons-links li {
+		flex: 1 1 0;
+		min-inline-size: 0;
+		margin: 0;
+		line-height: 0;
+		font-size: 0;
+	}
+
+	.addons-links li + li {
+		margin-block-start: 0;
+	}
+
+	.addons-links a {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		inline-size: 100%;
+		block-size: 2.2rem;
+		box-sizing: border-box;
+		padding: 0 0.65rem;
+		border: 1px solid var(--hairline);
+		font-family: var(--font-label);
+		font-size: 0.64rem;
+		line-height: 1;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		text-decoration: none;
+		white-space: nowrap;
+		color: var(--color-ink);
+		background: color-mix(in oklab, var(--color-bg) 88%, white);
+	}
+
+	.addons-links a:hover,
+	.addons-links a:focus-visible {
+		background: color-mix(in oklab, var(--color-bg) 70%, black);
+		color: white;
+	}
+
+	.addons-back a {
+		font-family: var(--font-label);
+		font-size: 0.67rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	@media (max-width: 42rem) {
+		.addons-links {
+			flex-direction: column;
+		}
+	}
+</style>
