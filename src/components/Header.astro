@@ -41,7 +41,10 @@ import logoImage from '../assets/vegetalope-transparent.avif'
 	/* Keep this file almost unstyled. */
 </style>
 
-<script is:inline>
+<script is:inline data-astro-rerun>
+	window.__vegetalopeHeaderAbort?.abort();
+	window.__vegetalopeHeaderAbort = new AbortController();
+	const { signal } = window.__vegetalopeHeaderAbort;
 	const header = document.querySelector('.site-header');
 	const button = document.querySelector('.menu-toggle');
 	const nav = document.querySelector('#site-nav');
@@ -55,19 +58,19 @@ import logoImage from '../assets/vegetalope-transparent.avif'
 		button.addEventListener('click', () => {
 			const isOpen = header.classList.toggle('menu-open');
 			button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-		});
+		}, { signal });
 
 		nav.addEventListener('click', (event) => {
 			const target = event.target;
 			if (target && target.matches('a')) {
 				closeMenu();
 			}
-		});
+		}, { signal });
 
 		window.addEventListener('keydown', (event) => {
 			if (event.key === 'Escape') {
 				closeMenu();
 			}
-		});
+		}, { signal });
 	}
 </script>

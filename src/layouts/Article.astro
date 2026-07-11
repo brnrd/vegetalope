@@ -3,9 +3,11 @@ import BaseHead from '../components/BaseHead.astro'
 import Header from '../components/Header.astro'
 import FormattedDate from '../components/FormattedDate.astro'
 import Footer from '../components/Footer.astro'
+import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName'
 
 const { frontmatter } = Astro.props
 const { title, description, pubDate, updatedDate, heroImage } = frontmatter
+const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname)
 ---
 
 <html lang="en">
@@ -16,7 +18,7 @@ const { title, description, pubDate, updatedDate, heroImage } = frontmatter
 	<body>
 		<Header />
 
-		<main class="content stack">
+		<main class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
 			<article class="stack">
 				{heroImage && (
 					<p class="stack">
@@ -25,7 +27,11 @@ const { title, description, pubDate, updatedDate, heroImage } = frontmatter
 				)}
 
 				<header class="stack">
-					<h1>{title}</h1>
+					<h1
+						class="transition-title"
+						style={`--view-transition-name: ${titleTransitionName};`}
+						transition:name={titleTransitionName}
+					>{title}</h1>
 
 					{(pubDate || updatedDate) && (
 						<p class="meta">

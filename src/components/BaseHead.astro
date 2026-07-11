@@ -3,6 +3,7 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 import { getImage } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
 import headerLogo from '../assets/vegetalope-transparent.webp';
 
 interface Props {
@@ -30,6 +31,7 @@ const headerLogoImage = await getImage({
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
+<ClientRouter fallback="animate" />
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=1">
@@ -70,7 +72,7 @@ const headerLogoImage = await getImage({
 <script defer src="https://umami.vegetalope.com/script.js" data-website-id="75cd0945-8e28-45e1-8a52-006373da5261"></script>
 
 <!-- This is intentionally inlined to avoid FOUC -->
-<script is:inline>
+<script is:inline data-astro-rerun>
 	if (typeof document !== 'undefined' && typeof localStorage !== 'undefined' && typeof window !== 'undefined') {
 		const root = document.documentElement;
 		const theme = localStorage.getItem('theme');

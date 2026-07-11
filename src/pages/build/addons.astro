@@ -2,10 +2,12 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import { pageContentTransition, viewTransitionNameFromPath } from '../../utils/viewTransitionName';
 
 const pageTitle = 'add-ons';
 const pageDescription =
 	'Small browser add-ons with quick links to product pages, source repos, and issue reporting.';
+const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 
 const addons = [
 	{
@@ -34,11 +36,19 @@ const addons = [
 	</head>
 	<body>
 		<Header />
-		<main class="content stack addons-page">
+		<main
+			class="content stack addons-page"
+			transition:name="page-content"
+			transition:animate={pageContentTransition}
+		>
 			<article class="stack">
 				<header class="stack">
 					<p class="meta">Build</p>
-					<h1>{pageTitle}</h1>
+					<h1
+						class="transition-title"
+						style={`--view-transition-name: ${titleTransitionName};`}
+						transition:name={titleTransitionName}
+					>{pageTitle}</h1>
 					<p>{pageDescription}</p>
 				</header>
 

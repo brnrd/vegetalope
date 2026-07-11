@@ -11,6 +11,10 @@ html.theme-dark {
 	color-scheme: dark;
 }
 
+@view-transition {
+	navigation: auto;
+}
+
 :root {
 	/* Typography */
 	--font-display: "Palatino Linotype", "Book Antiqua", "Times New Roman",
@@ -94,6 +98,57 @@ html.theme-dark {
 	background: var(--color-bg);
 }
 
+.transition-title,
+.transition-title-link {
+	view-transition-name: var(--view-transition-name, none);
+}
+
+::view-transition-group(page-content) {
+	animation-duration: 260ms;
+	animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+::view-transition-old(root) {
+	animation-duration: 90ms;
+	animation-timing-function: ease-out;
+}
+
+::view-transition-new(root) {
+	animation-duration: 120ms;
+	animation-timing-function: ease-out;
+}
+
+@keyframes vegetalopeContentOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes vegetalopeContentInFromRight {
+	from {
+		opacity: 0;
+		transform: translateX(1.75rem);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes vegetalopeContentInFromLeft {
+	from {
+		opacity: 0;
+		transform: translateX(-1.25rem);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	:where(html) {
 		scroll-behavior: auto;
@@ -104,6 +159,13 @@ html.theme-dark {
 		animation-duration: 0.001ms !important;
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.001ms !important;
+	}
+
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
 	}
 }
 

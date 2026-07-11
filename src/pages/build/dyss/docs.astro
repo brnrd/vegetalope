@@ -2,10 +2,12 @@
 import BaseHead from '../../../components/BaseHead.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
+import { pageContentTransition, viewTransitionNameFromPath } from '../../../utils/viewTransitionName';
 
 const pageTitle = 'dyss docs';
 const pageDescription =
 	'Reference documentation for dyss, a tiny utility for creating and updating live CSS stylesheets from JavaScript.';
+const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 
 const escapeInlineHtml = (value) =>
 	value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
@@ -431,11 +433,15 @@ if (rule) {
 	</head>
 	<body>
 		<Header />
-		<main class="content stack">
+		<main class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
 			<article class="stack dyss-docs">
 				<header class="stack">
 					<p class="meta">Build / dyss</p>
-					<h1>{pageTitle}</h1>
+					<h1
+						class="transition-title"
+						style={`--view-transition-name: ${titleTransitionName};`}
+						transition:name={titleTransitionName}
+					>{pageTitle}</h1>
 					<p class="lede">{pageDescription}</p>
 				</header>
 

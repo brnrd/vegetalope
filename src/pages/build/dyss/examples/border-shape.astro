@@ -1,0 +1,414 @@
+---
+import DyssExample from '../../../../layouts/DyssExample.astro';
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
+import dyssBorderShapeScript from '../../../../scripts/dyss-border-shape.js?url&no-inline';
+
+const title = 'dyss: border-shape playground';
+const description = 'An electric frame and a growing network of circles, redrawn as live CSS rules.';
+---
+
+<DyssExample title={title} description={description}>
+	<p>
+		These experiments push <code>border-shape</code> beyond regular polygons. The first continually redraws a
+		charged frame; the second bends shaped borders between draggable circles. Every path, position, and connector
+		is managed through dyss.
+	</p>
+
+	<div class="support-note" data-support-note role="status">
+		<span class="support-dot" aria-hidden="true"></span>
+		<span data-support-copy>Checking border-shape support…</span>
+	</div>
+
+	<div class="shape-lab stack" data-border-shape-demo>
+		<section class="experiment electric-experiment" aria-labelledby="electric-title">
+			<header class="experiment-header">
+				<div>
+					<p class="eyebrow">01 / animated perimeter</p>
+					<h2 id="electric-title">High voltage</h2>
+					<p>A restless border redraws itself around the content without clipping the glow.</p>
+				</div>
+				<div class="control-bank electric-controls">
+					<button type="button" data-electric-play aria-pressed="true">Pause current</button>
+					<label>
+						<span>Voltage</span>
+						<input data-voltage type="range" min="1" max="12" step="1" value="7" />
+						<output data-voltage-output>7kV</output>
+					</label>
+					<label>
+						<span>Charge</span>
+						<input data-charge type="range" min="1" max="8" step="1" value="4" />
+						<output data-charge-output>4px</output>
+					</label>
+				</div>
+			</header>
+
+			<div class="electric-stage">
+				<div class="electric-card" data-electric-card>
+					<span class="card-index">DYSS / 18.7 kHz</span>
+					<strong>Do not<br />touch<br />the edge.</strong>
+					<p>The box is ordinary. Its border is not.</p>
+				</div>
+				<div class="spark-field" aria-hidden="true">
+					<span></span><span></span><span></span><span></span><span></span>
+				</div>
+			</div>
+			<LiveCodeSection
+				className="shape-code experiment-code"
+				title="Electric frame rule"
+				codeAttrs={{ 'data-electric-code': '' }}
+			/>
+		</section>
+
+		<section class="experiment network-experiment" aria-labelledby="network-title">
+			<header class="experiment-header network-header">
+				<div>
+					<p class="eyebrow">02 / live topology</p>
+					<h2 id="network-title">Circle network</h2>
+					<p>Add nodes, drag them around, and change how their shaped borders connect.</p>
+				</div>
+				<div class="control-bank network-controls">
+					<button type="button" data-add-node>Add circle</button>
+					<button type="button" data-remove-node>Remove last</button>
+					<label>
+						<span>Connect</span>
+						<select data-topology>
+							<option value="chain">Chain</option>
+							<option value="ring" selected>Ring</option>
+							<option value="mesh">All together</option>
+						</select>
+					</label>
+					<label>
+						<span>Squish</span>
+						<input data-bend type="range" min="-42" max="42" step="1" value="18" />
+						<output data-bend-output>18%</output>
+					</label>
+				</div>
+			</header>
+
+			<div class="network-board" data-network-board aria-label="Draggable circle connector playground">
+				<div class="connector-layer" data-connector-layer aria-hidden="true"></div>
+				<div class="node-layer" data-node-layer></div>
+				<p class="drag-note">Drag the circles · up to 8 nodes</p>
+			</div>
+			<LiveCodeSection
+				className="shape-code experiment-code"
+				title="Latest connector mutation"
+				codeAttrs={{ 'data-network-code': '' }}
+			/>
+		</section>
+	</div>
+
+	<p class="reference-note">
+		Inspired by the electric frame and connected-circle demos in Temani Afif’s
+		<a href="https://css-tricks.com/get-ready-for-the-powerful-css-border-shape-property/">
+			CSS-Tricks exploration of <code>border-shape</code>
+		</a>.
+	</p>
+
+	<script slot="scripts" type="module" src={dyssBorderShapeScript} data-astro-rerun></script>
+</DyssExample>
+
+<style>
+	.support-note {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		width: fit-content;
+		padding: 0.45rem 0.7rem;
+		border: 1px solid var(--hairline);
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.support-dot {
+		inline-size: 0.6rem;
+		block-size: 0.6rem;
+		border-radius: 50%;
+		background: #e0a400;
+		box-shadow: 0 0 0 3px color-mix(in oklab, #e0a400 24%, transparent);
+	}
+
+	.support-note[data-supported='true'] .support-dot {
+		background: #2eaa69;
+		box-shadow: 0 0 0 3px color-mix(in oklab, #2eaa69 24%, transparent);
+	}
+
+	.shape-lab {
+		--lab-paper: #f4efe4;
+		--lab-ink: #17122d;
+		--electric: #70f9ff;
+		--electric-deep: #4268ff;
+		--node-a: #ff6542;
+		--node-b: #ffcf4a;
+		padding: clamp(0.7rem, 2vw, 1.1rem);
+		border: 1px solid var(--hairline);
+		background: var(--lab-paper);
+		color: var(--lab-ink);
+	}
+
+	.experiment {
+		border: 1px solid color-mix(in oklab, var(--lab-ink) 24%, transparent);
+		overflow: hidden;
+	}
+
+	.experiment-header {
+		display: grid;
+		grid-template-columns: minmax(220px, 1fr) minmax(330px, auto);
+		gap: 1rem;
+		align-items: end;
+		padding: clamp(0.9rem, 2vw, 1.25rem);
+		border-bottom: 1px solid color-mix(in oklab, var(--lab-ink) 24%, transparent);
+	}
+
+	.experiment-header h2 {
+		margin: 0.1rem 0 0.35rem;
+		font-size: clamp(2rem, 5vw, 3.2rem);
+		line-height: 0.9;
+	}
+
+	.experiment-header p {
+		margin: 0;
+		font-size: 0.95rem;
+	}
+
+	.experiment-header .eyebrow {
+		font-family: var(--font-label);
+		font-size: 0.62rem;
+		letter-spacing: 0.13em;
+		text-transform: uppercase;
+	}
+
+	.control-bank {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+	}
+
+	.control-bank label {
+		display: grid;
+		grid-template-columns: auto minmax(75px, 110px) 3rem;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: var(--font-label);
+		font-size: 0.62rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.control-bank output {
+		font-variant-numeric: tabular-nums;
+		text-align: right;
+	}
+
+	.control-bank button,
+	.control-bank select {
+		min-block-size: 2.1rem;
+		padding: 0.4rem 0.65rem;
+		border: 1px solid currentColor;
+		background: transparent;
+		color: inherit;
+		font-family: var(--font-label);
+		font-size: 0.62rem;
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
+	}
+
+	.electric-experiment {
+		background: #070916;
+		color: #edfaff;
+	}
+
+	.electric-experiment :is(h2, p) {
+		color: inherit;
+	}
+
+	.electric-experiment .experiment-header {
+		border-color: rgb(112 249 255 / 0.25);
+	}
+
+	.electric-stage {
+		position: relative;
+		min-block-size: 480px;
+		display: grid;
+		place-items: center;
+		padding: 3.5rem 1.5rem;
+		background:
+			radial-gradient(circle at 50% 48%, rgb(66 104 255 / 0.18), transparent 34%),
+			linear-gradient(rgb(112 249 255 / 0.05) 1px, transparent 1px),
+			linear-gradient(90deg, rgb(112 249 255 / 0.05) 1px, transparent 1px);
+		background-size: auto, 28px 28px, 28px 28px;
+	}
+
+	.electric-card {
+		position: relative;
+		z-index: 2;
+		inline-size: min(72vw, 480px);
+		min-block-size: 350px;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		padding: clamp(1.2rem, 4vw, 2.2rem);
+		box-sizing: border-box;
+		border: 4px solid var(--electric);
+		background: rgb(7 9 22 / 0.72);
+		box-shadow: 0 0 28px rgb(66 104 255 / 0.15);
+	}
+
+	.electric-card strong {
+		align-self: center;
+		font-family: var(--font-display);
+		font-size: clamp(2.1rem, 5.2vw, 3.7rem);
+		line-height: 0.82;
+		letter-spacing: -0.04em;
+	}
+
+	.electric-card p,
+	.card-index {
+		margin: 0;
+		font-family: var(--font-label);
+		font-size: 0.66rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.electric-card > p {
+		align-self: end;
+		padding-top: 0.8rem;
+	}
+
+	.spark-field span {
+		position: absolute;
+		inline-size: 3px;
+		block-size: 3px;
+		border-radius: 50%;
+		background: var(--electric);
+		box-shadow: 0 0 12px 3px var(--electric);
+	}
+
+	.spark-field span:nth-child(1) { inset: 18% auto auto 14%; }
+	.spark-field span:nth-child(2) { inset: 28% 18% auto auto; }
+	.spark-field span:nth-child(3) { inset: auto auto 17% 22%; }
+	.spark-field span:nth-child(4) { inset: auto 12% 28% auto; }
+	.spark-field span:nth-child(5) { inset: 50% auto auto 7%; }
+
+	.network-experiment {
+		background: #fffaf0;
+	}
+
+	.network-board {
+		position: relative;
+		min-block-size: 540px;
+		touch-action: none;
+		background:
+			linear-gradient(rgb(23 18 45 / 0.06) 1px, transparent 1px),
+			linear-gradient(90deg, rgb(23 18 45 / 0.06) 1px, transparent 1px);
+		background-size: 26px 26px;
+		isolation: isolate;
+		overflow: hidden;
+	}
+
+	.connector-layer,
+	.node-layer {
+		position: absolute;
+		inset: 0;
+	}
+
+	.connector-layer { z-index: 1; pointer-events: none; }
+	.node-layer { z-index: 2; }
+
+	:global(.network-node) {
+		position: absolute;
+		inline-size: 76px;
+		aspect-ratio: 1;
+		translate: -50% -50%;
+		border: 2px solid var(--lab-ink);
+		border-radius: 50%;
+		background: var(--node-color);
+		color: var(--lab-ink);
+		box-shadow: 6px 7px 0 rgb(23 18 45 / 0.16);
+		font-family: var(--font-label);
+		font-size: 0.64rem;
+		letter-spacing: 0.08em;
+		cursor: grab;
+		user-select: none;
+	}
+
+	:global(.network-node:active) {
+		cursor: grabbing;
+		box-shadow: 2px 3px 0 rgb(23 18 45 / 0.18);
+	}
+
+	:global(.network-connector) {
+		position: absolute;
+		block-size: 28px;
+		transform-origin: 0 50%;
+		border-bottom: 7px solid var(--connector-color);
+		box-sizing: border-box;
+		filter: drop-shadow(0 4px 0 rgb(23 18 45 / 0.08));
+	}
+
+	:global(.network-connector::after) {
+		content: '';
+		position: absolute;
+		inset: auto 0 -11px;
+		border-bottom: 1px dashed rgb(23 18 45 / 0.42);
+	}
+
+	.drag-note {
+		position: absolute;
+		z-index: 3;
+		inset: auto 0.8rem 0.65rem auto;
+		margin: 0;
+		font-family: var(--font-label);
+		font-size: 0.58rem;
+		letter-spacing: 0.11em;
+		text-transform: uppercase;
+		pointer-events: none;
+	}
+
+	.shape-code {
+		--dyss-code-max-height: 250px;
+	}
+
+	:global(.shape-lab .experiment-code) {
+		padding: 0.9rem;
+		border-top: 1px solid color-mix(in oklab, var(--lab-ink) 20%, transparent);
+		background: #fffaf0;
+		color: var(--lab-ink);
+	}
+
+	:global(.shape-lab .experiment-code h3) {
+		color: var(--lab-ink);
+	}
+
+	.reference-note { font-size: 0.9rem; }
+
+	@media (max-width: 800px) {
+		.experiment-header {
+			grid-template-columns: 1fr;
+			align-items: start;
+		}
+
+		.control-bank { justify-content: flex-start; }
+		.network-board { min-block-size: 460px; }
+	}
+
+	@media (max-width: 520px) {
+		.control-bank label {
+			inline-size: 100%;
+			grid-template-columns: 4.2rem 1fr 3rem;
+		}
+
+		.network-controls button { flex: 1; }
+		.electric-stage { min-block-size: 390px; }
+		.electric-card { inline-size: 82vw; min-block-size: 310px; }
+		:global(.network-node) { inline-size: 64px; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.spark-field { display: none; }
+	}
+</style>

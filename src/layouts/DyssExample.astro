@@ -2,11 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName';
 
 import dyssModuleUrl from 'dyss?url';
 
 
 const { title, description, backHref = '/build/dyss', backLabel = 'Back to dyss examples' } = Astro.props;
+const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 ---
 
 <!doctype html>
@@ -21,10 +23,14 @@ const { title, description, backHref = '/build/dyss', backLabel = 'Back to dyss 
 	</head>
 	<body>
 		<Header />
-	<main class="content stack">
+	<main class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
 			<article class="stack dyss-example">
 				<header class="stack">
-					<h1>{title}</h1>
+					<h1
+						class="transition-title"
+						style={`--view-transition-name: ${titleTransitionName};`}
+						transition:name={titleTransitionName}
+					>{title}</h1>
 					<p>{description}</p>
 				</header>
 

@@ -2,9 +2,11 @@
 import BaseHead from '../../../components/BaseHead.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
+import { pageContentTransition, viewTransitionNameFromPath } from '../../../utils/viewTransitionName';
 
 const pageTitle = 'dyss';
 const pageDescription = 'A tiny utility to dynamically create and update CSS stylesheets from JavaScript.';
+const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 
 const examples = [
 	{
@@ -18,6 +20,12 @@ const examples = [
 		href: '/build/dyss/examples/pie-chart',
 		description:
 			'Dynamic conic-gradient slices with live controls, stream updates, and runtime FPS feedback.'
+	},
+	{
+		title: 'Border-shape playground',
+		href: '/build/dyss/examples/border-shape',
+		description:
+			'Pulse, morph, and spin CSS border-shape outlines with live rules driven by dyss.'
 	},
 	{
 		title: 'Text highlights',
@@ -59,17 +67,28 @@ const examples = [
 	</head>
 	<body>
 		<Header />
-		<main class="content stack">
+		<main class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
 			<article class="stack">
 				<header class="stack">
-					<h1>{pageTitle}</h1>
+					<h1
+						class="transition-title"
+						style={`--view-transition-name: ${titleTransitionName};`}
+						transition:name={titleTransitionName}
+					>{pageTitle}</h1>
 					<p>{pageDescription}</p>
 				</header>
 
 				<section class="stack" aria-labelledby="dyss-docs-link">
 					<h2 id="dyss-docs-link">Documentation</h2>
 					<div class="dyss-doc-card">
-						<a href="/build/dyss/docs">Read the full dyss docs</a>
+						<a
+							href="/build/dyss/docs"
+							class="transition-title-link"
+							style={`--view-transition-name: ${viewTransitionNameFromPath('/build/dyss/docs')};`}
+							transition:name={viewTransitionNameFromPath('/build/dyss/docs')}
+						>
+							Read the full dyss docs
+						</a>
 						<p>
 							Reference docs for every current method in the package, with signatures, notes, and
 							practical examples.
@@ -82,7 +101,14 @@ const examples = [
 					<ul class="dyss-example-list">
 						{examples.map((example) => (
 							<li>
-								<a href={example.href}>{example.title}</a>
+								<a
+									href={example.href}
+									class="transition-title-link"
+									style={`--view-transition-name: ${viewTransitionNameFromPath(example.href)};`}
+									transition:name={viewTransitionNameFromPath(example.href)}
+								>
+									{example.title}
+								</a>
 								<p>{example.description}</p>
 							</li>
 						))}

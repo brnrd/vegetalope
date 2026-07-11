@@ -15,9 +15,13 @@ const themes = ['auto', 'light', 'dark'];
 	))}
 </fieldset>
 
-<script is:inline>
+<script is:inline data-astro-rerun>
 	(() => {
 		if (typeof document === 'undefined') return;
+
+		window.__vegetalopeThemeAbort?.abort();
+		window.__vegetalopeThemeAbort = new AbortController();
+		const { signal } = window.__vegetalopeThemeAbort;
 
 		const root = document.documentElement;
 		const container = document.querySelector('[data-theme-toggle]');
@@ -46,14 +50,14 @@ const themes = ['auto', 'light', 'dark'];
 		applyTheme(getStoredTheme());
 
 		for (const input of inputs) {
-			input.addEventListener('change', () => applyTheme(input.value));
+			input.addEventListener('change', () => applyTheme(input.value), { signal });
 		}
 
 		media.addEventListener('change', () => {
 			if (getStoredTheme() === 'auto') {
 				applyTheme('auto');
 			}
-		});
+		}, { signal });
 	})();
 </script>
 

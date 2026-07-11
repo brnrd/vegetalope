@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts';
+import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName';
 
 const writeArticleModules = import.meta.glob('./write/*.md');
 const writeArticles = (await Promise.all(
@@ -21,7 +22,11 @@ const writeArticles = (await Promise.all(
 	</head>
 	<body>
 		<Header title={SITE_TITLE} />
-		<main class="content stack site-index">
+		<main
+			class="content stack site-index"
+			transition:name="page-content"
+			transition:animate={pageContentTransition}
+		>
 			<header class="stack">
 				<h1 class="sr-only">{SITE_TITLE}</h1>
 				<p>
@@ -35,7 +40,14 @@ const writeArticles = (await Promise.all(
 					<ul class="card-list">
 						{writeArticles.map((article) => (
 							<li>
-								<a href={article.url}>{article.frontmatter.title}</a>
+								<a
+									href={article.url}
+									class="transition-title-link"
+									style={`--view-transition-name: ${viewTransitionNameFromPath(article.url)};`}
+									transition:name={viewTransitionNameFromPath(article.url)}
+								>
+									{article.frontmatter.title}
+								</a>
 								<p>{article.frontmatter.description}</p>
 							</li>
 						))}
@@ -46,7 +58,14 @@ const writeArticles = (await Promise.all(
 					<h2 id="nav-build">Build</h2>
 					<ul class="card-list">
 						<li>
-							<a href="/build/dyss">dyss</a>
+							<a
+								href="/build/dyss"
+								class="transition-title-link"
+								style={`--view-transition-name: ${viewTransitionNameFromPath('/build/dyss')};`}
+								transition:name={viewTransitionNameFromPath('/build/dyss')}
+							>
+								dyss
+							</a>
 							<p>Small runtime CSS demos built with dyss.</p>
 						</li>
 						<li>
@@ -54,7 +73,14 @@ const writeArticles = (await Promise.all(
 							<p>A tiny app to track meaningful dates. Local-first, no account.</p>
 						</li>
 						<li>
-							<a href="/build/addons">Firefox add-ons</a>
+							<a
+								href="/build/addons"
+								class="transition-title-link"
+								style={`--view-transition-name: ${viewTransitionNameFromPath('/build/addons')};`}
+								transition:name={viewTransitionNameFromPath('/build/addons')}
+							>
+								Firefox add-ons
+							</a>
 							<p>PromptTube and Amazon Search Focus.</p>
 						</li>
 					</ul>
