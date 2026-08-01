@@ -2,6 +2,9 @@
   "name": "vegetalope",
   "type": "module",
   "version": "0.0.3",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -10,19 +13,16 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^6.0.1",
-    "@astrojs/svelte": "^8.1.2",
+    "@astrojs/mdx": "^7.0.5",
+    "@astrojs/svelte": "^9.0.1",
     "@jorgejhms/astro-seo-meta-tags": "^0.4.0",
-    "astro": "^6.4.2",
+    "astro": "^7.1.6",
     "dyss": "^1.2.1",
-    "sharp": "^0.34.5",
-    "svelte": "^5.56.0"
+    "sharp": "^0.35.3",
+    "svelte": "^5.56.8"
   },
   "devDependencies": {
-    "eslint": "^9.39.4",
-    "eslint-plugin-astro": "^1.7.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1"
   }
 }
