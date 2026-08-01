@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/mdx": "^6.0.1",
     "@astrojs/svelte": "^8.1.2",
+    "@jorgejhms/astro-seo-meta-tags": "^0.4.0",
     "astro": "^6.4.2",
     "dyss": "^1.2.1",
     "sharp": "^0.34.5",

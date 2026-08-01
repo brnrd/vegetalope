@@ -3,51 +3,102 @@ import BaseHead from '../components/BaseHead.astro'
 import Header from '../components/Header.astro'
 import FormattedDate from '../components/FormattedDate.astro'
 import Footer from '../components/Footer.astro'
+import { SITE_AUTHOR, SITE_IMAGE } from '../consts'
 import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName'
 
 const { frontmatter } = Astro.props
-const { title, description, pubDate, updatedDate, heroImage } = frontmatter
+const { title, description, pubDate, updatedDate, heroImage, heroImageAlt } = frontmatter
 const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname)
+const toIsoDate = (date: string | Date | undefined) =>
+	date ? new Date(date).toISOString() : undefined
+const publishedTime = toIsoDate(pubDate)
+const modifiedTime = toIsoDate(updatedDate ?? pubDate)
+const isNotFound = Astro.url.pathname.startsWith('/404')
+const isArticle = Boolean(pubDate) && !isNotFound
+const jsonLd = isNotFound
+	? undefined
+	: isArticle
+	? {
+			'@context': 'https://schema.org',
+			'@type': 'BlogPosting',
+			headline: title,
+			description,
+			url: Astro.url.pathname,
+			image: heroImage ?? SITE_IMAGE,
+			datePublished: publishedTime,
+			dateModified: modifiedTime,
+			author: {
+				'@type': 'Person',
+				name: SITE_AUTHOR,
+				url: '/about',
+			},
+		}
+		: {
+			'@context': 'https://schema.org',
+			'@type': 'WebPage',
+			name: title,
+			description,
+			url: Astro.url.pathname,
+		}
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} image={heroImage} />
+		<BaseHead
+			title={title}
+			description={description}
+			image={heroImage}
+			imageAlt={heroImageAlt}
+			type={isArticle ? 'article' : 'website'}
+			publishedTime={isArticle ? publishedTime : undefined}
+			modifiedTime={isArticle ? modifiedTime : undefined}
+			jsonLd={jsonLd}
+		/>
 	</head>
 
 	<body>
 		<Header />
 
-		<main class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
+		<main
+			class="content stack"
+			transition:name="page-content"
+			transition:animate={pageContentTransition}
+		>
 			<article class="stack">
-				{heroImage && (
-					<p class="stack">
-						<img width="1020" height="510" src={heroImage} alt="" />
-					</p>
-				)}
+				{
+					heroImage && (
+						<p class="stack">
+							<img width="1020" height="510" src={heroImage} alt="" />
+						</p>
+					)
+				}
 
 				<header class="stack">
 					<h1
 						class="transition-title"
 						style={`--view-transition-name: ${titleTransitionName};`}
 						transition:name={titleTransitionName}
-					>{title}</h1>
+					>
+						{title}
+					</h1>
 
-					{(pubDate || updatedDate) && (
-						<p class="meta">
-							{pubDate && (
-								<span>
-									<FormattedDate date={pubDate} />
-								</span>
-							)}
-							{pubDate && updatedDate ? <span> | </span> : null}
-							{updatedDate && (
-								<span>
-									last updated on <FormattedDate date={updatedDate} />
-								</span>
-							)}
-						</p>
-					)}
+					{
+						(pubDate || updatedDate) && (
+							<p class="meta">
+								{pubDate && (
+									<span>
+										<FormattedDate date={pubDate} />
+									</span>
+								)}
+								{pubDate && updatedDate ? <span> | </span> : null}
+								{updatedDate && (
+									<span>
+										last updated on <FormattedDate date={updatedDate} />
+									</span>
+								)}
+							</p>
+						)
+					}
 				</header>
 
 				<section class="stack">

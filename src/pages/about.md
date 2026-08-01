@@ -1,7 +1,9 @@
 ---
 title: 'About'
+description: 'About Bernard Debecker, a frontend engineer and engineering leader.'
 layout: ../layouts/Article.astro
 ---
+
 My name is Bernard Debecker.
 
 I’m a husband, a father of five, and a frontend engineer at heart.

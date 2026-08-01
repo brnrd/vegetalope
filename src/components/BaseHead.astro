@@ -1,30 +1,62 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
-import { getImage } from 'astro:assets';
-import { ClientRouter } from 'astro:transitions';
-import headerLogo from '../assets/vegetalope-transparent.webp';
+import '../styles/global.css'
+import { MetaTags, type Metadata } from '@jorgejhms/astro-seo-meta-tags'
+import { getImage } from 'astro:assets'
+import { ClientRouter } from 'astro:transitions'
+import headerLogo from '../assets/vegetalope-transparent.webp'
+import {
+	SITE_AUTHOR,
+	SITE_DESCRIPTION,
+	SITE_IMAGE,
+	SITE_IMAGE_ALT,
+	SITE_LOCALE,
+	SITE_TITLE,
+	X_HANDLE,
+} from '../consts'
 
 interface Props {
-	title: string;
-	description: string;
-	image?: string;
+	title: string
+	description?: string
+	image?: Metadata['featuredImage']
+	imageAlt?: string
+	imageWidth?: number
+	imageHeight?: number
+	type?: string
+	publishedTime?: string
+	modifiedTime?: string
+	jsonLd?: Metadata['jsonLd']
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const {
+	title,
+	description = SITE_DESCRIPTION,
+	image = SITE_IMAGE,
+	imageAlt = image === SITE_IMAGE ? SITE_IMAGE_ALT : title,
+	imageWidth,
+	imageHeight,
+	type = 'website',
+	publishedTime,
+	modifiedTime,
+	jsonLd,
+} = Astro.props
+const pathname = Astro.url.pathname
+const allowIndex = pathname === '/' || pathname.startsWith('/write')
+const usesDefaultImage = image === SITE_IMAGE
+const ogProperties: Record<string, string> = {
+	locale: SITE_LOCALE,
+	site_name: SITE_TITLE,
+}
 
-const { title, description, image } = Astro.props;
-const fallbackImage = '/vegetalope.webp';
-const baseForImages = Astro.site ?? Astro.url;
-const resolvedImage = new URL(image ?? fallbackImage, baseForImages);
-const pathname = Astro.url.pathname;
-const allowIndex = pathname === '/' || pathname.startsWith('/write');
+if (publishedTime) ogProperties.published_time = publishedTime
+if (modifiedTime) ogProperties.modified_time = modifiedTime
+
 const headerLogoImage = await getImage({
 	src: headerLogo,
 	widths: [140, 200, 280, 360],
-	formats: ['webp']
-});
+	formats: ['webp'],
+})
 ---
 
 <!-- Global Metadata -->
@@ -34,16 +66,31 @@ const headerLogoImage = await getImage({
 <ClientRouter fallback="animate" />
 
 <!-- Favicon -->
-<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=1" />
 
-<!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
-
-<!-- Primary Meta Tags -->
-<title>{title}</title>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
-{!allowIndex && <meta name="robots" content="noindex, nofollow" />}
+<!-- SEO, Open Graph, X card, canonical URL, and structured data -->
+<MetaTags
+	metadata={{
+		title,
+		titleTemplate: title === SITE_TITLE ? undefined : `%s | ${SITE_TITLE}`,
+		description,
+		author: SITE_AUTHOR,
+		featuredImage: image,
+		ogImageWidth: imageWidth ?? (usesDefaultImage ? 814 : undefined),
+		ogImageHeight: imageHeight ?? (usesDefaultImage ? 400 : undefined),
+		ogImageAlt: imageAlt,
+		type,
+		twitter: {
+			card: 'summary_large_image',
+			site: X_HANDLE,
+			creator: X_HANDLE,
+			imageAlt,
+		},
+		ogProperties,
+		jsonLd,
+		noindex: !allowIndex,
+	}}
+/>
 <link rel="alternate" type="application/rss+xml" title="vegetalope Write Feed" href="/rss.xml" />
 <link
 	rel="preload"
@@ -52,35 +99,26 @@ const headerLogoImage = await getImage({
 	imagesrcset={headerLogoImage.srcset}
 	imagesizes="(max-width: 720px) 140px, 200px"
 />
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={resolvedImage} />
-
-<!-- Twitter / X -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content={Astro.url} />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:site" content="@vegetalope" />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={resolvedImage} />
-
 <!-- Tracking -->
-<script defer src="https://umami.vegetalope.com/script.js" data-website-id="75cd0945-8e28-45e1-8a52-006373da5261"></script>
+<script
+	defer
+	src="https://umami.vegetalope.com/script.js"
+	data-website-id="75cd0945-8e28-45e1-8a52-006373da5261"></script>
 
 <!-- This is intentionally inlined to avoid FOUC -->
 <script is:inline data-astro-rerun>
-	if (typeof document !== 'undefined' && typeof localStorage !== 'undefined' && typeof window !== 'undefined') {
-		const root = document.documentElement;
-		const theme = localStorage.getItem('theme');
-		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (
+		typeof document !== 'undefined' &&
+		typeof localStorage !== 'undefined' &&
+		typeof window !== 'undefined'
+	) {
+		const root = document.documentElement
+		const theme = localStorage.getItem('theme')
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 		if (theme === 'dark' || ((theme === 'auto' || !theme) && prefersDark)) {
-			root.classList.add('theme-dark');
+			root.classList.add('theme-dark')
 		} else {
-			root.classList.remove('theme-dark');
+			root.classList.remove('theme-dark')
 		}
 	}
 </script>
