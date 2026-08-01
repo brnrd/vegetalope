@@ -7,7 +7,8 @@ import { SITE_AUTHOR, SITE_IMAGE } from '../consts'
 import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName'
 
 const { frontmatter } = Astro.props
-const { title, description, pubDate, updatedDate, heroImage, heroImageAlt } = frontmatter
+const { title, description, pubDate, updatedDate, heroImage, heroImageAlt, minutesRead } =
+	frontmatter
 const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname)
 const toIsoDate = (date: string | Date | undefined) =>
 	date ? new Date(date).toISOString() : undefined
@@ -15,31 +16,35 @@ const publishedTime = toIsoDate(pubDate)
 const modifiedTime = toIsoDate(updatedDate ?? pubDate)
 const isNotFound = Astro.url.pathname.startsWith('/404')
 const isArticle = Boolean(pubDate) && !isNotFound
+const isWriting = Astro.url.pathname.startsWith('/write/')
+const articleMinutesRead = isArticle && isWriting ? minutesRead : undefined
+const articleSlug = isWriting ? Astro.url.pathname.split('/').filter(Boolean).at(-1) : undefined
+const socialImage = articleSlug ? `/og/${articleSlug}.png` : heroImage
 const jsonLd = isNotFound
 	? undefined
 	: isArticle
-	? {
-			'@context': 'https://schema.org',
-			'@type': 'BlogPosting',
-			headline: title,
-			description,
-			url: Astro.url.pathname,
-			image: heroImage ?? SITE_IMAGE,
-			datePublished: publishedTime,
-			dateModified: modifiedTime,
-			author: {
-				'@type': 'Person',
-				name: SITE_AUTHOR,
-				url: '/about',
-			},
-		}
+		? {
+				'@context': 'https://schema.org',
+				'@type': 'BlogPosting',
+				headline: title,
+				description,
+				url: Astro.url.pathname,
+				image: socialImage ?? SITE_IMAGE,
+				datePublished: publishedTime,
+				dateModified: modifiedTime,
+				author: {
+					'@type': 'Person',
+					name: SITE_AUTHOR,
+					url: '/about',
+				},
+			}
 		: {
-			'@context': 'https://schema.org',
-			'@type': 'WebPage',
-			name: title,
-			description,
-			url: Astro.url.pathname,
-		}
+				'@context': 'https://schema.org',
+				'@type': 'WebPage',
+				name: title,
+				description,
+				url: Astro.url.pathname,
+			}
 ---
 
 <html lang="en">
@@ -47,8 +52,10 @@ const jsonLd = isNotFound
 		<BaseHead
 			title={title}
 			description={description}
-			image={heroImage}
-			imageAlt={heroImageAlt}
+			image={socialImage}
+			imageAlt={heroImageAlt ?? (articleSlug ? `${title} article card` : undefined)}
+			imageWidth={articleSlug ? 1200 : undefined}
+			imageHeight={articleSlug ? 630 : undefined}
 			type={isArticle ? 'article' : 'website'}
 			publishedTime={isArticle ? publishedTime : undefined}
 			modifiedTime={isArticle ? modifiedTime : undefined}
@@ -83,19 +90,21 @@ const jsonLd = isNotFound
 					</h1>
 
 					{
-						(pubDate || updatedDate) && (
+						(pubDate || updatedDate || articleMinutesRead) && (
 							<p class="meta">
 								{pubDate && (
 									<span>
 										<FormattedDate date={pubDate} />
 									</span>
 								)}
-								{pubDate && updatedDate ? <span> | </span> : null}
+								{pubDate && (updatedDate || articleMinutesRead) ? <span> | </span> : null}
 								{updatedDate && (
 									<span>
 										last updated on <FormattedDate date={updatedDate} />
 									</span>
 								)}
+								{updatedDate && articleMinutesRead ? <span> | </span> : null}
+								{articleMinutesRead && <span>{articleMinutesRead} min read</span>}
 							</p>
 						)
 					}

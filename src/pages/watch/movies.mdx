@@ -15,4 +15,4 @@ All the films listed here are ones we personally consider “good movies”: tit
 
 The selection is deliberately personal rather than academic. It reflects our tastes, moods, and the kinds of films that tend to stay with us over time, without any claim to objectivity or completeness.
 
-<MediaGrid movies={movies} client:load />
+<MediaGrid movies={movies} client:idle={{ timeout: 1000 }} />
