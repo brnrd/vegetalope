@@ -1,7 +1,6 @@
 ---
 title: 'Context beats prompts'
 description: 'Why context matters more than a clever prompt.'
-layout: ../../layouts/Article.astro
 pubDate: '2026-02-08'
 ---
 

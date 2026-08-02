@@ -284,6 +284,21 @@ header.site-header a:hover {
 	color: var(--color-ink);
 }
 
+.language-switcher {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	font-family: var(--font-label);
+	font-size: 0.7rem;
+	letter-spacing: 0.12em;
+}
+
+.language-switcher a[aria-current="page"] {
+	color: var(--color-accent-2);
+	text-decoration: underline;
+	text-underline-offset: 0.25em;
+}
+
 .menu-toggle {
 	border: 0;
 	background: transparent;
@@ -465,6 +480,18 @@ header.site-header a:hover {
 	letter-spacing: 0.18em;
 	text-transform: uppercase;
 	color: color-mix(in oklab, var(--color-ink-muted) 80%, transparent);
+}
+
+.article-original-link {
+	margin-block-start: var(--stack-4);
+	padding-block-start: var(--stack-2);
+	border-top: 1px solid var(--hairline);
+}
+
+.article-original-link p {
+	font-family: var(--font-label);
+	font-size: 0.8rem;
+	letter-spacing: 0.08em;
 }
 
 :where(a) {

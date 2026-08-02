@@ -9,6 +9,13 @@ import linkValidator from 'astro-link-validator'
 export default defineConfig({
 	output: 'static',
 	site: 'https://vegetalope.com',
+	i18n: {
+		locales: ['en', 'fr'],
+		defaultLocale: 'en',
+		routing: {
+			prefixDefaultLocale: false,
+		},
+	},
 	build: {
 		inlineStylesheets: 'always',
 	},

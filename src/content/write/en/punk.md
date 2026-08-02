@@ -1,7 +1,6 @@
 ---
 title: 'PUNK'
 description: 'Pragmatic, Unconventional, Nimble, Keen.'
-layout: ../../layouts/Article.astro
 pubDate: '2023-10-23'
 updatedDate: '2026-02-07'
 ---

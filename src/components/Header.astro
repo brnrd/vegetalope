@@ -1,13 +1,28 @@
 ---
 import { Image } from 'astro:assets';
 import { SITE_TITLE } from '../consts'
+import { getLocaleFromPath, getLocalePath, ui, type Locale } from '../i18n'
 import logoImage from '../assets/vegetalope-transparent.avif'
+import LanguageSwitcher from './LanguageSwitcher.astro'
+
+interface Props {
+	locale?: Locale
+	enHref?: string
+	frHref?: string
+}
+
+const locale = Astro.props.locale ?? getLocaleFromPath(Astro.url.pathname)
+const strings = ui[locale]
+const enHref =
+	Astro.props.enHref ??
+	(locale === 'en' && !Astro.url.pathname.startsWith('/404') ? Astro.url.pathname : '/')
+const frHref = Astro.props.frHref ?? (locale === 'fr' ? Astro.url.pathname : '/fr/')
 ---
 
 <header class="site-header">
 	<div class="inner">
 		<h2>
-			<a class="site-logo" href="/" aria-label={SITE_TITLE}>
+			<a class="site-logo" href={getLocalePath(locale)} aria-label={SITE_TITLE}>
 				<Image
 					src={logoImage}
 					alt={SITE_TITLE}
@@ -24,15 +39,16 @@ import logoImage from '../assets/vegetalope-transparent.avif'
 		</h2>
 
 		<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-			<span class="sr-only">Toggle navigation</span>
+			<span class="sr-only">{strings.toggleNavigation}</span>
 			<span class="menu-lines" aria-hidden="true"></span>
 		</button>
 
-		<nav id="site-nav" class="site-nav" aria-label="Site">
-			<a href="/about">About</a>
+		<nav id="site-nav" class="site-nav" aria-label={strings.siteNavigation}>
+			<a href={getLocalePath(locale, '/about')}>{strings.about}</a>
 			<a href="https://x.com/vegetalope" target="_blank" rel="noreferrer">X</a>
 			<a href="https://www.linkedin.com/in/bernarddebecker/" target="_blank" rel="noreferrer">LinkedIn</a>
 			<a href="https://github.com/brnrd" target="_blank" rel="noreferrer">GitHub</a>
+			<LanguageSwitcher {locale} {enHref} {frHref} />
 		</nav>
 	</div>
 </header>
@@ -42,35 +58,37 @@ import logoImage from '../assets/vegetalope-transparent.avif'
 </style>
 
 <script is:inline data-astro-rerun>
-	window.__vegetalopeHeaderAbort?.abort();
-	window.__vegetalopeHeaderAbort = new AbortController();
-	const { signal } = window.__vegetalopeHeaderAbort;
-	const header = document.querySelector('.site-header');
-	const button = document.querySelector('.menu-toggle');
-	const nav = document.querySelector('#site-nav');
+	(() => {
+		window.__vegetalopeHeaderAbort?.abort();
+		window.__vegetalopeHeaderAbort = new AbortController();
+		const { signal } = window.__vegetalopeHeaderAbort;
+		const header = document.querySelector('.site-header');
+		const button = document.querySelector('.menu-toggle');
+		const nav = document.querySelector('#site-nav');
 
-	if (header && button && nav) {
-		const closeMenu = () => {
-			header.classList.remove('menu-open');
-			button.setAttribute('aria-expanded', 'false');
-		};
+		if (header && button && nav) {
+			const closeMenu = () => {
+				header.classList.remove('menu-open');
+				button.setAttribute('aria-expanded', 'false');
+			};
 
-		button.addEventListener('click', () => {
-			const isOpen = header.classList.toggle('menu-open');
-			button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-		}, { signal });
+			button.addEventListener('click', () => {
+				const isOpen = header.classList.toggle('menu-open');
+				button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+			}, { signal });
 
-		nav.addEventListener('click', (event) => {
-			const target = event.target;
-			if (target && target.matches('a')) {
-				closeMenu();
-			}
-		}, { signal });
+			nav.addEventListener('click', (event) => {
+				const target = event.target;
+				if (target && target.matches('a')) {
+					closeMenu();
+				}
+			}, { signal });
 
-		window.addEventListener('keydown', (event) => {
-			if (event.key === 'Escape') {
-				closeMenu();
-			}
-		}, { signal });
-	}
+			window.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape') {
+					closeMenu();
+				}
+			}, { signal });
+		}
+	})();
 </script>

@@ -15,6 +15,7 @@ import {
 	SITE_TITLE,
 	X_HANDLE,
 } from '../consts'
+import { getLocaleFromPath, ui, type Locale } from '../i18n'
 
 interface Props {
 	title: string
@@ -27,6 +28,9 @@ interface Props {
 	publishedTime?: string
 	modifiedTime?: string
 	jsonLd?: Metadata['jsonLd']
+	locale?: Locale
+	alternateUrls?: Partial<Record<Locale, string>>
+	enableLocaleDetection?: boolean
 }
 
 const {
@@ -40,13 +44,32 @@ const {
 	publishedTime,
 	modifiedTime,
 	jsonLd,
+	locale = getLocaleFromPath(Astro.url.pathname),
+	alternateUrls,
+	enableLocaleDetection = false,
 } = Astro.props
 const pathname = Astro.url.pathname
-const allowIndex = pathname === '/' || pathname.startsWith('/write')
+const absoluteAlternateUrls = alternateUrls
+	? Object.fromEntries(
+			Object.entries(alternateUrls).map(([language, href]) => [
+				language,
+				new URL(href, Astro.site ?? Astro.url).href,
+			]),
+		) as Partial<Record<Locale, string>>
+	: undefined
+const allowIndex =
+	pathname === '/' ||
+	pathname === '/fr/' ||
+	pathname.startsWith('/write') ||
+	pathname.startsWith('/fr/write')
 const usesDefaultImage = image === SITE_IMAGE
 const ogProperties: Record<string, string> = {
-	locale: SITE_LOCALE,
+	locale: locale === 'fr' ? 'fr_FR' : SITE_LOCALE,
 	site_name: SITE_TITLE,
+}
+
+if (alternateUrls?.en && alternateUrls?.fr) {
+	ogProperties.alternate_locale = locale === 'fr' ? SITE_LOCALE : 'fr_FR'
 }
 
 if (publishedTime) ogProperties.published_time = publishedTime
@@ -95,7 +118,15 @@ const twitterImage = image
 		noindex: !allowIndex,
 	}}
 />
-<link rel="alternate" type="application/rss+xml" title="vegetalope Write Feed" href="/rss.xml" />
+{absoluteAlternateUrls?.en && <link rel="alternate" hreflang="en" href={absoluteAlternateUrls.en} />}
+{absoluteAlternateUrls?.fr && <link rel="alternate" hreflang="fr" href={absoluteAlternateUrls.fr} />}
+{absoluteAlternateUrls?.en && <link rel="alternate" hreflang="x-default" href={absoluteAlternateUrls.en} />}
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title={ui[locale].feedTitle}
+	href={locale === 'fr' ? '/fr/rss.xml' : '/rss.xml'}
+/>
 <link
 	rel="preload"
 	as="image"
@@ -108,6 +139,29 @@ const twitterImage = image
 	defer
 	src="https://umami.vegetalope.com/script.js"
 	data-website-id="75cd0945-8e28-45e1-8a52-006373da5261"></script>
+
+{
+	enableLocaleDetection && (
+		<script is:inline>
+			if (typeof window !== 'undefined' && window.location.pathname === '/') {
+				let storedLocale = null;
+				try {
+					storedLocale = localStorage.getItem('site-locale');
+				} catch {
+					// Browser-language detection still works when storage is unavailable.
+				}
+				const browserLanguages = navigator.languages?.length
+					? navigator.languages
+					: [navigator.language];
+				const prefersFrench = browserLanguages[0]?.toLowerCase().startsWith('fr');
+
+				if (storedLocale === 'fr' || (!storedLocale && prefersFrench)) {
+					window.location.replace('/fr/');
+				}
+			}
+		</script>
+	)
+}
 
 <!-- This is intentionally inlined to avoid FOUC -->
 <script is:inline data-astro-rerun>

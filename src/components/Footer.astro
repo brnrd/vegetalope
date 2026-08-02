@@ -2,17 +2,23 @@
 import { Image } from 'astro:assets';
 import logoImage from '../assets/vegetalope.webp';
 import ThemeToggle from './ThemeToggle.astro';
+import { getLocaleFromPath, getLocalePath, ui, type Locale } from '../i18n';
 
 const pathname = Astro.url.pathname;
-const showRss = pathname === '/' || pathname.startsWith('/write');
+interface Props {
+	locale?: Locale;
+}
+const locale = Astro.props.locale ?? getLocaleFromPath(pathname);
+const strings = ui[locale];
+const showRss = pathname === '/' || pathname === '/fr/' || pathname.startsWith('/write') || pathname.startsWith('/fr/write');
 ---
 
 <footer class="site-footer">
 	<div class="inner home-footer">
-		<a class="hello" href="/about" aria-label="About Bernard Debecker">
+		<a class="hello" href={getLocalePath(locale, '/about')} aria-label={strings.aboutBernard}>
 			<div class="top">
-				<div>Hello</div>
-				<p>my name is</p>
+				<div>{strings.hello}</div>
+				<p>{strings.myNameIs}</p>
 			</div>
 			<div class="name">
 				<Image
@@ -26,9 +32,9 @@ const showRss = pathname === '/' || pathname.startsWith('/write');
 		</a>
 
 		<div class="footer-toggle">
-			<ThemeToggle />
+			<ThemeToggle {locale} />
 			{showRss && (
-				<a class="footer-rss" href="/rss.xml">RSS</a>
+				<a class="footer-rss" href={locale === 'fr' ? '/fr/rss.xml' : '/rss.xml'}>RSS</a>
 			)}
 		</div>
 	</div>

@@ -1,0 +1,38 @@
+---
+import { ui, type Locale } from '../i18n'
+
+interface Props {
+	locale: Locale
+	enHref?: string
+	frHref?: string
+}
+
+const { locale, enHref = '/', frHref = '/fr/' } = Astro.props
+const strings = ui[locale]
+---
+
+<div class="language-switcher" aria-label={strings.languageSelection}>
+	<a href={enHref} lang="en" hreflang="en" aria-current={locale === 'en' ? 'page' : undefined} data-locale="en">EN</a>
+	<span aria-hidden="true">/</span>
+	<a href={frHref} lang="fr" hreflang="fr" aria-current={locale === 'fr' ? 'page' : undefined} data-locale="fr">FR</a>
+</div>
+
+<script is:inline data-astro-rerun>
+	(() => {
+		if (typeof document === 'undefined') return;
+
+		window.__vegetalopeLocaleAbort?.abort();
+		window.__vegetalopeLocaleAbort = new AbortController();
+		const { signal } = window.__vegetalopeLocaleAbort;
+
+		for (const link of document.querySelectorAll('.language-switcher [data-locale]')) {
+			link.addEventListener('click', () => {
+				try {
+					localStorage.setItem('site-locale', link.dataset.locale);
+				} catch {
+					// Navigation still works when storage is unavailable.
+				}
+			}, { signal });
+		}
+	})();
+</script>

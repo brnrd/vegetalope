@@ -1,0 +1,44 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import Article from '../../layouts/Article.astro'
+import { getArticleParts } from '../../i18n'
+
+interface Props {
+	entry: CollectionEntry<'write'>
+	frHref?: string
+}
+
+export async function getStaticPaths() {
+	const entries = await getCollection('write')
+	const frenchSlugs = new Set(
+		entries
+			.map((entry) => getArticleParts(entry.id))
+			.filter(({ locale }) => locale === 'fr')
+			.map(({ slug }) => slug),
+	)
+
+	return entries
+		.filter((entry) => getArticleParts(entry.id).locale === 'en')
+		.map((entry) => {
+			const { slug } = getArticleParts(entry.id)
+			return {
+				params: { slug },
+				props: {
+					entry,
+					frHref: frenchSlugs.has(slug) ? `/fr/write/${slug}` : undefined,
+				},
+			}
+		})
+}
+
+const { entry, frHref } = Astro.props as Props
+const { Content, remarkPluginFrontmatter } = await render(entry)
+const slug = getArticleParts(entry.id).slug
+const enHref = `/write/${slug}`
+const frontmatter = { ...entry.data, ...remarkPluginFrontmatter }
+const alternateUrls = frHref ? { en: enHref, fr: frHref } : { en: enHref }
+---
+
+<Article {frontmatter} locale="en" {alternateUrls} {enHref} frHref={frHref ?? '/fr/'}>
+	<Content />
+</Article>

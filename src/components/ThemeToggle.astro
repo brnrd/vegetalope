@@ -1,15 +1,23 @@
 ---
-const themes = ['auto', 'light', 'dark'];
+import { getLocaleFromPath, ui, type Locale } from '../i18n';
+
+interface Props {
+	locale?: Locale;
+}
+
+const locale = Astro.props.locale ?? getLocaleFromPath(Astro.url.pathname);
+const strings = ui[locale];
+const themes = ['auto', 'light', 'dark'] as const;
 ---
 
 <fieldset class="theme-toggle" data-theme-toggle>
-	<legend class="sr-only">Colour theme</legend>
+	<legend class="sr-only">{strings.colourTheme}</legend>
 
 	{themes.map((t) => (
 		<label>
-			<input type="radio" name="theme" value={t} aria-label={`Use ${t} theme`} />
+			<input type="radio" name="theme" value={t} aria-label={strings.useTheme(strings.themes[t])} />
 			<span aria-hidden="true">
-				<span class="btn-text">{t}</span>
+				<span class="btn-text">{strings.themes[t]}</span>
 			</span>
 		</label>
 	))}

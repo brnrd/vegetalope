@@ -1,7 +1,6 @@
 ---
 title: 'Keep your own record'
 description: 'Why tracking your achievements is part of being a professional, not self-promotion.'
-layout: ../../layouts/Article.astro
 pubDate: '2026-02-09'
 ---
 

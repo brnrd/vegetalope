@@ -1,14 +1,15 @@
 ---
 import { getCollection } from 'astro:content'
-import BaseHead from '../components/BaseHead.astro'
-import Header from '../components/Header.astro'
-import Footer from '../components/Footer.astro'
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts'
-import { getArticleParts, ui } from '../i18n'
-import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName'
+import BaseHead from '../../components/BaseHead.astro'
+import Header from '../../components/Header.astro'
+import Footer from '../../components/Footer.astro'
+import { SITE_TITLE, SITE_IMAGE } from '../../consts'
+import { getArticleParts, ui } from '../../i18n'
+import { pageContentTransition, viewTransitionNameFromPath } from '../../utils/viewTransitionName'
 
-const locale = 'en' as const
+const locale = 'fr' as const
 const strings = ui[locale]
+const description = 'Réflexions sur l’ingénierie logicielle et la vie, ainsi que de petits outils créés pour le plaisir.'
 const writeArticles = (await getCollection('write'))
 	.filter((entry) => getArticleParts(entry.id).locale === locale)
 	.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
@@ -17,41 +18,25 @@ const writeArticles = (await getCollection('write'))
 <!DOCTYPE html>
 <html lang={locale}>
 	<head>
-		<BaseHead
-			title="vegetalope"
-			description={SITE_DESCRIPTION}
-			image={SITE_IMAGE}
-			{locale}
-			alternateUrls={{ en: '/', fr: '/fr/' }}
-			enableLocaleDetection
-		/>
+		<BaseHead title="vegetalope" {description} image={SITE_IMAGE} {locale} alternateUrls={{ en: '/', fr: '/fr/' }} />
 	</head>
 	<body>
 		<Header title={SITE_TITLE} {locale} enHref="/" frHref="/fr/" />
-		<main
-			class="content stack site-index"
-			transition:name="page-content"
-			transition:animate={pageContentTransition}
-		>
+		<main class="content stack site-index" transition:name="page-content" transition:animate={pageContentTransition}>
 			<header class="stack">
 				<h1 class="sr-only">{SITE_TITLE}</h1>
 				<p>{strings.intro}</p>
 			</header>
 
-			<nav aria-label="Site navigation" class="stack nav-sections">
+			<nav aria-label="Navigation du site" class="stack nav-sections">
 				<section class="stack nav-section" aria-labelledby="nav-write">
 					<h2 id="nav-write">{strings.write}</h2>
 					<ul class="card-list">
 						{writeArticles.map((article) => {
-							const url = `/write/${getArticleParts(article.id).slug}`
+							const url = `/fr/write/${getArticleParts(article.id).slug}`
 							return (
 								<li>
-									<a
-										href={url}
-										class="transition-title-link"
-										style={`--view-transition-name: ${viewTransitionNameFromPath(url)};`}
-										transition:name={viewTransitionNameFromPath(url)}
-									>
+									<a href={url} class="transition-title-link" style={`--view-transition-name: ${viewTransitionNameFromPath(url)};`} transition:name={viewTransitionNameFromPath(url)}>
 										{article.data.title}
 									</a>
 									<p>{article.data.description}</p>

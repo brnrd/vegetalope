@@ -4,9 +4,24 @@ import Header from '../components/Header.astro'
 import FormattedDate from '../components/FormattedDate.astro'
 import Footer from '../components/Footer.astro'
 import { SITE_AUTHOR, SITE_IMAGE } from '../consts'
+import { getLocaleFromPath, type Locale } from '../i18n'
 import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName'
 
-const { frontmatter } = Astro.props
+interface Props {
+	frontmatter: Record<string, any>
+	locale?: Locale
+	alternateUrls?: Partial<Record<Locale, string>>
+	enHref?: string
+	frHref?: string
+}
+
+const {
+	frontmatter,
+	locale = getLocaleFromPath(Astro.url.pathname),
+	alternateUrls: suppliedAlternateUrls,
+	enHref: suppliedEnHref,
+	frHref: suppliedFrHref,
+} = Astro.props as Props
 const { title, description, pubDate, updatedDate, heroImage, heroImageAlt, minutesRead } =
 	frontmatter
 const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname)
@@ -16,10 +31,20 @@ const publishedTime = toIsoDate(pubDate)
 const modifiedTime = toIsoDate(updatedDate ?? pubDate)
 const isNotFound = Astro.url.pathname.startsWith('/404')
 const isArticle = Boolean(pubDate) && !isNotFound
-const isWriting = Astro.url.pathname.startsWith('/write/')
+const isWriting =
+	Astro.url.pathname.startsWith('/write/') || Astro.url.pathname.startsWith('/fr/write/')
 const articleMinutesRead = isArticle && isWriting ? minutesRead : undefined
 const articleSlug = isWriting ? Astro.url.pathname.split('/').filter(Boolean).at(-1) : undefined
-const socialImage = articleSlug ? `/og/${articleSlug}.png` : heroImage
+const socialImage = articleSlug
+	? `${locale === 'fr' ? '/fr' : ''}/og/${articleSlug}.png`
+	: heroImage
+const isAbout = Astro.url.pathname === '/about' || Astro.url.pathname === '/fr/about'
+const enHref =
+	suppliedEnHref ??
+	(isAbout ? '/about' : locale === 'en' && !isNotFound ? Astro.url.pathname : '/')
+const frHref = suppliedFrHref ?? (isAbout ? '/fr/about' : locale === 'fr' ? Astro.url.pathname : '/fr/')
+const alternateUrls =
+	suppliedAlternateUrls ?? (isAbout ? { en: '/about', fr: '/fr/about' } : undefined)
 const jsonLd = isNotFound
 	? undefined
 	: isArticle
@@ -32,10 +57,11 @@ const jsonLd = isNotFound
 				image: socialImage ?? SITE_IMAGE,
 				datePublished: publishedTime,
 				dateModified: modifiedTime,
+				inLanguage: locale,
 				author: {
 					'@type': 'Person',
 					name: SITE_AUTHOR,
-					url: '/about',
+					url: locale === 'fr' ? '/fr/about' : '/about',
 				},
 			}
 		: {
@@ -44,10 +70,11 @@ const jsonLd = isNotFound
 				name: title,
 				description,
 				url: Astro.url.pathname,
+				inLanguage: locale,
 			}
 ---
 
-<html lang="en">
+<html lang={locale}>
 	<head>
 		<BaseHead
 			title={title}
@@ -60,11 +87,13 @@ const jsonLd = isNotFound
 			publishedTime={isArticle ? publishedTime : undefined}
 			modifiedTime={isArticle ? modifiedTime : undefined}
 			jsonLd={jsonLd}
+			{locale}
+			{alternateUrls}
 		/>
 	</head>
 
 	<body>
-		<Header />
+		<Header {locale} {enHref} {frHref} />
 
 		<main
 			class="content stack"
@@ -94,17 +123,22 @@ const jsonLd = isNotFound
 							<p class="meta">
 								{pubDate && (
 									<span>
-										<FormattedDate date={pubDate} />
+										<FormattedDate date={pubDate} {locale} />
 									</span>
 								)}
 								{pubDate && (updatedDate || articleMinutesRead) ? <span> | </span> : null}
 								{updatedDate && (
 									<span>
-										last updated on <FormattedDate date={updatedDate} />
+										{locale === 'fr' ? 'dernière mise à jour le' : 'last updated on'}{' '}
+										<FormattedDate date={updatedDate} {locale} />
 									</span>
 								)}
 								{updatedDate && articleMinutesRead ? <span> | </span> : null}
-								{articleMinutesRead && <span>{articleMinutesRead} min read</span>}
+								{articleMinutesRead && (
+									<span>
+										{articleMinutesRead} {locale === 'fr' ? 'min de lecture' : 'min read'}
+									</span>
+								)}
 							</p>
 						)
 					}
@@ -113,9 +147,21 @@ const jsonLd = isNotFound
 				<section class="stack">
 					<slot />
 				</section>
+
+				{
+					locale === 'fr' && isWriting && enHref !== '/' && (
+						<footer class="article-original-link">
+							<p>
+								<a href={enHref} lang="en" hreflang="en">
+									Lire la version originale en anglais
+								</a>
+							</p>
+						</footer>
+					)
+				}
 			</article>
 		</main>
 
-		<Footer />
+		<Footer {locale} />
 	</body>
 </html>
