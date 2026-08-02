@@ -1,5 +1,5 @@
 ---
-title: 'Why I Keep Work on a Separate Phone'
+title: 'Why I keep work on a separatephone'
 description: 'Keeping work available when needed, but out of my pocket otherwise.'
 layout: ../../layouts/Article.astro
 pubDate: '2026-08-02'
