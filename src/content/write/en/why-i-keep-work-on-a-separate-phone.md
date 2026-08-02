@@ -1,5 +1,5 @@
 ---
-title: 'Why I keep work on a separatephone'
+title: 'Why I keep work on a separate phone'
 description: 'Keeping work available when needed, but out of my pocket otherwise.'
 pubDate: '2026-08-02'
 ---
