@@ -11,7 +11,7 @@ const writeArticles = (await Promise.all(
 )).sort((a, b) => {
 	const aDate = new Date(a.frontmatter.pubDate ?? 0);
 	const bDate = new Date(b.frontmatter.pubDate ?? 0);
-	return aDate.getTime() - bDate.getTime();
+	return bDate.getTime() - aDate.getTime();
 });
 ---
 
