@@ -57,6 +57,9 @@ const headerLogoImage = await getImage({
 	widths: [140, 200, 280, 360],
 	formats: ['webp'],
 })
+const twitterImage = image
+	? new URL(typeof image === 'string' ? image : image.src, Astro.site ?? Astro.url).href
+	: undefined
 ---
 
 <!-- Global Metadata -->
@@ -84,6 +87,7 @@ const headerLogoImage = await getImage({
 			card: 'summary_large_image',
 			site: X_HANDLE,
 			creator: X_HANDLE,
+			image: twitterImage,
 			imageAlt,
 		},
 		ogProperties,
