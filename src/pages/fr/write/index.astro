@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content'
+import BaseHead from '../../../components/BaseHead.astro'
+import Header from '../../../components/Header.astro'
+import Footer from '../../../components/Footer.astro'
+import { SITE_TITLE } from '../../../consts'
+import { getArticleParts, ui } from '../../../i18n'
+import { pageContentTransition, viewTransitionNameFromPath } from '../../../utils/viewTransitionName'
+
+const locale = 'fr' as const
+const strings = ui[locale]
+const writeArticles = (await getCollection('write'))
+	.filter((entry) => getArticleParts(entry.id).locale === locale)
+	.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+---
+
+<!DOCTYPE html>
+<html lang={locale}>
+	<head>
+		<BaseHead
+			title={strings.write}
+			description={strings.writeDescription}
+			{locale}
+			alternateUrls={{ en: '/write/', fr: '/fr/write/' }}
+		/>
+	</head>
+	<body>
+		<Header title={SITE_TITLE} {locale} enHref="/write/" frHref="/fr/write/" />
+		<main
+			class="content stack site-index"
+			transition:name="page-content"
+			transition:animate={pageContentTransition}
+		>
+			<header class="stack">
+				<h1>{strings.write}</h1>
+				<p>{strings.writeDescription}</p>
+			</header>
+
+			<ul class="card-list">
+				{writeArticles.map((article) => {
+					const url = `/fr/write/${getArticleParts(article.id).slug}`
+					return (
+						<li>
+							<a
+								href={url}
+								class="transition-title-link"
+								style={`--view-transition-name: ${viewTransitionNameFromPath(url)};`}
+								transition:name={viewTransitionNameFromPath(url)}
+							>
+								{article.data.title}
+							</a>
+							<p>{article.data.description}</p>
+						</li>
+					)
+				})}
+			</ul>
+		</main>
+		<Footer {locale} />
+	</body>
+</html>

@@ -736,6 +736,13 @@ header.site-header a:hover {
 	font-size: inherit;
 }
 
+.section-more {
+	margin-block-start: var(--stack-2);
+	font-family: var(--font-label);
+	font-size: 0.8rem;
+	letter-spacing: 0.08em;
+}
+
 
 .home-footer {
 	margin-top: clamp(2.6rem, 6vw, 5rem);

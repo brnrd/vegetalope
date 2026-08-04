@@ -13,6 +13,7 @@ const description = 'Réflexions sur l’ingénierie logicielle et la vie, ainsi
 const writeArticles = (await getCollection('write'))
 	.filter((entry) => getArticleParts(entry.id).locale === locale)
 	.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+const latestWriteArticles = writeArticles.slice(0, 5)
 ---
 
 <!DOCTYPE html>
@@ -32,7 +33,7 @@ const writeArticles = (await getCollection('write'))
 				<section class="stack nav-section" aria-labelledby="nav-write">
 					<h2 id="nav-write">{strings.write}</h2>
 					<ul class="card-list">
-						{writeArticles.map((article) => {
+						{latestWriteArticles.map((article) => {
 							const url = `/fr/write/${getArticleParts(article.id).slug}`
 							return (
 								<li>
@@ -44,6 +45,7 @@ const writeArticles = (await getCollection('write'))
 							)
 						})}
 					</ul>
+					<p class="section-more"><a href="/fr/write/">{strings.allArticles} →</a></p>
 				</section>
 
 				<section class="stack nav-section" aria-labelledby="nav-build">
