@@ -45,7 +45,6 @@ const frHref = Astro.props.frHref ?? (locale === 'fr' ? Astro.url.pathname : '/f
 
 		<nav id="site-nav" class="site-nav" aria-label={strings.siteNavigation}>
 			<a href={getLocalePath(locale, '/about')}>{strings.about}</a>
-			<a href="https://x.com/vegetalope" target="_blank" rel="noreferrer">X</a>
 			<a href="https://www.linkedin.com/in/bernarddebecker/" target="_blank" rel="noreferrer">LinkedIn</a>
 			<a href="https://github.com/brnrd" target="_blank" rel="noreferrer">GitHub</a>
 			<LanguageSwitcher {locale} {enHref} {frHref} />
