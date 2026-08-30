@@ -13,7 +13,7 @@ const description = 'Réflexions sur l’ingénierie logicielle et la vie, ainsi
 const writeArticles = (await getCollection('write'))
 	.filter((entry) => getArticleParts(entry.id).locale === locale)
 	.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-const latestWriteArticles = writeArticles.slice(0, 5)
+const latestWriteArticles = writeArticles.slice(0, 3)
 ---
 
 <!DOCTYPE html>
