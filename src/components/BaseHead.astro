@@ -3,9 +3,7 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css'
 import { MetaTags, type Metadata } from '@jorgejhms/astro-seo-meta-tags'
-import { getImage } from 'astro:assets'
 import { ClientRouter } from 'astro:transitions'
-import headerLogo from '../assets/vegetalope-transparent.webp'
 import {
 	SITE_AUTHOR,
 	SITE_DESCRIPTION,
@@ -75,11 +73,6 @@ if (alternateUrls?.en && alternateUrls?.fr) {
 if (publishedTime) ogProperties.published_time = publishedTime
 if (modifiedTime) ogProperties.modified_time = modifiedTime
 
-const headerLogoImage = await getImage({
-	src: headerLogo,
-	widths: [140, 200, 280, 360],
-	formats: ['webp'],
-})
 const twitterImage = image
 	? new URL(typeof image === 'string' ? image : image.src, Astro.site ?? Astro.url).href
 	: undefined
@@ -89,7 +82,7 @@ const twitterImage = image
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
-<ClientRouter fallback="animate" />
+<ClientRouter fallback="swap" />
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=1" />
@@ -127,13 +120,6 @@ const twitterImage = image
 	title={ui[locale].feedTitle}
 	href={locale === 'fr' ? '/fr/rss.xml' : '/rss.xml'}
 />
-<link
-	rel="preload"
-	as="image"
-	href={headerLogoImage.src}
-	imagesrcset={headerLogoImage.srcset}
-	imagesizes="(max-width: 720px) 140px, 200px"
-/>
 <!-- Tracking -->
 <script
 	defer
@@ -167,11 +153,11 @@ const twitterImage = image
 <script is:inline data-astro-rerun>
 	if (
 		typeof document !== 'undefined' &&
-		typeof localStorage !== 'undefined' &&
 		typeof window !== 'undefined'
 	) {
 		const root = document.documentElement
-		const theme = localStorage.getItem('theme')
+		let theme = null
+		try { theme = localStorage.getItem('theme') } catch { /* Use the system preference. */ }
 		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 		if (theme === 'dark' || ((theme === 'auto' || !theme) && prefersDark)) {
 			root.classList.add('theme-dark')

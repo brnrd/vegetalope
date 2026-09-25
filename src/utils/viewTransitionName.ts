@@ -19,9 +19,8 @@ export const pageContentTransition = {
 		},
 		new: {
 			name: 'vegetalopeContentInFromRight',
-			duration: '260ms',
+			duration: '180ms',
 			easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)',
-			delay: '35ms',
 			fillMode: 'both',
 		},
 	},
@@ -34,9 +33,8 @@ export const pageContentTransition = {
 		},
 		new: {
 			name: 'vegetalopeContentInFromLeft',
-			duration: '240ms',
+			duration: '180ms',
 			easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)',
-			delay: '25ms',
 			fillMode: 'both',
 		},
 	},

@@ -23,7 +23,7 @@ const latestWriteArticles = writeArticles.slice(0, 3)
 	</head>
 	<body>
 		<Header title={SITE_TITLE} {locale} enHref="/" frHref="/fr/" />
-		<main class="content stack site-index" transition:name="page-content" transition:animate={pageContentTransition}>
+		<main id="main-content" tabindex="-1" class="content stack site-index" transition:name="page-content" transition:animate={pageContentTransition}>
 			<header class="stack">
 				<h1 class="sr-only">{SITE_TITLE}</h1>
 				<p>{strings.intro}</p>
