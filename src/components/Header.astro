@@ -19,6 +19,7 @@ const enHref =
 const frHref = Astro.props.frHref ?? (locale === 'fr' ? Astro.url.pathname : '/fr/')
 ---
 
+<a class="skip-link" href="#main-content">{locale === 'fr' ? 'Aller au contenu' : 'Skip to content'}</a>
 <header class="site-header">
 	<div class="inner">
 		<h2>
@@ -32,7 +33,7 @@ const frHref = Astro.props.frHref ?? (locale === 'fr' ? Astro.url.pathname : '/f
 					loading="eager"
 					decoding="async"
 					fetchpriority="high"
-					sizes="(max-width: 720px) 140px, 200px"
+					sizes="(max-width: 700px) 140px, (max-width: 1000px) 20vw, 200px"
 				/>
 				<span class="sr-only">{SITE_TITLE}</span>
 			</a>
@@ -44,7 +45,7 @@ const frHref = Astro.props.frHref ?? (locale === 'fr' ? Astro.url.pathname : '/f
 		</button>
 
 		<nav id="site-nav" class="site-nav" aria-label={strings.siteNavigation}>
-			<a href={getLocalePath(locale, '/about')}>{strings.about}</a>
+			<a href={getLocalePath(locale, '/about')} aria-current={Astro.url.pathname.replace(/\/$/, '') === getLocalePath(locale, '/about') ? 'page' : undefined}>{strings.about}</a>
 			<a href="https://www.linkedin.com/in/bernarddebecker/" target="_blank" rel="noreferrer">LinkedIn</a>
 			<a href="https://github.com/brnrd" target="_blank" rel="noreferrer">GitHub</a>
 			<LanguageSwitcher {locale} {enHref} {frHref} />
@@ -52,42 +53,39 @@ const frHref = Astro.props.frHref ?? (locale === 'fr' ? Astro.url.pathname : '/f
 	</div>
 </header>
 
-<style>
-	/* Keep this file almost unstyled. */
-</style>
-
 <script is:inline data-astro-rerun>
 	(() => {
 		window.__vegetalopeHeaderAbort?.abort();
 		window.__vegetalopeHeaderAbort = new AbortController();
 		const { signal } = window.__vegetalopeHeaderAbort;
 		const header = document.querySelector('.site-header');
-		const button = document.querySelector('.menu-toggle');
-		const nav = document.querySelector('#site-nav');
-
-		if (header && button && nav) {
-			const closeMenu = () => {
-				header.classList.remove('menu-open');
-				button.setAttribute('aria-expanded', 'false');
-			};
-
-			button.addEventListener('click', () => {
-				const isOpen = header.classList.toggle('menu-open');
-				button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-			}, { signal });
-
-			nav.addEventListener('click', (event) => {
-				const target = event.target;
-				if (target && target.matches('a')) {
-					closeMenu();
-				}
-			}, { signal });
-
-			window.addEventListener('keydown', (event) => {
-				if (event.key === 'Escape') {
-					closeMenu();
-				}
-			}, { signal });
-		}
+		const button = header?.querySelector('.menu-toggle');
+		const nav = header?.querySelector('#site-nav');
+		if (!header || !button || !nav) return;
+		header.classList.add('menu-ready');
+		const closeMenu = () => {
+			header.classList.remove('menu-open');
+			button.setAttribute('aria-expanded', 'false');
+		};
+		button.addEventListener('click', () => {
+			const isOpen = header.classList.toggle('menu-open');
+			button.setAttribute('aria-expanded', String(isOpen));
+		}, { signal });
+		nav.addEventListener('click', (event) => {
+			if (event.target.closest('a')) closeMenu();
+		}, { signal });
+		header.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && header.classList.contains('menu-open')) {
+				closeMenu();
+				button.focus();
+			}
+		}, { signal });
+		document.addEventListener('click', (event) => {
+			if (!header.contains(event.target)) closeMenu();
+		}, { signal });
+		header.addEventListener('focusout', (event) => {
+			if (!header.contains(event.relatedTarget)) closeMenu();
+		}, { signal });
+		window.matchMedia('(max-width: 720px)').addEventListener('change', closeMenu, { signal });
 	})();
 </script>

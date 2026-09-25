@@ -23,7 +23,7 @@ const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 	</head>
 	<body>
 		<Header />
-	<main class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
+	<main id="main-content" tabindex="-1" class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
 			<article class="stack dyss-example">
 				<header class="stack">
 					<h1

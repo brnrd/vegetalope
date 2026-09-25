@@ -1,154 +1,143 @@
 ---
-import { getLocaleFromPath, ui, type Locale } from '../i18n';
+import { getLocaleFromPath, ui, type Locale } from '../i18n'
 
 interface Props {
-	locale?: Locale;
+	locale?: Locale
 }
 
-const locale = Astro.props.locale ?? getLocaleFromPath(Astro.url.pathname);
-const strings = ui[locale];
-const themes = ['auto', 'light', 'dark'] as const;
+const locale = Astro.props.locale ?? getLocaleFromPath(Astro.url.pathname)
+const strings = ui[locale]
+const themes = ['auto', 'light', 'dark'] as const
 ---
 
 <fieldset class="theme-toggle" data-theme-toggle>
 	<legend class="sr-only">{strings.colourTheme}</legend>
 
-	{themes.map((t) => (
-		<label>
-			<input type="radio" name="theme" value={t} aria-label={strings.useTheme(strings.themes[t])} />
-			<span aria-hidden="true">
-				<span class="btn-text">{strings.themes[t]}</span>
-			</span>
-		</label>
-	))}
+	{
+		themes.map(t => (
+			<label>
+				<input
+					type="radio"
+					name="theme"
+					value={t}
+					aria-label={strings.useTheme(strings.themes[t])}
+				/>
+				<span aria-hidden="true">
+					<span class="btn-text">{strings.themes[t]}</span>
+				</span>
+			</label>
+		))
+	}
 </fieldset>
 
 <script is:inline data-astro-rerun>
-	(() => {
-		if (typeof document === 'undefined') return;
+	;(() => {
+		if (typeof document === 'undefined') return
 
-		window.__vegetalopeThemeAbort?.abort();
-		window.__vegetalopeThemeAbort = new AbortController();
-		const { signal } = window.__vegetalopeThemeAbort;
+		window.__vegetalopeThemeAbort?.abort()
+		window.__vegetalopeThemeAbort = new AbortController()
+		const { signal } = window.__vegetalopeThemeAbort
 
-		const root = document.documentElement;
-		const container = document.querySelector('[data-theme-toggle]');
-		if (!container) return;
+		const root = document.documentElement
+		const container = document.querySelector('[data-theme-toggle]')
+		if (!container) return
 
-		const inputs = Array.from(container.querySelectorAll('input[name="theme"]'));
-		if (!inputs.length) return;
+		const inputs = Array.from(container.querySelectorAll('input[name="theme"]'))
+		if (!inputs.length) return
 
-		const media = window.matchMedia('(prefers-color-scheme: dark)');
+		const media = window.matchMedia('(prefers-color-scheme: dark)')
 
 		const getStoredTheme = () => {
-			const stored = localStorage.getItem('theme');
-			if (stored === 'light' || stored === 'dark' || stored === 'auto') return stored;
-			return 'auto';
-		};
-
-		const applyTheme = (theme) => {
-			const isDark = theme === 'dark' || (theme === 'auto' && media.matches);
-			root.classList.toggle('theme-dark', isDark);
-			localStorage.setItem('theme', theme);
-			for (const input of inputs) {
-				input.checked = input.value === theme;
+			let stored
+			try {
+				stored = localStorage.getItem('theme')
+			} catch {
+				return 'auto'
 			}
-		};
-
-		applyTheme(getStoredTheme());
-
-		for (const input of inputs) {
-			input.addEventListener('change', () => applyTheme(input.value), { signal });
+			if (stored === 'light' || stored === 'dark' || stored === 'auto') return stored
+			return 'auto'
 		}
 
-		media.addEventListener('change', () => {
-			if (getStoredTheme() === 'auto') {
-				applyTheme('auto');
+		let currentTheme = getStoredTheme()
+
+		const applyTheme = theme => {
+			currentTheme = theme
+			const isDark = theme === 'dark' || (theme === 'auto' && media.matches)
+			root.classList.toggle('theme-dark', isDark)
+			try {
+				localStorage.setItem('theme', theme)
+			} catch {
+				/* Theme still works for this page. */
 			}
-		}, { signal });
-	})();
+			for (const input of inputs) {
+				input.checked = input.value === theme
+			}
+		}
+
+		applyTheme(currentTheme)
+
+		for (const input of inputs) {
+			input.addEventListener('change', () => applyTheme(input.value), { signal })
+		}
+
+		media.addEventListener(
+			'change',
+			() => {
+				if (currentTheme === 'auto') {
+					applyTheme('auto')
+				}
+			},
+			{ signal },
+		)
+	})()
 </script>
 
 <style>
-	/* Keep this component visually neutral */
 	fieldset {
-		border: 0;
-		padding: 0;
-		margin: 0;
 		display: inline-flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 0.2rem;
+		flex-wrap: wrap;
+		gap: 0.15rem;
+		padding: 0.2rem;
+		margin: 0;
+		border: 1px solid var(--hairline);
+		border-radius: 999px;
 	}
-
 	label {
-		display: inline-flex;
-		align-items: center;
-		cursor: pointer;
 		position: relative;
+		cursor: pointer;
 	}
-
-	/* Visually hide the legend but keep it accessible */
-	.sr-only {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-		border: 0;
-	}
-
-	/*
-	  Do NOT remove the radios from the accessibility tree.
-	  Just make them unobtrusive visually.
-	*/
 	input {
-		margin: 0;
 		position: absolute;
 		opacity: 0;
-		pointer-events: none;
+		margin: 0;
 	}
-
-	/*
-	  Small visual hint for the current theme,
-	  without introducing colours.
-	*/
-	span {
+	label > span {
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		gap: 0.25rem;
-		padding: 0.2rem 0.45rem;
-		border-radius: 0;
-		border: 0;
-		background: transparent;
-		opacity: 1;
+		min-height: 40px;
+		padding: 0.5rem 0.85rem;
+		border-radius: 999px;
+		color: var(--color-ink-muted);
+		transition:
+			background-color 120ms ease,
+			color 120ms ease;
+	}
+	label:hover > span {
 		color: var(--color-ink);
-		line-height: 1;
-		transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
-		white-space: nowrap;
+		background: color-mix(in oklab, var(--color-ink) 5%, transparent);
 	}
-
-	label:hover span {
-		text-decoration: underline;
-	}
-
 	input:checked + span {
-		text-decoration: underline;
+		color: var(--color-bg);
+		background: var(--color-ink);
 	}
-
 	input:focus-visible + span {
-		outline: 2px solid currentColor;
-		outline-offset: 2px;
+		outline: var(--focus);
+		outline-offset: var(--focus-offset);
 	}
-
 	.btn-text {
-		text-transform: capitalize;
-		font-size: 0.7rem;
-		letter-spacing: 0.18em;
+		font-family: var(--font-label);
+		font-size: 0.65rem;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
 	}
 </style>

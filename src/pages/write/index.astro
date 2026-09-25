@@ -26,7 +26,7 @@ const writeArticles = (await getCollection('write'))
 	</head>
 	<body>
 		<Header title={SITE_TITLE} {locale} enHref="/write/" frHref="/fr/write/" />
-		<main
+		<main id="main-content" tabindex="-1"
 			class="content stack site-index"
 			transition:name="page-content"
 			transition:animate={pageContentTransition}

@@ -1,7 +1,4 @@
-/*
-  Global styles aligned to americabydesign.gov: bold type, big scale, clean surfaces.
-  Minimal rules, lots of air, editorial hierarchy.
-*/
+/* Editorial typography, native motion, and a deliberately small visual system. */
 
 html {
 	color-scheme: light;
@@ -17,11 +14,12 @@ html.theme-dark {
 
 :root {
 	/* Typography */
-	--font-display: "Palatino Linotype", "Book Antiqua", "Times New Roman",
-		"Georgia", "Cambria", serif;
-	--font-body: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-	--font-label: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-		"Courier New", monospace;
+	--font-display:
+		'Palatino Linotype', 'Book Antiqua', 'Times New Roman', 'Georgia', 'Cambria', serif;
+	--font-body: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+	--font-label:
+		ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+		monospace;
 
 	/* Palette */
 	--color-ink: #14161a;
@@ -103,8 +101,8 @@ html.theme-dark {
 	view-transition-name: var(--view-transition-name, none);
 }
 
-::view-transition-group(page-content) {
-	animation-duration: 260ms;
+::view-transition-group(*) {
+	animation-duration: 180ms;
 	animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -130,7 +128,7 @@ html.theme-dark {
 @keyframes vegetalopeContentInFromRight {
 	from {
 		opacity: 0;
-		transform: translateX(1.75rem);
+		transform: translateX(8px);
 	}
 	to {
 		opacity: 1;
@@ -141,7 +139,7 @@ html.theme-dark {
 @keyframes vegetalopeContentInFromLeft {
 	from {
 		opacity: 0;
-		transform: translateX(-1.25rem);
+		transform: translateX(-8px);
 	}
 	to {
 		opacity: 1;
@@ -150,6 +148,9 @@ html.theme-dark {
 }
 
 @media (prefers-reduced-motion: reduce) {
+	@view-transition {
+		navigation: none;
+	}
 	:where(html) {
 		scroll-behavior: auto;
 	}
@@ -218,7 +219,6 @@ header.site-header .site-logo-mark {
 	inline-size: clamp(140px, 20vw, 200px);
 	block-size: auto;
 	filter: none;
-	transition: filter 160ms ease;
 }
 
 html.theme-dark header.site-header .site-logo-mark {
@@ -260,10 +260,10 @@ header.site-header a:hover {
 
 :where(nav.site-nav) {
 	display: flex;
-	gap: 0.8rem;
+	gap: 1.2rem;
 	flex-wrap: wrap;
 	align-items: center;
-	margin-block: var(--stack-1) 0;
+	margin-block: 0;
 }
 
 :where(nav.site-nav a) {
@@ -293,7 +293,7 @@ header.site-header a:hover {
 	letter-spacing: 0.12em;
 }
 
-.language-switcher a[aria-current="page"] {
+.language-switcher a[aria-current='page'] {
 	color: var(--color-accent-2);
 	text-decoration: underline;
 	text-underline-offset: 0.25em;
@@ -317,13 +317,13 @@ header.site-header a:hover {
 
 .menu-lines::before,
 .menu-lines::after {
-	content: "";
+	content: '';
 	position: absolute;
 	left: 0;
 	right: 0;
 	height: 2px;
 	background: var(--color-ink);
-	transition: transform 220ms ease, top 220ms ease, opacity 220ms ease;
+	transition: transform 160ms ease;
 }
 
 .menu-lines::before {
@@ -335,52 +335,52 @@ header.site-header a:hover {
 }
 
 @media (max-width: 720px) {
-	.menu-toggle {
+	.site-header .inner {
+		position: relative;
+	}
+	.menu-ready .menu-toggle {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		color: var(--color-ink);
-		position: relative;
-		z-index: 20;
+		min-width: 44px;
+		min-height: 44px;
 	}
-
 	:where(nav.site-nav) {
-		position: fixed;
-		inset: 0;
-		background: var(--color-bg);
+		width: 100%;
+		gap: 0.6rem 1.2rem;
+	}
+	.menu-ready nav.site-nav {
+		position: absolute;
+		top: calc(100% + 0.75rem);
+		inset-inline: 0;
 		z-index: 10;
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
-		justify-content: flex-start;
-		gap: 1.4rem;
-		padding: clamp(5rem, 10vh, 7rem) var(--page-pad) 2rem;
-		margin: 0;
-		transform: translateY(8px);
+		align-items: stretch;
+		gap: 0.25rem;
+		padding: 1rem;
+		border: 1px solid var(--hairline);
+		border-radius: 12px;
+		background: var(--color-bg);
+		box-shadow: 0 12px 30px rgb(0 0 0 / 8%);
+		visibility: hidden;
 		opacity: 0;
-		pointer-events: none;
-		transition: opacity 220ms ease, transform 220ms ease;
+		transform: translateY(-4px);
+		transition:
+			opacity 160ms ease,
+			transform 160ms ease;
 	}
-
-	:where(nav.site-nav a) {
-		font-size: 1.1rem;
-		letter-spacing: 0.14em;
-	}
-
-	.site-header.menu-open :where(nav.site-nav) {
+	.menu-ready.menu-open nav.site-nav {
+		visibility: visible;
 		opacity: 1;
 		transform: translateY(0);
-		pointer-events: auto;
 	}
-
 	.site-header.menu-open .menu-lines::before {
-		top: 8px;
-		transform: rotate(45deg);
+		transform: translateY(4px) rotate(45deg);
 	}
-
 	.site-header.menu-open .menu-lines::after {
-		top: 8px;
-		transform: rotate(-45deg);
+		transform: translateY(-4px) rotate(-45deg);
 	}
 }
 
@@ -412,7 +412,7 @@ header.site-header a:hover {
 }
 
 :where(h1) {
-	font-size: clamp(3.1rem, 5.6vw, 5.4rem);
+	font-size: clamp(2.5rem, 5.6vw, 4.75rem);
 	margin-block: var(--stack-3) var(--stack-2);
 	letter-spacing: -0.02em;
 }
@@ -436,7 +436,7 @@ header.site-header a:hover {
 	text-wrap: pretty;
 	hyphens: auto;
 	color: var(--color-ink-muted);
-	font-size: 1.5rem;
+	font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
 }
 
 :where(ul, ol) {
@@ -597,7 +597,7 @@ header.site-header a:hover {
 	font: inherit;
 }
 
-:where(input[type="text"], input[type="search"], input[type="number"], select, textarea) {
+:where(input[type='text'], input[type='search'], input[type='number'], select, textarea) {
 	max-width: 100%;
 	padding: 0.55rem 0.7rem;
 	border: 0;
@@ -621,7 +621,10 @@ header.site-header a:hover {
 	text-transform: uppercase;
 	letter-spacing: 0.18em;
 	font-size: 0.7rem;
-	transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+	transition:
+		background-color 160ms ease,
+		border-color 160ms ease,
+		color 160ms ease;
 }
 
 :where(button:hover) {
@@ -719,17 +722,31 @@ header.site-header a:hover {
 	padding: 0;
 	margin: 0;
 	display: grid;
-	gap: 1.4rem;
+	gap: 0;
 }
 
 .card-list li {
-	padding: 0.2rem 0;
+	margin: 0;
+	padding: 0.65rem 0;
 }
 
 .card-list a {
+	display: inline-block;
+	font-size: clamp(1.05rem, 1.8vw, 1.3rem);
 	font-weight: 600;
-	letter-spacing: 0.06em;
+	letter-spacing: 0.045em;
 	text-transform: uppercase;
+	line-height: 1.3;
+	text-decoration: none;
+	transition: color 120ms ease;
+}
+
+.card-list a:hover {
+	text-decoration: underline;
+}
+.card-list p {
+	margin-top: 0.45rem;
+	max-width: 62ch;
 }
 
 .card-list p {
@@ -743,25 +760,27 @@ header.site-header a:hover {
 	letter-spacing: 0.08em;
 }
 
-
 .home-footer {
-	margin-top: clamp(2.6rem, 6vw, 5rem);
+	margin-top: clamp(2rem, 5vw, 4rem);
+	padding-top: 2rem;
 	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 0.6rem;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 2rem;
 }
 
 .hello {
 	display: inline-block;
-	font-size: 1em;
+	font-size: 1rem;
 	font-family: sans-serif;
 	width: 13em;
 	border-radius: 1em;
 	border-bottom: solid 1em var(--color-accent-2);
 	text-align: center;
-	box-shadow: 0 0 1em rgba(0,0,0,0.3);
-	margin: 1em auto 2em;
+	box-shadow: 0 5px 16px rgb(0 0 0 / 10%);
+	margin: 0;
 	transform: rotate(-2deg);
 	text-decoration: none;
 	color: inherit;
@@ -822,8 +841,8 @@ header.site-header a:hover {
 	:where(a) {
 		text-decoration: underline;
 	}
-	:where(a[href^="http"])::after {
-		content: " (" attr(href) ")";
+	:where(a[href^='http'])::after {
+		content: ' (' attr(href) ')';
 		font-size: 0.9em;
 	}
 }
@@ -839,4 +858,60 @@ header.site-header a:hover {
 	border: 0;
 	border-radius: 0;
 	padding: 0;
+}
+
+/* Shared alignment and clear interaction targets. */
+header.site-header .inner,
+footer.site-footer .inner {
+	max-width: calc(92ch - 2 * var(--page-pad));
+}
+nav.site-nav a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+}
+nav.site-nav a[aria-current='page'] {
+	color: var(--color-accent-2);
+}
+.site-index > header > p {
+	max-width: 60ch;
+	font-size: clamp(1.125rem, 1.8vw, 1.375rem);
+}
+.site-index .nav-section h2 {
+	font-size: clamp(1.7rem, 3vw, 2.2rem);
+}
+main > article {
+	max-width: 68ch;
+	margin-inline: auto;
+}
+main > article > header {
+	margin-bottom: 2.5rem;
+}
+main > article section {
+	overflow-wrap: anywhere;
+}
+.skip-link {
+	position: fixed;
+	top: 1rem;
+	left: var(--page-pad);
+	z-index: 100;
+	padding: 0.6rem 1rem;
+	background: var(--color-bg);
+	color: var(--color-ink);
+	transform: translateY(-200%);
+}
+.skip-link:focus {
+	transform: translateY(0);
+}
+::selection {
+	background: var(--color-accent);
+	color: var(--color-bg);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+	.hello {
+		transition: transform 160ms ease;
+	}
+	.hello:hover {
+		transform: rotate(0);
+	}
 }
