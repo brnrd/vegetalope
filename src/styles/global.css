@@ -942,9 +942,19 @@ header.site-header .inner {
 	padding-bottom: 1.2rem;
 	border-bottom: 1px solid var(--hairline);
 }
+.home-index {
+	margin-block: 0 clamp(1.5rem, 3vw, 2rem);
+}
 .home-index .home-intro {
-	padding-block: clamp(1rem, 3vw, 3rem) clamp(2rem, 5vw, 4rem);
+	padding-block: 0.75rem clamp(1rem, 2vw, 1.5rem);
 	margin-bottom: 0;
+}
+.home-index + .site-footer {
+	padding-block-start: 1rem;
+}
+.home-index + .site-footer .home-footer {
+	margin-top: 0;
+	padding-top: 1.5rem;
 }
 .home-index .home-intro h1 {
 	max-width: 15ch;
