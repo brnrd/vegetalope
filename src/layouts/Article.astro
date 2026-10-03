@@ -100,7 +100,7 @@ const jsonLd = isNotFound
 			transition:name="page-content"
 			transition:animate={pageContentTransition}
 		>
-			<article class="stack">
+			<article class:list={["stack", { "reading-article": isWriting }]}>
 				{
 					heroImage && (
 						<p class="stack">

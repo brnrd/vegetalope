@@ -30,12 +30,13 @@ const latestWriteArticles = writeArticles.slice(0, 3)
 	<body>
 		<Header title={SITE_TITLE} {locale} enHref="/" frHref="/fr/" />
 		<main id="main-content" tabindex="-1"
-			class="content stack site-index"
+			class="content stack site-index home-index"
 			transition:name="page-content"
 			transition:animate={pageContentTransition}
 		>
-			<header class="stack">
-				<h1 class="sr-only">{SITE_TITLE}</h1>
+			<header class="stack home-intro">
+				<p class="meta">{strings.homeEyebrow}</p>
+				<h1>{strings.homeHeadline}</h1>
 				<p>{strings.intro}</p>
 			</header>
 
