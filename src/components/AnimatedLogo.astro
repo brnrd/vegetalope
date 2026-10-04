@@ -1,0 +1,210 @@
+---
+import logoImage from '../assets/vegetalope-transparent.avif'
+
+// Uneven progress mimics a marker catching at a turn, then moving quickly again.
+// Keep it deterministic so every replay has the same handwritten rhythm.
+const gestures = {
+	sweep: 'linear(0, 0.08 12%, 0.48 36%, 0.55 55%, 0.9 78%, 1)',
+	loop: 'linear(0, 0.24 18%, 0.3 35%, 0.63 53%, 0.7 72%, 1)',
+	flick: 'cubic-bezier(0.12, 0, 0.3, 1)',
+}
+
+interface Stroke {
+	d: string
+	width: number
+	duration: number
+	pause: number
+	gesture: keyof typeof gestures
+}
+
+// Follow the pen through the original 814 × 400 artwork. Separate strokes
+// preserve the little pen lifts, especially the crossbar of the t.
+const strokes: Stroke[] = [
+	// 1. V — short downstroke, long rising diagonal, then the hooked tip.
+	{
+		d: 'M 28 164 C 22 224 23 273 39 287 C 55 231 77 110 124 30 Q 139 11 137 89',
+		width: 25,
+		duration: 140,
+		pause: 45,
+		gesture: 'sweep',
+	},
+	// 2. First e — inner loop, rounded base, and connecting exit toward the g.
+	{
+		d: 'M 100 229 C 132 232 149 138 134 146 C 107 149 89 220 101 259 C 114 302 151 276 174 250',
+		width: 30,
+		duration: 110,
+		pause: 8,
+		gesture: 'loop',
+	},
+	// 3. g — rounded bowl, descending stem, and curled tail below the baseline.
+	{
+		d: 'M 207 177 C 192 130 164 188 165 240 C 163 284 198 276 208 218 L 214 156 C 214 237 208 319 182 372 Q 164 405 164 356',
+		width: 29,
+		duration: 280,
+		pause: 20,
+		gesture: 'loop',
+	},
+	// 4. Second e — loop and rounded base, finishing with an upward exit.
+	{
+		d: 'M 243 230 C 273 224 291 142 276 147 C 251 154 231 221 245 265 C 259 290 289 277 310 237',
+		width: 30,
+		duration: 110,
+		pause: 20,
+		gesture: 'flick',
+	},
+	// 5. t — tall stem drawn from top to bottom.
+	{ d: 'M 348 91 L 335 289', width: 29, duration: 80, pause: 20, gesture: 'sweep' },
+	// 6. t — separate crossbar flicking diagonally up to the right.
+	{ d: 'M 338 200 Q 377 166 418 129', width: 27, duration: 20, pause: 55, gesture: 'flick' },
+	// 7. a — oval bowl, right-hand downstroke, and connecting exit toward the l.
+	{
+		d: 'M 431 197 C 420 157 397 196 388 246 C 370 296 407 307 427 245 L 441 182 C 434 218 421 267 451 274 Q 472 276 489 263',
+		width: 31,
+		duration: 140,
+		pause: 0,
+		gesture: 'loop',
+	},
+	// 8. l — tall ascending loop, downstroke, and curved exit along the baseline.
+	{
+		d: 'M 492 214 C 524 196 559 114 556 85 Q 548 62 519 113 C 497 151 486 204 500 249 C 511 286 532 285 554 259',
+		width: 29,
+		duration: 200,
+		pause: 12,
+		gesture: 'sweep',
+	},
+	// 9. o — rounded loop, returning through the right side into the exit stroke.
+	{
+		d: 'M 595 180 C 573 182 549 234 556 264 C 566 306 599 263 610 205 C 625 157 589 176 587 203 C 578 239 583 279 619 278',
+		width: 29,
+		duration: 120,
+		pause: 25,
+		gesture: 'loop',
+	},
+	// 10. p — long downstroke extending below the baseline.
+	{
+		d: 'M 657 184 C 651 229 651 283 643 324 L 636 364',
+		width: 29,
+		duration: 150,
+		pause: 60,
+		gesture: 'sweep',
+	},
+	// 11. p — return up the stem, then around the upper bowl and back down.
+	{
+		d: 'M 650 250 C 658 212 676 140 694 144 C 722 155 684 240 656 260 Q 643 278 638 291',
+		width: 30,
+		duration: 180,
+		pause: 0,
+		gesture: 'loop',
+	},
+	// 12. Final e — loop, rounded base, and the finishing flick to the right.
+	{
+		d: 'M 721 213 C 734 253 766 192 773 153 C 778 113 735 174 728 211 C 715 252 739 290 775 269 L 797 256',
+		width: 30,
+		duration: 110,
+		pause: 0,
+		gesture: 'flick',
+	},
+]
+
+let delay = 120
+const timedStrokes = strokes.map(stroke => {
+	const timed = { ...stroke, delay }
+	delay += stroke.duration + stroke.pause
+	return timed
+})
+---
+
+<link rel="preload" as="image" href={logoImage.src} />
+<svg
+	class="site-logo-mark"
+	viewBox="0 0 814 400"
+	width="814"
+	height="400"
+	aria-hidden="true"
+	focusable="false"
+	data-handwritten-logo
+	transition:persist="handwritten-logo"
+	style={`--writing-duration: ${delay}ms`}
+>
+	<defs>
+		<mask id="logo-handwriting" maskUnits="userSpaceOnUse" x="0" y="0" width="814" height="400">
+			<g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round">
+				{
+					timedStrokes.map(stroke => (
+						<path
+							class="pen-stroke"
+							d={stroke.d}
+							stroke-width={stroke.width}
+							pathLength="1"
+							style={`--stroke-duration: ${stroke.duration}ms; --stroke-delay: ${stroke.delay}ms; --stroke-easing: ${gestures[stroke.gesture]}`}
+						/>
+					))
+				}
+			</g>
+			<!-- Restore every grain of the original texture once the pen has finished. -->
+			<rect class="finished-ink" width="814" height="400" fill="white"></rect>
+		</mask>
+	</defs>
+	<image href={logoImage.src} width="814" height="400" mask="url(#logo-handwriting)" />
+</svg>
+
+<script>
+	// Some browsers restart CSS animations when a persisted SVG is reattached.
+	// Keep the finished artwork visible during every subsequent page transition.
+	document.addEventListener('astro:before-swap', () => {
+		document.querySelector('[data-handwritten-logo]')?.setAttribute('data-written', '')
+	})
+</script>
+
+<style>
+	svg {
+		display: block;
+	}
+
+	/* The complete logo is the default, including without animation support. */
+	@media (prefers-reduced-motion: no-preference) {
+		.pen-stroke {
+			stroke-dasharray: 1 1;
+			animation: write-stroke var(--stroke-duration) cubic-bezier(0.3, 0, 0.3, 1)
+				var(--stroke-delay) both;
+		}
+
+		@supports (animation-timing-function: linear(0, 1)) {
+			.pen-stroke {
+				animation-timing-function: var(--stroke-easing);
+			}
+		}
+
+		.finished-ink {
+			animation: finish-writing var(--writing-duration) steps(1, end) both;
+		}
+
+		svg[data-written] .pen-stroke,
+		svg[data-written] .finished-ink {
+			animation: none;
+		}
+	}
+
+	@keyframes write-stroke {
+		0% {
+			opacity: 0;
+			stroke-dashoffset: 1;
+		}
+		1% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 1;
+			stroke-dashoffset: 0;
+		}
+	}
+
+	@keyframes finish-writing {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+</style>

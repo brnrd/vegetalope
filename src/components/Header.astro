@@ -1,8 +1,7 @@
 ---
-import { Image } from 'astro:assets';
 import { SITE_TITLE } from '../consts'
 import { getLocaleFromPath, getLocalePath, ui, type Locale } from '../i18n'
-import logoImage from '../assets/vegetalope-transparent.avif'
+import AnimatedLogo from './AnimatedLogo.astro'
 import LanguageSwitcher from './LanguageSwitcher.astro'
 
 interface Props {
@@ -24,17 +23,7 @@ const frHref = Astro.props.frHref ?? (locale === 'fr' ? Astro.url.pathname : '/f
 	<div class="inner">
 		<h2>
 			<a class="site-logo" href={getLocalePath(locale)} aria-label={SITE_TITLE}>
-				<Image
-					src={logoImage}
-					alt={SITE_TITLE}
-					class="site-logo-mark"
-					formats={['webp', 'avif']}
-					widths={[140, 200, 280, 360]}
-					loading="eager"
-					decoding="async"
-					fetchpriority="high"
-					sizes="(max-width: 700px) 140px, (max-width: 1000px) 20vw, 200px"
-				/>
+				<AnimatedLogo />
 				<span class="sr-only">{SITE_TITLE}</span>
 			</a>
 		</h2>
