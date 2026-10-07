@@ -2,6 +2,7 @@
 title: 'Same problems, different teams'
 description: 'Why familiar engineering challenges can be a reassuring sign of progress.'
 pubDate: '2026-10-06'
+updatedDate: '2026-10-07'
 ---
 
 When I talk to people in other engineering teams, I often hear about the same problems we’re dealing with. Different industries, different products, small companies, large ones, old businesses, new ones. Yet there’s a familiar set of things we all seem to work through.
@@ -10,7 +11,7 @@ A language we want to move away from. APIs that need updating. Legacy code that�
 
 We’re not all dealing with the same problem at the same time. One team is starting a migration, another is finishing one, and a third is beginning to question the choice they made a few years ago. It’s more or less the same set of problems, coming round again.
 
-Right now, AI adoption seems to come up in almost every conversation. How do we use it well? Who wants to try it, who’s reluctant, and why? How do we help people get started when we’re still working out what works ourselves?
+Right now, [AI adoption](/write/ai-beyond-coding/) seems to come up in almost every conversation. How do we use it well? Who wants to try it, who’s reluctant, and why? How do we help people get started when we’re still working out what works ourselves?
 
 The products might have very little in common, but the conversations sound familiar.
 

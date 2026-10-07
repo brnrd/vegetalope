@@ -2,13 +2,14 @@
 title: 'Gardez votre propre historique'
 description: 'Pourquoi suivre ses réalisations relève du professionnalisme, pas de l’autopromotion.'
 pubDate: '2026-02-09'
+updatedDate: '2026-10-07'
 ---
 
 Le travail s’efface plus vite qu’on ne le pense.
 
 Non pas parce qu’il n’était pas utile, mais parce qu’il est devenu normal. Les fonctionnalités sont livrées et intègrent le produit. Les refactorisations tiennent et plus personne n’y pense. Les petites décisions, les blocages levés et les responsabilités supplémentaires se fondent discrètement dans le décor.
 
-Après quelques mois, même vous en oubliez une partie. C’est pourquoi je garde un historique de mon travail, et pourquoi vous devriez en faire autant.
+Après quelques mois, même vous en oubliez une partie. C’est pourquoi je [garde un historique de mon travail](/fr/write/make-the-case-for-your-work/), et pourquoi vous devriez en faire autant.
 
 ## La mémoire n’est pas fiable
 

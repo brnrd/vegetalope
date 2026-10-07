@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro'
 import Header from '../components/Header.astro'
 import FormattedDate from '../components/FormattedDate.astro'
 import Footer from '../components/Footer.astro'
+import RelatedArticles from '../components/RelatedArticles.astro'
 import { SITE_AUTHOR, SITE_IMAGE } from '../consts'
 import { getLocaleFromPath, type Locale } from '../i18n'
 import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName'
@@ -159,6 +160,7 @@ const jsonLd = isNotFound
 						</footer>
 					)
 				}
+				{articleSlug && <RelatedArticles slug={articleSlug} {locale} />}
 			</article>
 		</main>
 

@@ -2,6 +2,7 @@
 title: 'Les mêmes problèmes, d’autres équipes'
 description: 'Pourquoi retrouver les mêmes défis dans d’autres équipes d’ingénierie peut être rassurant.'
 pubDate: '2026-10-06'
+updatedDate: '2026-10-07'
 ---
 
 Quand je parle avec des personnes d’autres équipes d’ingénierie, j’entends souvent parler des mêmes problèmes que ceux auxquels nous sommes confrontés. Des secteurs différents, des produits différents, des petites et des grandes entreprises, des entreprises anciennes et des plus récentes. Pourtant, nous semblons tous traverser un ensemble de difficultés bien familières.
@@ -10,7 +11,7 @@ Un langage dont nous voulons nous éloigner. Des API à mettre à jour. Du code 
 
 Nous ne rencontrons pas tous le même problème au même moment. Une équipe entame une migration, une autre en termine une, et une troisième commence à remettre en question un choix fait il y a quelques années. C’est plus ou moins le même ensemble de problèmes qui revient régulièrement.
 
-En ce moment, l’adoption de l’IA semble revenir dans presque toutes les conversations. Comment bien l’utiliser ? Qui a envie de l’essayer, qui hésite, et pourquoi ? Comment aider les gens à commencer alors que nous cherchons encore nous-mêmes ce qui fonctionne ?
+En ce moment, [l’adoption de l’IA](/fr/write/ai-beyond-coding/) semble revenir dans presque toutes les conversations. Comment bien l’utiliser ? Qui a envie de l’essayer, qui hésite, et pourquoi ? Comment aider les gens à commencer alors que nous cherchons encore nous-mêmes ce qui fonctionne ?
 
 Les produits ont parfois très peu de choses en commun, mais les conversations se ressemblent.
 

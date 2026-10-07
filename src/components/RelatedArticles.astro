@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content'
+import { relatedArticles } from '../data/relatedArticles'
+import { getArticleParts, getLocalePath, type Locale } from '../i18n'
+
+interface Props {
+	slug: string
+	locale: Locale
+}
+
+const { slug, locale } = Astro.props
+const entries = await getCollection('write', entry => getArticleParts(entry.id).locale === locale)
+const bySlug = new Map(entries.map(entry => [getArticleParts(entry.id).slug, entry]))
+const articles = [...new Set(relatedArticles[slug] ?? [])]
+	.filter(relatedSlug => relatedSlug !== slug)
+	.flatMap(relatedSlug => {
+		const entry = bySlug.get(relatedSlug)
+		// Never send readers to a different language when a translation is missing.
+		return entry ? [{ ...entry.data, href: getLocalePath(locale, `/write/${relatedSlug}/`) }] : []
+	})
+---
+
+{articles.length > 0 && (
+	<nav class="related-articles" aria-labelledby="related-articles-title">
+		<h2 id="related-articles-title">{locale === 'fr' ? 'À lire aussi' : 'Related articles'}</h2>
+		<ul class="card-list">
+			{articles.map(article => (
+				<li>
+					<a href={article.href}>{article.title}</a>
+					<p>{article.description}</p>
+				</li>
+			))}
+		</ul>
+	</nav>
+)}
+
+<style>
+	.related-articles {
+		margin-block-start: var(--stack-4);
+		padding-block-start: var(--stack-2);
+		border-top: 1px solid var(--hairline);
+	}
+	h2 {
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+		font-weight: 400;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+	a {
+		font-family: var(--font-reading);
+	}
+</style>

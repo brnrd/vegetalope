@@ -2,13 +2,14 @@
 title: 'Keep your own record'
 description: 'Why tracking your achievements is part of being a professional, not self-promotion.'
 pubDate: '2026-02-09'
+updatedDate: '2026-10-07'
 ---
 
 Work fades faster than you expect.
 
 Not because it wasn’t useful, but because it became normal. Features ship and become part of the product. Refactors hold and no one thinks about them again. The small decisions, the unblockings, the extra ownership quietly blend into the background.
 
-After a few months, even you forget parts of it. That’s why I keep a record, and why you should too.
+After a few months, even you forget parts of it. That’s why I [keep a record](/write/make-the-case-for-your-work/), and why you should too.
 
 ## Memory is unreliable
 

@@ -5,6 +5,7 @@ import { satteri } from '@astrojs/markdown-satteri'
 import { readingTime } from '@xsynaptic/satteri-reading-time'
 import linkValidator from 'astro-link-validator'
 import sitemap from '@astrojs/sitemap'
+import { serializeArticleSitemap } from './src/utils/articleSitemap.mjs'
 
 // https://astro.build/config
 export default defineConfig({
@@ -27,6 +28,7 @@ export default defineConfig({
 		svelte(),
 		mdx(),
 		sitemap({
+			serialize: serializeArticleSitemap,
 			filter: page => {
 				const path = new URL(page).pathname.replace(/\/$/, '')
 				return (
