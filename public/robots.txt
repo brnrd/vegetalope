@@ -1,39 +1,22 @@
+# Search engines can crawl every public page, in English and French.
 User-agent: *
 Allow: /
 
 Sitemap: https://vegetalope.com/sitemap-index.xml
 
+# These crawlers share the same policy for English and French writing.
 User-agent: GPTBot
-Disallow: /
-Allow: /write/
-Allow: /write
-Allow: /$
-Allow: /rss.xml
-
 User-agent: ChatGPT-User
-Disallow: /
-Allow: /write/
-Allow: /write
-Allow: /$
-Allow: /rss.xml
-
 User-agent: CCBot
-Disallow: /
-Allow: /write/
-Allow: /write
-Allow: /$
-Allow: /rss.xml
-
 User-agent: ClaudeBot
-Disallow: /
-Allow: /write/
-Allow: /write
-Allow: /$
-Allow: /rss.xml
-
 User-agent: Google-Extended
 Disallow: /
-Allow: /write/
-Allow: /write
 Allow: /$
-Allow: /rss.xml
+Allow: /fr$
+Allow: /fr/$
+Allow: /write$
+Allow: /write/
+Allow: /fr/write$
+Allow: /fr/write/
+Allow: /rss.xml$
+Allow: /fr/rss.xml$
