@@ -1,14 +1,14 @@
 /* Editorial typography, native motion, and a deliberately small visual system. */
 @font-face {
 	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff') format('woff');
+	src: url('/fonts/atkinson-regular.woff2') format('woff2');
 	font-style: normal;
 	font-weight: 400;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff') format('woff');
+	src: url('/fonts/atkinson-bold.woff2') format('woff2');
 	font-style: normal;
 	font-weight: 700;
 	font-display: swap;

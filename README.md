@@ -95,6 +95,13 @@ Preview deployments are automatically created for pull requests.
 - The site is built in static mode.
 - Assets use long-lived cache headers.
 - Compression and edge caching are handled by the Cloudflare platform.
+- Both Atkinson weights are served as WOFF2 and preloaded in `BaseHead.astro`, so
+  font downloads do not wait for the shared stylesheet. Keep preload URLs and
+  `@font-face` URLs in `src/styles/global.css` in sync.
+- The original WOFF files are retained as conversion sources. To regenerate the
+  WOFF2 assets with FontTools (`fonttools[woff]`), run
+  `fonttools ttLib.woff2 compress public/fonts/atkinson-regular.woff` and
+  `fonttools ttLib.woff2 compress public/fonts/atkinson-bold.woff`.
 
 No additional runtime or edge functions are required.
 
