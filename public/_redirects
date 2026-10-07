@@ -1,0 +1,7 @@
+# Permanent moves: Cloudflare Pages must send HTTP redirects, not only HTML refreshes.
+/blog/brian-viner-100-classic-films /watch/brian-viner-100-classic-films 301
+/articles/2024-06-01-brian-viner-100-classic-films /watch/brian-viner-100-classic-films 301
+/blog/2022-01-05-movies /watch/movies 301
+/blog/2023-10-23-punk /write/punk 301
+/blog/2022-01-05-tv-shows /watch/tv-shows 301
+/write/ask-and-do /write/shy-bairns-get-nowt 301

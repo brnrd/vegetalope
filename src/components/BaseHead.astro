@@ -51,15 +51,12 @@ const absoluteAlternateUrls = alternateUrls
 	? Object.fromEntries(
 			Object.entries(alternateUrls).map(([language, href]) => [
 				language,
-				new URL(href, Astro.site ?? Astro.url).href,
+				new URL(href.replace(/\/?$/, '/'), Astro.site ?? Astro.url).href,
 			]),
 		) as Partial<Record<Locale, string>>
 	: undefined
-const allowIndex =
-	pathname === '/' ||
-	pathname === '/fr/' ||
-	pathname.startsWith('/write') ||
-	pathname.startsWith('/fr/write')
+// Public pages are indexable; error pages must stay out of search results.
+const allowIndex = !/^\/(404|500)(?:\.html|\/)?$/.test(pathname)
 const usesDefaultImage = image === SITE_IMAGE
 const ogProperties: Record<string, string> = {
 	locale: locale === 'fr' ? 'fr_FR' : SITE_LOCALE,

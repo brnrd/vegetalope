@@ -1,9 +1,7 @@
 User-agent: *
-Disallow: /
-Allow: /write/
-Allow: /write
-Allow: /$
-Allow: /rss.xml
+Allow: /
+
+Sitemap: https://vegetalope.com/sitemap-index.xml
 
 User-agent: GPTBot
 Disallow: /

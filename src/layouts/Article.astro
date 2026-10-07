@@ -38,7 +38,7 @@ const articleSlug = isWriting ? Astro.url.pathname.split('/').filter(Boolean).at
 const socialImage = articleSlug
 	? `${locale === 'fr' ? '/fr' : ''}/og/${articleSlug}.png`
 	: heroImage
-const isAbout = Astro.url.pathname === '/about' || Astro.url.pathname === '/fr/about'
+const isAbout = /^\/(?:fr\/)?about\/?$/.test(Astro.url.pathname)
 const enHref =
 	suppliedEnHref ??
 	(isAbout ? '/about' : locale === 'en' && !isNotFound ? Astro.url.pathname : '/')
