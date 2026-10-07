@@ -55,8 +55,10 @@ const absoluteAlternateUrls = alternateUrls
 			]),
 		) as Partial<Record<Locale, string>>
 	: undefined
-// Public pages are indexable; error pages must stay out of search results.
-const allowIndex = !/^\/(404|500)(?:\.html|\/)?$/.test(pathname)
+// Watch lists and error pages must stay out of search results.
+const allowIndex =
+	!/^\/(?:fr\/)?watch(?:\/|$)/.test(pathname) &&
+	!/^\/(404|500)(?:\.html|\/)?$/.test(pathname)
 const usesDefaultImage = image === SITE_IMAGE
 const ogProperties: Record<string, string> = {
 	locale: locale === 'fr' ? 'fr_FR' : SITE_LOCALE,

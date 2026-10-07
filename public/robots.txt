@@ -1,4 +1,6 @@
 # Search engines can crawl every public page, in English and French.
+# /watch/ pages are excluded with a robots noindex tag and from the sitemap.
+# Keep them crawlable so search engines can read noindex and remove old results.
 User-agent: *
 Allow: /
 

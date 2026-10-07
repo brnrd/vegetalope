@@ -30,6 +30,7 @@ export default defineConfig({
 			filter: page => {
 				const path = new URL(page).pathname.replace(/\/$/, '')
 				return (
+					!/^\/(?:fr\/)?watch(?:\/|$)/.test(path) &&
 					!path.startsWith('/blog/') &&
 					!path.startsWith('/articles/') &&
 					path !== '/write/ask-and-do'
