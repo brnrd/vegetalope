@@ -1,9 +1,4 @@
 ---
-interface Props {
-	date: Date;
-	locale?: 'en' | 'fr';
-}
-
 const { date, locale = 'en' } = Astro.props;
 const dateObject = new Date(date);
 ---

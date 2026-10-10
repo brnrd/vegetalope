@@ -9,17 +9,9 @@ const gestures = {
 	flick: 'cubic-bezier(0.12, 0, 0.3, 1)',
 }
 
-interface Stroke {
-	d: string
-	width: number
-	duration: number
-	pause: number
-	gesture: keyof typeof gestures
-}
-
 // Follow the pen through the original 814 × 400 artwork. Separate strokes
 // preserve the little pen lifts, especially the crossbar of the t.
-const strokes: Stroke[] = [
+const strokes = [
 	// 1. V — short downstroke, long rising diagonal, then the hooked tip.
 	{
 		d: 'M 28 164 C 22 224 23 273 39 287 C 55 231 77 110 124 30 Q 139 11 137 89',

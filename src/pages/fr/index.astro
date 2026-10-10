@@ -7,7 +7,7 @@ import { SITE_TITLE, SITE_IMAGE } from '../../consts'
 import { getArticleParts, ui } from '../../i18n'
 import { pageContentTransition, viewTransitionNameFromPath } from '../../utils/viewTransitionName'
 
-const locale = 'fr' as const
+const locale = 'fr'
 const strings = ui[locale]
 const description = 'Réflexions sur l’ingénierie logicielle et la vie, ainsi que de petits outils créés pour le plaisir.'
 const writeArticles = (await getCollection('write'))

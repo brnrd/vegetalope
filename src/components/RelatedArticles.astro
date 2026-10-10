@@ -1,12 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 import { relatedArticles } from '../data/relatedArticles'
-import { getArticleParts, getLocalePath, type Locale } from '../i18n'
-
-interface Props {
-	slug: string
-	locale: Locale
-}
+import { getArticleParts, getLocalePath } from '../i18n'
 
 const { slug, locale } = Astro.props
 const entries = await getCollection('write', entry => getArticleParts(entry.id).locale === locale)

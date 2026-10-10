@@ -28,13 +28,18 @@ The current focus is:
 - Vite (via Astro)
 - Cloudflare Pages
 
+Source code uses JavaScript. Keep interactive UI in Svelte components and shared
+data, utilities, content configuration, and endpoints in `.js` modules. Astro
+handles static pages and layouts. `jsconfig.json` provides editor support;
+Astro generates its own declarations in the ignored `.astro/` directory.
+
 There is no backend and no server-side runtime. All pages are generated at build time.
 
 ## Development
 
 ### Requirements
 
-- Node.js 18 or later
+- Node.js 22.12.0 or later
 - npm (or a compatible package manager)
 
 ### Install

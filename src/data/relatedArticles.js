@@ -1,5 +1,5 @@
 // Shared slugs keep editorial recommendations consistent across translations.
-export const relatedArticles: Record<string, string[]> = {
+export const relatedArticles = {
 	'modern-em': ['ai-for-the-human-part-of-engineering-management', 'context-beats-prompts'],
 	'ai-for-the-human-part-of-engineering-management': ['sharing-my-one-to-one-notes', 'modern-em'],
 	'sharing-my-one-to-one-notes': [

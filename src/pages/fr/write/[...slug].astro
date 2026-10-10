@@ -1,12 +1,7 @@
 ---
-import { getCollection, render, type CollectionEntry } from 'astro:content'
+import { getCollection, render } from 'astro:content'
 import Article from '../../../layouts/Article.astro'
 import { getArticleParts } from '../../../i18n'
-
-interface Props {
-	entry: CollectionEntry<'write'>
-	enHref: string
-}
 
 export async function getStaticPaths() {
 	const entries = await getCollection('write')
@@ -31,7 +26,7 @@ export async function getStaticPaths() {
 		})
 }
 
-const { entry, enHref } = Astro.props as Props
+const { entry, enHref } = Astro.props
 const { Content, remarkPluginFrontmatter } = await render(entry)
 const slug = getArticleParts(entry.id).slug
 const frHref = `/fr/write/${slug}`

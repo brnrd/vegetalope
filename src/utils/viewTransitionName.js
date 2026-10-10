@@ -1,4 +1,4 @@
-export function viewTransitionNameFromPath(path: string): string {
+export function viewTransitionNameFromPath(path) {
 	const pathname = path.split(/[?#]/, 1)[0] || '/'
 	const slug = pathname
 		.replace(/^\/+|\/+$/g, '')

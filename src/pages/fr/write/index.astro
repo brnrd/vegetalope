@@ -7,7 +7,7 @@ import { SITE_TITLE } from '../../../consts'
 import { getArticleParts, ui } from '../../../i18n'
 import { pageContentTransition, viewTransitionNameFromPath } from '../../../utils/viewTransitionName'
 
-const locale = 'fr' as const
+const locale = 'fr'
 const strings = ui[locale]
 const writeArticles = (await getCollection('write'))
 	.filter((entry) => getArticleParts(entry.id).locale === locale)

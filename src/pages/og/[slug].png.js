@@ -1,10 +1,9 @@
 import { getCollection } from 'astro:content'
-import type { APIRoute, GetStaticPaths } from 'astro'
 import sharp from 'sharp'
 import { getArticleParts } from '../../i18n'
-import { renderSocialCard, type SocialCardProps } from '../../utils/ogCard'
+import { renderSocialCard } from '../../utils/ogCard'
 
-export const getStaticPaths = (async () => {
+export const getStaticPaths = async () => {
 	const articles = await getCollection('write')
 	return articles
 		.filter((article) => getArticleParts(article.id).locale === 'en')
@@ -14,12 +13,12 @@ export const getStaticPaths = (async () => {
 				title: article.data.title,
 				description: article.data.description,
 				pubDate: article.data.pubDate.toISOString(),
-				locale: 'en' as const,
+				locale: 'en',
 			},
 		}))
-}) satisfies GetStaticPaths
+}
 
-export const GET: APIRoute<SocialCardProps> = async ({ props }) => {
+export const GET = async ({ props }) => {
 	const image = await sharp(Buffer.from(renderSocialCard(props))).png().toBuffer()
 
 	return new Response(image, {

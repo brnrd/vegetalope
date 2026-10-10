@@ -1,7 +1,6 @@
-export const locales = ['en', 'fr'] as const
-export type Locale = (typeof locales)[number]
+export const locales = ['en', 'fr']
 
-export const defaultLocale: Locale = 'en'
+export const defaultLocale = 'en'
 
 export const ui = {
 	en: {
@@ -22,7 +21,7 @@ export const ui = {
 		lastUpdated: 'last updated on',
 		minuteRead: 'min read',
 		colourTheme: 'Colour theme',
-		useTheme: (theme: string) => `Use ${theme} theme`,
+		useTheme: (theme) => `Use ${theme} theme`,
 		themes: { auto: 'auto', light: 'light', dark: 'dark' },
 		hello: 'Hello',
 		myNameIs: 'my name is',
@@ -47,29 +46,29 @@ export const ui = {
 		lastUpdated: 'dernière mise à jour le',
 		minuteRead: 'min de lecture',
 		colourTheme: 'Thème de couleur',
-		useTheme: (theme: string) => `Utiliser le thème ${theme}`,
+		useTheme: (theme) => `Utiliser le thème ${theme}`,
 		themes: { auto: 'auto', light: 'clair', dark: 'sombre' },
 		hello: 'Bonjour',
 		myNameIs: 'je m’appelle',
 		aboutBernard: 'À propos de Bernard Debecker',
 		feedTitle: 'Flux des écrits de vegetalope',
 	},
-} as const
+}
 
-export function getLocaleFromPath(pathname: string): Locale {
+export function getLocaleFromPath(pathname) {
 	return pathname === '/fr' || pathname.startsWith('/fr/') ? 'fr' : 'en'
 }
 
-export function getLocalePath(locale: Locale, path = '/') {
+export function getLocalePath(locale, path = '/') {
 	const normalizedPath = path.startsWith('/') ? path : `/${path}`
 	if (locale === defaultLocale) return normalizedPath
 	if (normalizedPath === '/') return '/fr/'
 	return `/fr${normalizedPath}`
 }
 
-export function getArticleParts(id: string) {
+export function getArticleParts(id) {
 	const normalizedId = id.replace(/\.(md|mdx)$/, '')
 	const [candidateLocale, ...slugParts] = normalizedId.split('/')
-	const locale: Locale = candidateLocale === 'fr' ? 'fr' : 'en'
+	const locale = candidateLocale === 'fr' ? 'fr' : 'en'
 	return { locale, slug: slugParts.join('/') }
 }

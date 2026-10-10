@@ -2,12 +2,9 @@
 import { Image } from 'astro:assets';
 import logoImage from '../assets/vegetalope.webp';
 import ThemeToggle from './ThemeToggle.astro';
-import { getLocaleFromPath, getLocalePath, ui, type Locale } from '../i18n';
+import { getLocaleFromPath, getLocalePath, ui } from '../i18n';
 
 const pathname = Astro.url.pathname;
-interface Props {
-	locale?: Locale;
-}
 const locale = Astro.props.locale ?? getLocaleFromPath(pathname);
 const strings = ui[locale];
 const showRss = pathname === '/' || pathname === '/fr/' || pathname.startsWith('/write') || pathname.startsWith('/fr/write');

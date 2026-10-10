@@ -2,7 +2,7 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css'
-import { MetaTags, type Metadata } from '@jorgejhms/astro-seo-meta-tags'
+import { MetaTags } from '@jorgejhms/astro-seo-meta-tags'
 import { ClientRouter } from 'astro:transitions'
 import {
 	SITE_AUTHOR,
@@ -13,22 +13,7 @@ import {
 	SITE_TITLE,
 	X_HANDLE,
 } from '../consts'
-import { getLocaleFromPath, ui, type Locale } from '../i18n'
-
-interface Props {
-	title: string
-	description?: string
-	image?: Metadata['featuredImage']
-	imageAlt?: string
-	imageWidth?: number
-	imageHeight?: number
-	type?: string
-	publishedTime?: string
-	modifiedTime?: string
-	jsonLd?: Metadata['jsonLd']
-	locale?: Locale
-	alternateUrls?: Partial<Record<Locale, string>>
-}
+import { getLocaleFromPath, ui } from '../i18n'
 
 const {
 	title,
@@ -51,14 +36,14 @@ const absoluteAlternateUrls = alternateUrls
 				language,
 				new URL(href.replace(/\/?$/, '/'), Astro.site ?? Astro.url).href,
 			]),
-		) as Partial<Record<Locale, string>>
+		)
 	: undefined
 // Watch lists and error pages must stay out of search results.
 const allowIndex =
 	!/^\/(?:fr\/)?watch(?:\/|$)/.test(pathname) &&
 	!/^\/(404|500)(?:\.html|\/)?$/.test(pathname)
 const usesDefaultImage = image === SITE_IMAGE
-const ogProperties: Record<string, string> = {
+const ogProperties = {
 	locale: locale === 'fr' ? 'fr_FR' : SITE_LOCALE,
 	site_name: SITE_TITLE,
 }

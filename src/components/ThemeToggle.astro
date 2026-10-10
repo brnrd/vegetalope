@@ -1,13 +1,9 @@
 ---
-import { getLocaleFromPath, ui, type Locale } from '../i18n'
-
-interface Props {
-	locale?: Locale
-}
+import { getLocaleFromPath, ui } from '../i18n'
 
 const locale = Astro.props.locale ?? getLocaleFromPath(Astro.url.pathname)
 const strings = ui[locale]
-const themes = ['auto', 'light', 'dark'] as const
+const themes = ['auto', 'light', 'dark']
 ---
 
 <fieldset class="theme-toggle" data-theme-toggle>

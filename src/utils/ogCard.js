@@ -1,15 +1,6 @@
-import type { Locale } from '../i18n'
-
-export interface SocialCardProps {
-	title: string
-	description: string
-	pubDate: string
-	locale: Locale
-}
-
-const escapeXml = (value: string) =>
+const escapeXml = (value) =>
 	value.replace(/[<>&"']/g, character => {
-		const entities: Record<string, string> = {
+		const entities = {
 			'<': '&lt;',
 			'>': '&gt;',
 			'&': '&amp;',
@@ -19,9 +10,9 @@ const escapeXml = (value: string) =>
 		return entities[character]
 	})
 
-const wrapText = (text: string, maxCharacters: number, maxLines: number) => {
+const wrapText = (text, maxCharacters, maxLines) => {
 	const words = text.split(/\s+/)
-	const lines: string[] = []
+	const lines = []
 	let currentLine = ''
 
 	for (const word of words) {
@@ -38,7 +29,7 @@ const wrapText = (text: string, maxCharacters: number, maxLines: number) => {
 	return lines.slice(0, maxLines)
 }
 
-export const renderSocialCard = ({ title, description, pubDate, locale }: SocialCardProps) => {
+export const renderSocialCard = ({ title, description, pubDate, locale }) => {
 	const titleLines = wrapText(title, 25, 3)
 	const descriptionLines = wrapText(description, 68, 2)
 	const titleSize = titleLines.length > 2 ? 72 : 84

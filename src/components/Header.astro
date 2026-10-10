@@ -1,14 +1,8 @@
 ---
 import { SITE_TITLE } from '../consts'
-import { getLocaleFromPath, getLocalePath, ui, type Locale } from '../i18n'
+import { getLocaleFromPath, getLocalePath, ui } from '../i18n'
 import AnimatedLogo from './AnimatedLogo.astro'
 import LanguageSwitcher from './LanguageSwitcher.astro'
-
-interface Props {
-	locale?: Locale
-	enHref?: string
-	frHref?: string
-}
 
 const locale = Astro.props.locale ?? getLocaleFromPath(Astro.url.pathname)
 const strings = ui[locale]
