@@ -1,7 +1,6 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
 import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
-import dyssBorderShapeScript from '../../../../scripts/dyss-border-shape.js?url&no-inline';
 
 const title = 'dyss: border-shape playground';
 const description = 'An electric frame and a growing network of circles, redrawn as live CSS rules.';
@@ -105,7 +104,7 @@ const description = 'An electric frame and a growing network of circles, redrawn
 		</a>.
 	</p>
 
-	<script slot="scripts" type="module" src={dyssBorderShapeScript} data-astro-rerun></script>
+	<script src="../../../../scripts/dyss-border-shape.js"></script>
 </DyssExample>
 
 <style>

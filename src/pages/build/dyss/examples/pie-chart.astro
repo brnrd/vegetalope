@@ -1,7 +1,6 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
 import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
-import dyssPieDemoScript from '../../../../scripts/dyss-pie-demo.js?url&no-inline';
 
 const title = 'dyss: dynamic pie chart playground';
 const description = 'A small dyss use-case: tweak pie chart inputs and let CSS update itself.';
@@ -60,7 +59,7 @@ const description = 'A small dyss use-case: tweak pie chart inputs and let CSS u
 		</a>
 	</p>
 
-	<script slot="scripts" type="module" src={dyssPieDemoScript} data-astro-rerun></script>
+	<script src="../../../../scripts/dyss-pie-demo.js"></script>
 </DyssExample>
 
 <style>

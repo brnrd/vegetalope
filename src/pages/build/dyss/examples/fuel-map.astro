@@ -1,7 +1,6 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
 import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
-import dyssFuelMapDemoScript from '../../../../scripts/dyss-fuel-map-demo.js?url&no-inline';
 
 const title = 'dyss: AFR fuel map';
 const description = 'A live AFR fuel map table with dynamic CSS rules per cell.';
@@ -41,7 +40,7 @@ const description = 'A live AFR fuel map table with dynamic CSS rules per cell.'
 		<LiveCodeSection className="fuel-map-code" />
 	</div>
 
-	<script slot="scripts" type="module" src={dyssFuelMapDemoScript} data-astro-rerun></script>
+	<script src="../../../../scripts/dyss-fuel-map-demo.js"></script>
 </DyssExample>
 
 <style>

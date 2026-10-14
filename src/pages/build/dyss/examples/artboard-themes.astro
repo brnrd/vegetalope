@@ -1,7 +1,6 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
 import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
-import dyssArtboardScript from '../../../../scripts/dyss-artboard-themes.js?url&no-inline';
 
 const title = 'dyss: live artboard themes';
 const description = 'Swap complete UI themes in one click using live stylesheet updates.';
@@ -61,7 +60,7 @@ const description = 'Swap complete UI themes in one click using live stylesheet 
 		<LiveCodeSection className="artboard-code" />
 	</div>
 
-	<script slot="scripts" type="module" src={dyssArtboardScript} data-astro-rerun></script>
+	<script src="../../../../scripts/dyss-artboard-themes.js"></script>
 </DyssExample>
 
 <style>

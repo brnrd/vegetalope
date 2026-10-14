@@ -1,4 +1,5 @@
 import Sheet from 'dyss';
+import { registerDemo } from './dyss-demo-lifecycle.js';
 
 function normalizeHex(value) {
 	const raw = String(value).trim().replace(/^#/, '');
@@ -113,7 +114,7 @@ function mountDemo(root) {
 	let renderCount = 0;
 	let fpsWindowStart = performance.now();
 	let fpsRafId = 0;
-	const hexTimers = new WeakMap();
+	const hexTimers = new Map();
 
 	function commitRowHex(target, rowEl, row, allowShort = false) {
 		const normalized = parseHexInputValue(target.value, allowShort);
@@ -426,14 +427,16 @@ function mountDemo(root) {
 		}
 	});
 
-	window.addEventListener('beforeunload', () => {
-		setLiveMode(false);
-		if (fpsRafId) window.cancelAnimationFrame(fpsRafId);
-	});
-
 	renderRows();
 	renderChart();
 	fpsRafId = window.requestAnimationFrame(tickFPS);
+	return () => {
+		for (const timer of hexTimers.values()) window.clearTimeout(timer);
+		hexTimers.clear();
+		setLiveMode(false);
+		window.cancelAnimationFrame(fpsRafId);
+		sheet.destroy();
+	};
 }
 
-document.querySelectorAll('[data-dyss-demo]').forEach(mountDemo);
+registerDemo('[data-dyss-demo]', mountDemo);

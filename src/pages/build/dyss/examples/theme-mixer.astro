@@ -2,7 +2,6 @@
 import DyssExample from '../../../../layouts/DyssExample.astro';
 import ColorPickerHex from '../../../../components/dyss/ColorPickerHex.svelte';
 import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
-import dyssThemeMixerScript from '../../../../scripts/dyss-theme-mixer.js?url&no-inline';
 
 const title = 'dyss: theme mixer';
 const description = 'Tune theme tokens and watch a preview UI restyle itself in real time.';
@@ -103,7 +102,7 @@ const description = 'Tune theme tokens and watch a preview UI restyle itself in 
 		<LiveCodeSection className="theme-code" />
 	</div>
 
-	<script slot="scripts" type="module" src={dyssThemeMixerScript} data-astro-rerun></script>
+	<script src="../../../../scripts/dyss-theme-mixer.js"></script>
 </DyssExample>
 
 <style>

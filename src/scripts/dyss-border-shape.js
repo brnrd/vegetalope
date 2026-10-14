@@ -1,4 +1,5 @@
 import Sheet from 'dyss';
+import { registerDemo } from './dyss-demo-lifecycle.js';
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -69,6 +70,7 @@ function mountBorderShapeDemo(root) {
 	let charge = Number(chargeInput.value);
 	let lastFrame = 0;
 	let frameCount = 0;
+	let animationFrame = 0;
 
 	function writeElectricCode(path) {
 		electricCode.textContent = [
@@ -90,7 +92,7 @@ function mountBorderShapeDemo(root) {
 			cardRule?.style.setProperty('filter', `drop-shadow(0 0 ${voltage * 1.5}px var(--electric))`);
 			writeElectricCode(path);
 		}
-		requestAnimationFrame(renderElectric);
+		animationFrame = requestAnimationFrame(renderElectric);
 	}
 
 	electricPlay.addEventListener('click', () => {
@@ -265,8 +267,12 @@ function mountBorderShapeDemo(root) {
 	addNode(66, 73);
 	addNode(28, 70);
 	syncButtons();
-	requestAnimationFrame(renderElectric);
+	animationFrame = requestAnimationFrame(renderElectric);
+	return () => {
+		cancelAnimationFrame(animationFrame);
+		window.removeEventListener('resize', rebuildConnectors);
+		sheet.destroy();
+	};
 }
 
-const demo = document.querySelector('[data-border-shape-demo]');
-if (demo) mountBorderShapeDemo(demo);
+registerDemo('[data-border-shape-demo]', mountBorderShapeDemo);

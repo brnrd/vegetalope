@@ -1,4 +1,5 @@
 import Sheet from 'dyss';
+import { registerDemo } from './dyss-demo-lifecycle.js';
 
 const themes = {
 	signal: {
@@ -92,7 +93,7 @@ function mountArtboard(root) {
 	});
 
 	applyTheme('signal');
+	return () => sheet.destroy();
 }
 
-const demo = document.querySelector('[data-dyss-artboard]');
-if (demo) mountArtboard(demo);
+registerDemo('[data-dyss-artboard]', mountArtboard);

@@ -1,4 +1,5 @@
 import Sheet from 'dyss'
+import { registerDemo } from './dyss-demo-lifecycle.js'
 
 const METHOD_CLASSES = [
 	'is-inline',
@@ -274,7 +275,7 @@ function setActiveCodeTab(root, methodId) {
 	}
 }
 
-async function mountBenchmark(root) {
+function mountBenchmark(root) {
 	const countInput = root.querySelector('[data-benchmark-count]')
 	const countOutput = root.querySelector('[data-benchmark-count-output]')
 	const samplesInput = root.querySelector('[data-benchmark-samples]')
@@ -305,11 +306,12 @@ async function mountBenchmark(root) {
 		return
 	}
 
-	createClassToggleSheet()
+	const classToggleSheet = createClassToggleSheet()
 	const cssomRule = createCssomRule()
 	const constructedRule = createConstructedRule()
 	const dyssHandle = createDyssRule()
 	const cssTextStyle = createCssTextWriter()
+	let disposed = false
 	let currentCount = 0
 	let nodes = []
 
@@ -498,6 +500,7 @@ async function mountBenchmark(root) {
 
 		try {
 			for (const method of methods) {
+				if (disposed) return
 				activeMethod.textContent = method.label
 				status.textContent = `Running ${method.label}...`
 				setActiveCodeTab(root, method.id)
@@ -506,6 +509,7 @@ async function mountBenchmark(root) {
 				if (shouldFlush) forceStyleRead(nodes)
 
 				await nextFrame()
+				if (disposed) return
 
 				const samples = []
 				for (const [index, state] of states.entries()) {
@@ -528,7 +532,7 @@ async function mountBenchmark(root) {
 
 			status.textContent = `Finished ${methods.length} comparisons across ${currentCount} elements.`
 		} finally {
-			resetStageSurface()
+			if (!disposed) resetStageSurface()
 			activeMethod.textContent = 'Idle'
 			runButton.disabled = false
 		}
@@ -556,9 +560,17 @@ async function mountBenchmark(root) {
 		if (!methodId) return
 		setActiveCodeTab(root, methodId)
 	})
+	return () => {
+		disposed = true
+		classToggleSheet?.ownerNode?.remove()
+		cssomRule?.parentStyleSheet?.ownerNode?.remove()
+		const constructedSheet = constructedRule?.parentStyleSheet
+		if (constructedSheet) {
+			document.adoptedStyleSheets = document.adoptedStyleSheets.filter(sheet => sheet !== constructedSheet)
+		}
+		dyssHandle.sheet.destroy()
+		cssTextStyle.remove()
+	}
 }
 
-const root = document.querySelector('[data-dyss-benchmark]')
-if (root instanceof HTMLElement) {
-	void mountBenchmark(root)
-}
+registerDemo('[data-dyss-benchmark]', mountBenchmark)

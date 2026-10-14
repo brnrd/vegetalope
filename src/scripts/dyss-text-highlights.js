@@ -1,4 +1,5 @@
 import Sheet from 'dyss';
+import { registerDemo } from './dyss-demo-lifecycle.js';
 
 function normalizeHex(value) {
 	const raw = String(value).trim().replace(/^#/, '');
@@ -73,7 +74,7 @@ function mountDemo(root) {
 	let activeColorId = colors[0]?.id ?? null;
 	const highlights = new Map();
 	const hasTrustedTypes = typeof window !== 'undefined' && 'trustedTypes' in window;
-	const hexTimers = new WeakMap();
+	const hexTimers = new Map();
 
 	function updateColorRule(color) {
 		sheet.updateSet(`.hl-${color.id}`, {
@@ -311,6 +312,11 @@ function mountDemo(root) {
 
 	renderPalette();
 	renderWords();
+	return () => {
+		for (const timer of hexTimers.values()) window.clearTimeout(timer);
+		hexTimers.clear();
+		sheet.destroy();
+	};
 }
 
-document.querySelectorAll('[data-dyss-highlight-demo]').forEach(mountDemo);
+registerDemo('[data-dyss-highlight-demo]', mountDemo);

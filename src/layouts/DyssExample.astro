@@ -4,9 +4,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName';
 
-import dyssModuleUrl from 'dyss?url';
-
-
 const { title, description, backHref = '/build/dyss', backLabel = 'Back to dyss examples' } = Astro.props;
 const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 ---
@@ -15,11 +12,6 @@ const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
-		<script
-			type="importmap"
-			is:inline
-			set:html={JSON.stringify({ imports: { dyss: dyssModuleUrl } })}
-		></script>
 	</head>
 	<body>
 		<Header />

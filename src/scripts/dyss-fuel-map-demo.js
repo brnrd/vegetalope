@@ -1,4 +1,5 @@
 import Sheet from 'dyss';
+import { registerDemo } from './dyss-demo-lifecycle.js';
 
 const rpmLabels = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500];
 const loadLabels = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
@@ -280,7 +281,10 @@ function mountFuelMap(root) {
 			startLive();
 		}
 	});
+	return () => {
+		stopLive();
+		sheet.destroy();
+	};
 }
 
-const demo = document.querySelector('[data-dyss-fuel-map]');
-if (demo) mountFuelMap(demo);
+registerDemo('[data-dyss-fuel-map]', mountFuelMap);

@@ -1,6 +1,5 @@
 ---
 import DyssExample from '../../../../layouts/DyssExample.astro';
-import dyssTextDemoScript from '../../../../scripts/dyss-text-highlights.js?url&no-inline';
 
 const title = 'dyss: text highlights';
 const description = 'Mock OCR text highlighting with overlapping colors and live palette edits.';
@@ -25,7 +24,7 @@ const description = 'Mock OCR text highlighting with overlapping colors and live
 		<div class="dyss-ocr" data-dyss-words></div>
 	</div>
 
-	<script slot="scripts" type="module" src={dyssTextDemoScript} data-astro-rerun></script>
+	<script src="../../../../scripts/dyss-text-highlights.js"></script>
 </DyssExample>
 
 <style>

@@ -1,4 +1,5 @@
 import Sheet from 'dyss';
+import { registerDemo } from './dyss-demo-lifecycle.js';
 
 function normalizeHex(value) {
 	const raw = String(value).trim().replace(/^#/, '');
@@ -103,7 +104,7 @@ function mountContrastLab(root) {
 	let lightText = lightTextInput.value;
 	let darkText = darkTextInput.value;
 	let swatches = defaultSwatches.map((item) => makeSwatch(item));
-	const hexTimers = new WeakMap();
+	const hexTimers = new Map();
 
 	function syncCandidateInputs() {
 		lightTextInput.value = lightText;
@@ -400,6 +401,11 @@ function mountContrastLab(root) {
 	syncCandidateInputs();
 	renderRows();
 	renderPreview();
+	return () => {
+		for (const timer of hexTimers.values()) window.clearTimeout(timer);
+		hexTimers.clear();
+		sheet.destroy();
+	};
 }
 
-document.querySelectorAll('[data-dyss-contrast-lab]').forEach(mountContrastLab);
+registerDemo('[data-dyss-contrast-lab]', mountContrastLab);

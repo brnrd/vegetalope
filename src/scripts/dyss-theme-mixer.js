@@ -1,4 +1,5 @@
 import Sheet from 'dyss';
+import { registerDemo } from './dyss-demo-lifecycle.js';
 
 function normalizeHex(value) {
 	const raw = String(value).trim().replace(/^#/, '');
@@ -104,7 +105,7 @@ function mountThemeMixer(root) {
 	preview.classList.add(className);
 
 	const tokens = { ...defaults };
-	const hexTimers = new WeakMap();
+	const hexTimers = new Map();
 
 	sheet.add(selector, {
 		'--tm-bg': tokens.bg,
@@ -227,7 +228,11 @@ function mountThemeMixer(root) {
 
 	syncControls();
 	applyTokens();
+	return () => {
+		for (const timer of hexTimers.values()) window.clearTimeout(timer);
+		hexTimers.clear();
+		sheet.destroy();
+	};
 }
 
-const demo = document.querySelector('[data-dyss-theme-demo]');
-if (demo) mountThemeMixer(demo);
+registerDemo('[data-dyss-theme-demo]', mountThemeMixer);

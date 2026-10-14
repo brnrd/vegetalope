@@ -2,7 +2,6 @@
 import DyssExample from '../../../../layouts/DyssExample.astro';
 import ColorPickerHex from '../../../../components/dyss/ColorPickerHex.svelte';
 import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
-import dyssContrastLabScript from '../../../../scripts/dyss-contrast-lab.js?url&no-inline';
 
 const title = 'dyss: contrast lab';
 const description = 'Approximate contrast-color() with relative color syntax and dyss runtime rules.';
@@ -61,7 +60,7 @@ const description = 'Approximate contrast-color() with relative color syntax and
 		<LiveCodeSection className="contrast-code" />
 	</div>
 
-	<script slot="scripts" type="module" src={dyssContrastLabScript} data-astro-rerun></script>
+	<script src="../../../../scripts/dyss-contrast-lab.js"></script>
 </DyssExample>
 
 <style>
