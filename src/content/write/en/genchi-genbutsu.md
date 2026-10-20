@@ -1,5 +1,5 @@
 ---
-title: 'genchi genbutsu'
+title: 'Genchi genbutsu'
 description: 'Why first-hand experience of engineering work helps leaders understand what teams need.'
 pubDate: '2026-10-20'
 ---

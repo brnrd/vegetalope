@@ -1,5 +1,5 @@
 ---
-title: 'genchi genbutsu'
+title: 'Genchi genbutsu'
 description: 'Aller voir le travail des équipes par soi-même pour mieux comprendre ce qui les aide et ce qui les freine.'
 pubDate: '2026-10-20'
 ---
