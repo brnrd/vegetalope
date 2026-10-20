@@ -844,7 +844,7 @@ header.site-header a:hover {
 .hello .name picture img {
 	object-fit: cover;
 	height: auto;
-	width: 80%;
+	width: 100%;
 	margin: 0 auto;
 }
 

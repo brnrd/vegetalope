@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import logoImage from '../assets/vegetalope.webp';
 import ThemeToggle from './ThemeToggle.astro';
 import { getLocaleFromPath, getLocalePath, ui } from '../i18n';
@@ -18,9 +18,10 @@ const showRss = pathname === '/' || pathname === '/fr/' || pathname.startsWith('
 				<p>{strings.myNameIs}</p>
 			</div>
 			<div class="name">
-				<Image
+				<Picture
 					src={logoImage}
-					formats={['webp', 'avif']}
+					formats={['avif', 'webp']}
+					fallbackFormat="webp"
 					widths={[120, 240, 360]}
 					sizes="150px"
 					alt="vegetalope written with a black Sharpie on white paper"
