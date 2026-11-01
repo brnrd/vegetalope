@@ -1,0 +1,141 @@
+---
+import { Image } from 'astro:assets'
+import BaseHead from '../../components/BaseHead.astro'
+import Header from '../../components/Header.astro'
+import Footer from '../../components/Footer.astro'
+import editorImage from '../../assets/keylo-editor.webp'
+import { pageContentTransition, viewTransitionNameFromPath } from '../../utils/viewTransitionName'
+
+const pageTitle = 'Keylo'
+const pageDescription = 'An open-source, self-hosted workspace for product copy and translations.'
+const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname)
+const repositoryUrl = 'https://github.com/brnrd/keylo'
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main
+			id="main-content"
+			tabindex="-1"
+			class="content stack keylo-page"
+			transition:name="page-content"
+			transition:animate={pageContentTransition}
+		>
+			<article class="stack">
+				<header class="stack">
+					<p class="meta">Build</p>
+					<h1
+						class="transition-title"
+						style={`--view-transition-name: ${titleTransitionName};`}
+						transition:name={titleTransitionName}
+					>
+						{pageTitle}
+					</h1>
+					<p>{pageDescription}</p>
+					<nav class="project-links" aria-label="Keylo links">
+						<a href={repositoryUrl}>View on GitHub</a>
+						<a href={`${repositoryUrl}#get-started`}>Get started</a>
+					</nav>
+				</header>
+
+				<p>
+					The words in an app need somewhere to live. Keylo brings source copy, translation keys and
+					every language into one shared workspace, so product teams and developers can keep them
+					organised and ship them through their existing build pipeline.
+				</p>
+
+				<figure class="stack editor-preview">
+					<a href={editorImage.src} aria-label="View the full-size Keylo editor screenshot">
+						<Image
+							src={editorImage}
+							alt="Keylo’s translation editor with English source copy, French and Dutch translations, and current or outdated status labels."
+							widths={[640, 960, 1280]}
+							sizes="(max-width: 960px) 100vw, 960px"
+						/>
+					</a>
+					<figcaption>
+						Source copy and translations together in the editor. Sample project from the{' '}
+						<a href={`${repositoryUrl}#a-focused-home-for-your-copy`}>Keylo repository</a>.
+					</figcaption>
+				</figure>
+
+				<section class="stack" aria-labelledby="copy">
+					<h2 id="copy">Keep every language in view</h2>
+					<p>
+						Projects, namespaces and tags give copy some structure. The editor keeps language values
+						together and flags missing or outdated translations when the source changes. A shared
+						glossary and previous wording help keep terminology consistent, while placeholder checks
+						and translation history make changes easier to catch and recover.
+					</p>
+				</section>
+
+				<section class="stack" aria-labelledby="workflow">
+					<h2 id="workflow">Work with your app</h2>
+					<p>
+						Import existing localisation files or Lokalise exports, then use the CLI to push source
+						strings and pull translations into your codebase. JSON, YAML, gettext, Apple and Android
+						formats are among the{' '}
+						<a href={`${repositoryUrl}/blob/main/docs/file-formats.md`}>supported formats</a>. CI
+						can require current, valid translations before a build goes through.
+					</p>
+					<p>
+						An optional <a href={`${repositoryUrl}/blob/main/docs/mcp.md`}>MCP connection</a>{' '}
+						lets Claude Code work with project context and selected target languages. Editing and publication
+						stay explicit; Keylo has no built-in automatic translation service.
+					</p>
+				</section>
+
+				<section class="stack" aria-labelledby="hosting">
+					<h2 id="hosting">Your copy, your infrastructure</h2>
+					<p>
+						Keylo is MIT licensed and designed for self-hosting. Try it locally with Node.js and
+						SQLite, or run it for a team using the included Docker image or AWS templates. Built-in
+						accounts and SSO are available, with project roles and separate credentials for
+						integrations.
+					</p>
+					<p>
+						The <a href={`${repositoryUrl}#get-started`}>setup guide</a> covers the local demo and team
+						deployment. Explore the{' '}
+						<a href={`${repositoryUrl}#documentation`}>documentation</a> for imports, source sync, access
+						control and recovery.
+					</p>
+				</section>
+
+				<p><a href="/">Back to home</a></p>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.keylo-page h1 {
+		margin: 0;
+	}
+
+	.project-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem 1.5rem;
+		font-family: var(--font-label);
+		font-size: 0.76rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.editor-preview img {
+		inline-size: 100%;
+		border: 1px solid var(--hairline);
+		border-radius: 0.75rem;
+	}
+
+	.editor-preview figcaption {
+		font-size: 0.9rem;
+		color: var(--color-ink-muted);
+	}
+</style>
