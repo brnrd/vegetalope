@@ -3,13 +3,13 @@ import { Image } from 'astro:assets'
 import BaseHead from '../../components/BaseHead.astro'
 import Header from '../../components/Header.astro'
 import Footer from '../../components/Footer.astro'
-import editorImage from '../../assets/keylo-editor.webp'
+import editorImage from '../../assets/kieli-editor.webp'
 import { pageContentTransition, viewTransitionNameFromPath } from '../../utils/viewTransitionName'
 
-const pageTitle = 'Keylo'
+const pageTitle = 'Kieli'
 const pageDescription = 'An open-source, self-hosted workspace for product copy and translations.'
 const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname)
-const repositoryUrl = 'https://github.com/brnrd/keylo'
+const repositoryUrl = 'https://github.com/brnrd/Kieli'
 ---
 
 <!doctype html>
@@ -22,7 +22,7 @@ const repositoryUrl = 'https://github.com/brnrd/keylo'
 		<main
 			id="main-content"
 			tabindex="-1"
-			class="content stack keylo-page"
+			class="content stack kieli-page"
 			transition:name="page-content"
 			transition:animate={pageContentTransition}
 		>
@@ -37,30 +37,30 @@ const repositoryUrl = 'https://github.com/brnrd/keylo'
 						{pageTitle}
 					</h1>
 					<p>{pageDescription}</p>
-					<nav class="project-links" aria-label="Keylo links">
+					<nav class="project-links" aria-label="Kieli links">
 						<a href={repositoryUrl}>View on GitHub</a>
 						<a href={`${repositoryUrl}#get-started`}>Get started</a>
 					</nav>
 				</header>
 
 				<p>
-					The words in an app need somewhere to live. Keylo brings source copy, translation keys and
+					The words in an app need somewhere to live. Kieli brings source copy, translation keys and
 					every language into one shared workspace, so product teams and developers can keep them
 					organised and ship them through their existing build pipeline.
 				</p>
 
 				<figure class="stack editor-preview">
-					<a href={editorImage.src} aria-label="View the full-size Keylo editor screenshot">
+					<a href={editorImage.src} aria-label="View the full-size Kieli editor screenshot">
 						<Image
 							src={editorImage}
-							alt="Keylo’s translation editor with English source copy, French and Dutch translations, and current or outdated status labels."
+							alt="Kieli’s translation editor with English source copy, French and Dutch translations, missing translations, and freshness indicators."
 							widths={[640, 960, 1280]}
 							sizes="(max-width: 960px) 100vw, 960px"
 						/>
 					</a>
 					<figcaption>
 						Source copy and translations together in the editor. Sample project from the{' '}
-						<a href={`${repositoryUrl}#a-focused-home-for-your-copy`}>Keylo repository</a>.
+						<a href={`${repositoryUrl}#a-focused-home-for-your-copy`}>Kieli repository</a>.
 					</figcaption>
 				</figure>
 
@@ -86,14 +86,14 @@ const repositoryUrl = 'https://github.com/brnrd/keylo'
 					<p>
 						An optional <a href={`${repositoryUrl}/blob/main/docs/mcp.md`}>MCP connection</a>{' '}
 						lets Claude Code work with project context and selected target languages. Editing and publication
-						stay explicit; Keylo has no built-in automatic translation service.
+						stay explicit; Kieli has no built-in automatic translation service.
 					</p>
 				</section>
 
 				<section class="stack" aria-labelledby="hosting">
 					<h2 id="hosting">Your copy, your infrastructure</h2>
 					<p>
-						Keylo is MIT licensed and designed for self-hosting. Try it locally with Node.js and
+						Kieli is MIT licensed and designed for self-hosting. Try it locally with Node.js and
 						SQLite, or run it for a team using the included Docker image or AWS templates. Built-in
 						accounts and SSO are available, with project roles and separate credentials for
 						integrations.
@@ -114,7 +114,7 @@ const repositoryUrl = 'https://github.com/brnrd/keylo'
 </html>
 
 <style>
-	.keylo-page h1 {
+	.kieli-page h1 {
 		margin: 0;
 	}
 

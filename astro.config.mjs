@@ -35,7 +35,8 @@ export default defineConfig({
 					!/^\/(?:fr\/)?watch(?:\/|$)/.test(path) &&
 					!path.startsWith('/blog/') &&
 					!path.startsWith('/articles/') &&
-					path !== '/write/ask-and-do'
+					path !== '/write/ask-and-do' &&
+					path !== '/build/keylo'
 				)
 			},
 			i18n: { defaultLocale: 'en', locales: { en: 'en', fr: 'fr' } },
@@ -46,6 +47,10 @@ export default defineConfig({
 		}),
 	],
 	redirects: {
+		'/build/keylo': {
+			status: 301,
+			destination: '/build/kieli',
+		},
 		'/blog/brian-viner-100-classic-films': {
 			status: 301,
 			destination: '/watch/brian-viner-100-classic-films',
