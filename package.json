@@ -19,10 +19,10 @@
     "@astrojs/svelte": "^9.0.1",
     "@jorgejhms/astro-seo-meta-tags": "^0.4.0",
     "@xsynaptic/satteri-reading-time": "^0.2.1",
-    "astro": "^7.2.9",
+    "astro": "^7.4.5",
     "astro-link-validator": "^1.1.1",
     "dyss": "^1.2.1",
-    "sharp": "^0.35.3",
+    "sharp": "^0.35.5",
     "svelte": "^5.56.8",
     "yaml": "^2.9.1"
   },
