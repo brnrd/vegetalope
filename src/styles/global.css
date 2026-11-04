@@ -957,16 +957,16 @@ header.site-header .inner {
 	padding-top: 1.5rem;
 }
 .home-index .home-intro h1 {
-	max-width: 15ch;
+	max-width: 16ch;
 	font-family: var(--font-reading);
-	font-size: clamp(3.2rem, 7.5vw, 6.5rem);
+	font-size: clamp(2.4rem, 5vw, 4.5rem);
 	font-weight: 400;
 	letter-spacing: -0.035em;
 	line-height: 1.08;
-	margin-block: 1.3rem 1.8rem;
+	margin-block: 1rem 1.25rem;
 }
 .home-index .home-intro p:last-child {
-	max-width: 49ch;
+	max-width: 56ch;
 	font-size: clamp(1.15rem, 2vw, 1.4rem);
 }
 .home-index .home-intro .meta {
@@ -1056,8 +1056,5 @@ main > article.reading-article {
 	}
 	.reading-article > section {
 		font-size: 1.125rem;
-	}
-	.home-index .home-intro h1 {
-		max-width: 16ch;
 	}
 }
