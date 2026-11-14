@@ -1,19 +1,4 @@
 /* Editorial typography, native motion, and a deliberately small visual system. */
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff2') format('woff2');
-	font-style: normal;
-	font-weight: 400;
-	font-display: swap;
-}
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff2') format('woff2');
-	font-style: normal;
-	font-weight: 700;
-	font-display: swap;
-}
-
 html {
 	color-scheme: light;
 }
@@ -27,9 +12,9 @@ html.theme-dark {
 }
 
 :root {
-	/* Typography */
-	--font-display: 'Atkinson', 'Avenir Next', system-ui, sans-serif;
-	--font-body: 'Atkinson', system-ui, sans-serif;
+	/* Local fonts only; Verdana keeps Atkinson's open, generously spaced feel. */
+	--font-body: Verdana, 'DejaVu Sans', system-ui, sans-serif;
+	--font-display: var(--font-body);
 	--font-reading: Charter, 'Bitstream Charter', Georgia, serif;
 	--font-label:
 		ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
