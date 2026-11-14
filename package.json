@@ -19,7 +19,7 @@
     "@astrojs/svelte": "^9.0.1",
     "@jorgejhms/astro-seo-meta-tags": "^0.4.0",
     "@xsynaptic/satteri-reading-time": "^0.2.1",
-    "astro": "^7.4.5",
+    "astro": "^7.4.12",
     "astro-link-validator": "^1.1.1",
     "dyss": "^1.2.1",
     "sharp": "^0.35.5",
