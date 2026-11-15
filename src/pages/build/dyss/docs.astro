@@ -1,429 +1,383 @@
 ---
-import BaseHead from '../../../components/BaseHead.astro';
-import Header from '../../../components/Header.astro';
-import Footer from '../../../components/Footer.astro';
-import { pageContentTransition, viewTransitionNameFromPath } from '../../../utils/viewTransitionName';
+import { Code } from 'astro:components'
+import BaseHead from '../../../components/BaseHead.astro'
+import Header from '../../../components/Header.astro'
+import Footer from '../../../components/Footer.astro'
+import {
+	pageContentTransition,
+	viewTransitionNameFromPath,
+} from '../../../utils/viewTransitionName'
 
-const pageTitle = 'dyss docs';
+const pageTitle = 'dyss docs'
 const pageDescription =
-	'Reference documentation for dyss, a tiny utility for creating and updating live CSS stylesheets from JavaScript.';
-const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
+	'Create CSS rules from JavaScript, update them at runtime, and share them across elements.'
+const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname)
+const codeThemes = { light: 'github-light', dark: 'github-dark' } as const
 
-const escapeInlineHtml = (value) =>
-	value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+const escapeInlineHtml = (value: string) =>
+	value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+const withInlineCode = (value: string) =>
+	escapeInlineHtml(value).replace(/`([^`]+)`/g, '<code>$1</code>')
 
-const withInlineCode = (value) =>
-	value.replace(/`([^`]+)`/g, (_, code) => `<code>${escapeInlineHtml(code)}</code>`);
-
-const hasMeaningfulReturn = (value) => value && value !== 'Returns `undefined`.';
-
-const publicProperties = [
+const properties = [
 	{
 		id: 'property-mode',
 		label: 'mode',
-		signature: "sheet.mode",
-		summary: 'Stores the active creation mode for the instance.',
-		whenToUse:
-			'Read this when you need to know whether the instance is managing a DOM-backed style tag or a constructable stylesheet.',
+		kind: 'Property',
+		signature: 'sheet.mode',
+		summary: 'The stylesheet mode selected when the instance was created.',
+		type: "'style-tag' | 'constructed' | null",
 		parameters: [],
-		returns: "<code>'style-tag' | 'constructed' | null</code>.",
-		notes: [
-			'Starts as <code>style-tag</code> by default unless you pass a different mode to the constructor.',
-			'After <code>destroy()</code>, dyss sets this property to <code>null</code>.'
-		],
+		notes: ['Defaults to `style-tag`. Becomes `null` after `destroy()`.'],
 		example: `const sheet = new Sheet({ mode: 'constructed' })
 
-console.log(sheet.mode)
-// "constructed"`
+console.log(sheet.mode) // 'constructed'`,
 	},
 	{
 		id: 'property-sheet',
 		label: 'sheet',
+		kind: 'Property',
 		signature: 'sheet.sheet',
-		summary: 'Holds the underlying native stylesheet object used for rule insertion and lookup.',
-		whenToUse:
-			'Read this when you want direct access to the CSSOM object that dyss is mutating under the hood.',
+		summary:
+			'The native stylesheet managed by this instance. Use it to access the CSS Object Model (CSSOM) directly.',
+		type: 'CSSStyleSheet | null',
 		parameters: [],
-		returns: '<code>CSSStyleSheet | null</code>.',
-		notes: [
-			'This is the same object returned by <code>getSheet()</code>.',
-			'After <code>destroy()</code>, dyss clears the property and sets it to <code>null</code>.'
-		],
-		example: `const sheet = new Sheet()
+		notes: ['The same object returned by `getSheet()`. Becomes `null` after `destroy()`.'],
+		example: `console.log(sheet.sheet?.cssRules.length)`,
+	},
+]
 
-console.log(sheet.sheet?.cssRules.length)
-// 0`
-	}
-];
-
-const publicApi = [
-	{
-		id: 'new-sheet',
-		label: 'new Sheet',
-		signature: "new Sheet(options?: { mode?: 'style-tag' | 'constructed' })",
-		summary: 'Creates a stylesheet instance in the browser and stores the underlying CSSStyleSheet on the instance.',
-		whenToUse:
-			'Use this first. Every other method operates on the stylesheet created by this constructor.',
-		parameters: [
-			{
-				name: 'options',
-				type: "{ mode?: 'style-tag' | 'constructed' }",
-				description:
-					"Optional configuration object. If omitted, dyss uses <code>style-tag</code> mode."
-			},
-			{
-				name: 'options.mode',
-				type: "'style-tag' | 'constructed'",
-				description:
-					"Selects the backing implementation. <code>style-tag</code> injects a <code>&lt;style&gt;</code> element; <code>constructed</code> uses <code>new CSSStyleSheet()</code> and appends it to <code>document.adoptedStyleSheets</code>."
-			}
-		],
-		returns: 'Returns a new Sheet instance.',
-		notes: [
-			"<code>mode: 'style-tag'</code> is the default and inserts a real <code>&lt;style&gt;</code> element into <code>document.head</code>.",
-			"<code>mode: 'constructed'</code> uses <code>new CSSStyleSheet()</code> and appends it to <code>document.adoptedStyleSheets</code>.",
-			'Constructed mode throws if the current browser does not support constructable stylesheets.'
-		],
-		example: `import Sheet from 'dyss'
+const constructor = {
+	id: 'new-sheet',
+	label: 'new Sheet',
+	kind: 'Constructor',
+	signature: 'new Sheet(options?)',
+	summary: 'Creates an empty stylesheet and attaches it to the current document.',
+	type: 'Sheet',
+	parameters: [
+		{
+			name: 'options',
+			type: "{ mode?: 'style-tag' | 'constructed' }",
+			description: "Optional configuration object. Defaults to `{ mode: 'style-tag' }`.",
+		},
+	],
+	notes: [
+		'In `style-tag` mode, inserts a `<style>` element into `document.head`.',
+		'In `constructed` mode, creates a `CSSStyleSheet` and adds it to `document.adoptedStyleSheets`. Throws if these APIs are unavailable.',
+		'Create the instance in the browser, after `document.head` is available.',
+	],
+	example: `import Sheet from 'dyss'
 
 const sheet = new Sheet()
-const adopted = new Sheet({ mode: 'constructed' })`
-	},
-	{
-		id: 'add-media-attribute',
-		label: 'addMediaAttribute',
-		signature: 'sheet.addMediaAttribute(mediaAttribute)',
-		summary: 'Sets the `media` attribute on the backing `<style>` tag.',
-		whenToUse:
-			'Use this when the entire stylesheet should be conditionally active, such as for print output or a single media query.',
-		parameters: [
-			{
-				name: 'mediaAttribute',
-				type: 'string',
-				description:
-					'The exact string written to the <code>media</code> attribute, for example <code>print</code> or <code>(max-width: 60rem)</code>.'
-			}
-		],
-		returns: 'Returns `undefined`.',
-		notes: [
-			'Only available in <code>style-tag</code> mode.',
-			'Useful for a sheet that should only apply to <code>print</code> or a single media query.'
-		],
-		example: `const sheet = new Sheet()
 
-sheet.addMediaAttribute('(max-width: 60rem)')`
-	},
-	{
-		id: 'get-sheet',
-		label: 'getSheet',
-		signature: 'sheet.getSheet()',
-		summary: 'Returns the underlying native `CSSStyleSheet` instance.',
-		whenToUse:
-			'Use this when you need to inspect or integrate with the native stylesheet object directly.',
-		parameters: [],
-		returns: '`CSSStyleSheet | null`.',
-		notes: ['After <code>destroy()</code>, this returns <code>null</code> because the instance reference is cleared.'],
-		example: `const nativeSheet = sheet.getSheet()
+// Or use a constructable stylesheet:
+const adopted = new Sheet({ mode: 'constructed' })`,
+}
 
-if (nativeSheet) {
-\tconsole.log(nativeSheet.cssRules.length)
-}`
-	},
+const methods = [
 	{
 		id: 'add',
 		label: 'add',
 		signature: 'sheet.add(selector, set, index?)',
-		summary: 'Inserts a CSS rule for a selector using an object of camelCase style declarations.',
-		whenToUse:
-			'Use this to create a new rule when you already know the selector you want to target.',
+		summary: 'Inserts a new CSS rule. Appends it to the stylesheet unless you provide an index.',
 		parameters: [
 			{
 				name: 'selector',
 				type: 'string',
-				description:
-					'Any valid selector string, such as <code>.card</code>, <code>#app</code>, or <code>button[disabled]</code>.'
+				description: 'A CSS selector, such as `.card`, `#app`, or `button[disabled]`.',
 			},
 			{
 				name: 'set',
 				type: 'Record<string, string>',
 				description:
-					'Object of declarations keyed like <code>element.style</code>, for example <code>backgroundColor</code> or <code>borderRadius</code>. Values are written as CSS values.'
+					"CSS declarations with camelCase keys and string values, such as `{ backgroundColor: 'navy' }`.",
 			},
 			{
 				name: 'index',
 				type: 'number',
 				description:
-					'Optional insert position in the top-level stylesheet. If omitted, the rule is appended.'
-			}
+					'Optional zero-based insertion position among top-level rules. Defaults to the end of the stylesheet.',
+			},
 		],
-		returns: 'Returns `undefined`.',
 		notes: [
-			'Property keys should follow the same naming style as <code>element.style</code>, such as <code>backgroundColor</code>.',
-			'If <code>index</code> is omitted, the rule is appended to the end of the stylesheet.'
+			'Always inserts a new rule, even if the selector already exists. Use `updateSet()` to change an existing rule.',
 		],
 		example: `sheet.add('.card', {
-\tpadding: '1rem',
-\tbackgroundColor: '#111827',
-\tcolor: '#ffffff'
+	padding: '1rem',
+	backgroundColor: '#111827',
+	color: '#ffffff'
 })
 
-sheet.add('.card--first', { order: '0' }, 0)`
+// Insert before all other top-level rules.
+sheet.add('.card--first', { order: '0' }, 0)`,
 	},
 	{
 		id: 'add-class',
 		label: 'addClass',
 		signature: 'sheet.addClass(set)',
-		summary: 'Generates a random class name, inserts a rule for it, and returns the class name without a leading dot.',
-		whenToUse:
-			'Use this when you want dyss to generate a reusable class name for runtime styling instead of managing a selector yourself.',
+		summary:
+			'Creates a rule with a randomly generated class name. Returns the name without a leading dot.',
+		type: 'string',
 		parameters: [
 			{
 				name: 'set',
 				type: 'Record<string, string>',
-				description:
-					'Declaration object for the generated class rule. It follows the same camelCase rules as <code>add()</code>.'
-			}
+				description: 'CSS declarations for the generated class, using the same format as `add()`.',
+			},
 		],
-		returns: '`string`.',
 		notes: [
-			'The returned value is intended for <code>element.classList.add(...)</code>.',
-			'Internally, dyss prefixes the generated name with <code>.</code> before inserting the rule.'
+			'Apply the returned name with `element.classList.add()`. Add a leading `.` when passing it to selector-based methods such as `updateSet()`.',
 		],
 		example: `const pillClass = sheet.addClass({
-\tpadding: '0.4rem 0.7rem',
-\tborderRadius: '999px',
-\tbackgroundColor: '#c21f2b',
-\tcolor: '#ffffff'
+	padding: '0.4rem 0.7rem',
+	borderRadius: '999px',
+	backgroundColor: '#304e77',
+	color: '#ffffff'
 })
 
-button.classList.add(pillClass)`
+const button = document.querySelector('button')
+button?.classList.add(pillClass)`,
 	},
 	{
 		id: 'update-set',
 		label: 'updateSet',
 		signature: 'sheet.updateSet(selector, set)',
-		summary: 'Merges declarations into an existing rule, or creates the rule if it does not exist yet.',
-		whenToUse:
-			'Use this when a selector already exists and you want to change only a subset of its properties without resetting the rest.',
+		summary:
+			'Merges declarations into the first matching top-level rule. Preserves properties you leave out.',
 		parameters: [
 			{
 				name: 'selector',
 				type: 'string',
-				description: 'Selector of the rule to update.'
+				description: 'The exact selector of the top-level rule to update.',
 			},
 			{
 				name: 'set',
 				type: 'Record<string, string>',
 				description:
-					'Partial declaration object. Only the provided properties are overwritten or added.'
-			}
+					'Declarations to add or overwrite. Include `!important` at the end of a value to set its priority.',
+			},
 		],
-		returns: 'Returns `undefined`.',
 		notes: [
-			'This preserves existing properties that are not mentioned in the new set.',
-			'Values ending in <code>!important</code> are applied with <code>style.setProperty(..., "important")</code>.'
+			'If no top-level rule matches, creates one. Does not update rules nested inside `@media` blocks.',
 		],
 		example: `sheet.updateSet('.card', {
-\tbackgroundColor: '#2563eb',
-\tborderRadius: '1rem',
-\tcolor: '#ffffff !important'
-})`
+	backgroundColor: '#2563eb',
+	borderRadius: '1rem',
+	color: '#ffffff !important'
+})
+// Existing padding is preserved.`,
 	},
 	{
 		id: 'replace-set',
 		label: 'replaceSet',
 		signature: 'sheet.replaceSet(selector, set)',
-		summary: 'Removes every existing declaration from a rule, then applies the new set.',
-		whenToUse:
-			'Use this when the old declarations should be discarded completely and replaced with a new rule body.',
+		summary: 'Replaces every declaration in the first matching top-level rule with the new set.',
 		parameters: [
 			{
 				name: 'selector',
 				type: 'string',
-				description: 'Selector of the rule to replace.'
+				description: 'The exact selector of the top-level rule to replace.',
 			},
 			{
 				name: 'set',
 				type: 'Record<string, string>',
 				description:
-					'Full replacement declaration object. Any previous properties not listed here are removed first.'
-			}
+					'The complete replacement declarations. Supports values ending in `!important`.',
+			},
 		],
-		returns: 'Returns `undefined`.',
 		notes: [
-			'This is a full replacement, not a merge.',
-			'If the selector is missing, dyss creates a new rule first.'
+			'If no top-level rule matches, creates one. Does not replace rules nested inside `@media` blocks.',
 		],
 		example: `sheet.replaceSet('.card', {
-\tdisplay: 'grid',
-\tgap: '0.75rem'
-})`
-	},
-	{
-		id: 'remove',
-		label: 'remove',
-		signature: 'sheet.remove(selector)',
-		summary: 'Deletes the matching rule from the stylesheet.',
-		whenToUse:
-			'Use this when the selector should no longer exist in the stylesheet at all.',
-		parameters: [
-			{
-				name: 'selector',
-				type: 'string',
-				description:
-					'Selector to remove. dyss checks both top-level rules and rules nested under media blocks.'
-			}
-		],
-		returns: 'Returns `undefined`.',
-		notes: ['The lookup includes top-level rules and rules nested inside <code>@media</code> blocks.'],
-		example: `sheet.remove('.card')`
-	},
-	{
-		id: 'remove-class',
-		label: 'removeClass',
-		signature: 'sheet.removeClass(className)',
-		summary: 'Deletes a class rule using either the raw class name or the dotted selector form.',
-		whenToUse:
-			'Use this as a convenience wrapper when you are removing a class-based rule, especially one created by <code>addClass()</code>.',
-		parameters: [
-			{
-				name: 'className',
-				type: 'string',
-				description:
-					'Class token with or without the leading dot. dyss normalizes it to a class selector before removal.'
-			}
-		],
-		returns: 'Returns `undefined`.',
-		notes: ['Passing `badge` and `.badge` both target the same `.badge` rule.'],
-		example: `const badgeClass = sheet.addClass({ color: '#ffffff' })
-
-sheet.removeClass(badgeClass)
-sheet.removeClass('.legacy-badge')`
-	},
-	{
-		id: 'destroy',
-		label: 'destroy',
-		signature: 'sheet.destroy()',
-		summary: 'Cleans up the stylesheet and clears the instance references.',
-		whenToUse:
-			'Use this during teardown when the dynamic stylesheet should be fully removed from the page.',
-		parameters: [],
-		returns: 'Returns `undefined`.',
-		notes: [
-			'In <code>style-tag</code> mode, dyss removes the injected <code>&lt;style&gt;</code> element from the DOM.',
-			'In constructed mode, dyss removes the sheet from <code>document.adoptedStyleSheets</code>.'
-		],
-		example: `const sheet = new Sheet()
-
-sheet.add('.toast', { opacity: '1' })
-
-// later, during teardown
-sheet.destroy()`
+	display: 'grid',
+	gap: '0.75rem'
+})
+// Previous padding, colors, and other declarations are removed.`,
 	},
 	{
 		id: 'add-media',
 		label: 'addMedia',
 		signature: 'sheet.addMedia(mediaQuery, selector, set)',
-		summary: 'Adds a selector rule inside an `@media` block, creating the media block on first use.',
-		whenToUse:
-			'Use this when the rule should exist only inside a media query instead of at the top level of the stylesheet.',
+		summary: 'Inserts a rule inside an `@media` block. Creates the block if it does not exist.',
 		parameters: [
 			{
 				name: 'mediaQuery',
 				type: 'string',
-				description:
-					'Media query text without the leading <code>@media</code>, for example <code>(max-width: 48rem)</code>.'
+				description: 'The media query without `@media`, such as `(max-width: 48rem)` or `print`.',
 			},
 			{
 				name: 'selector',
 				type: 'string',
-				description: 'Selector to insert inside the media block.'
+				description: 'The CSS selector to insert inside the block.',
 			},
 			{
 				name: 'set',
 				type: 'Record<string, string>',
-				description:
-					'Declaration object for the nested selector rule.'
-			}
+				description: 'CSS declarations for the nested rule.',
+			},
 		],
-		returns: 'Returns `undefined`.',
 		notes: [
-			'Reuses an existing <code>@media</code> rule when the same media query string is used again.',
-			'Rules inside the block are appended in insertion order.'
+			'Reuses a media block when its `mediaText` matches the query string. Each call appends a new selector rule inside it.',
 		],
 		example: `sheet.addMedia('(max-width: 48rem)', '.card', {
-\tpadding: '0.75rem',
-\tfontSize: '0.95rem'
-})`
+	padding: '0.75rem',
+	fontSize: '0.95rem'
+})`,
 	},
 	{
 		id: 'add-pseudo',
 		label: 'addPseudo',
 		signature: 'sheet.addPseudo(selector, pseudo, set)',
-		summary: 'Adds a rule for a pseudo-class or pseudo-element.',
-		whenToUse:
-			'Use this when you want dyss to build the full selector for hover, focus, before, after, and similar pseudo states.',
+		summary: 'Appends a pseudo-class or pseudo-element to a selector and inserts a new rule.',
 		parameters: [
-			{
-				name: 'selector',
-				type: 'string',
-				description: 'Base selector before the pseudo segment is appended.'
-			},
+			{ name: 'selector', type: 'string', description: 'The base selector, such as `.button`.' },
 			{
 				name: 'pseudo',
 				type: 'string',
 				description:
-					'Pseudo-class or pseudo-element. You can pass it with or without a leading colon.'
+					'A pseudo-class with or without its colon (`hover` or `:hover`). Include both colons for a pseudo-element, such as `::before`.',
 			},
 			{
 				name: 'set',
 				type: 'Record<string, string>',
-				description:
-					'Declaration object applied to the combined selector.'
-			}
+				description: 'CSS declarations for the combined selector.',
+			},
 		],
-		returns: 'Returns `undefined`.',
-		notes: [
-			'The <code>pseudo</code> argument may be passed as <code>hover</code> or <code>:hover</code>.',
-			'Pseudo-elements such as <code>::before</code> also work.'
-		],
+		notes: [],
 		example: `sheet.addPseudo('.button', ':hover', {
-\tbackgroundColor: '#1a2747',
-\tcolor: '#ffffff'
+	backgroundColor: '#1a2747',
+	color: '#ffffff'
 })
 
 sheet.addPseudo('.button', '::before', {
-\tcontent: '""',
-\tdisplay: 'block'
-})`
+	content: '""',
+	display: 'block'
+})`,
+	},
+	{
+		id: 'add-media-attribute',
+		label: 'addMediaAttribute',
+		signature: 'sheet.addMediaAttribute(mediaAttribute)',
+		summary:
+			'Sets the `media` attribute on the `<style>` element, so the entire stylesheet applies only when the query matches.',
+		parameters: [
+			{
+				name: 'mediaAttribute',
+				type: 'string',
+				description: 'The attribute value, such as `print` or `(max-width: 60rem)`.',
+			},
+		],
+		notes: [
+			'Available only in `style-tag` mode. Throws in `constructed` mode. Use `addMedia()` to limit individual rules instead.',
+		],
+		example: `const printSheet = new Sheet()
+
+printSheet.addMediaAttribute('print')
+printSheet.add('.navigation', { display: 'none' })`,
 	},
 	{
 		id: 'get',
 		label: 'get',
 		signature: 'sheet.get(selector)',
-		summary: 'Returns the matching `CSSStyleRule`, or `null` when no rule matches.',
-		whenToUse:
-			'Use this when you want to inspect a rule, read current values, or pass the native rule into your own CSSOM logic.',
+		summary: 'Returns the first matching CSS rule, or `null` if no rule matches.',
+		type: 'CSSStyleRule | null',
 		parameters: [
 			{
 				name: 'selector',
 				type: 'string',
 				description:
-					'Selector to search for. dyss checks both top-level rules and rules inside media blocks.'
-			}
+					'The exact selector to look up. Searches top-level rules and one level inside grouping rules, including `@media` blocks.',
+			},
 		],
-		returns: '`CSSStyleRule | null`.',
 		notes: [
-			'Like <code>remove()</code>, this searches top-level rules and rules nested inside media queries.',
-			'Once you have the rule, you can inspect <code>rule.style</code>, <code>rule.cssText</code>, and other CSSOM properties.'
+			'Matches the browser’s `selectorText` exactly. Use the returned rule’s `style` or `cssText` to inspect its declarations.',
 		],
 		example: `const rule = sheet.get('.card')
 
 if (rule) {
-\tconsole.log(rule.style.backgroundColor)
-}`
-	}
-];
+	console.log(rule.style.backgroundColor)
+}`,
+	},
+	{
+		id: 'get-sheet',
+		label: 'getSheet',
+		signature: 'sheet.getSheet()',
+		summary: 'Returns the native stylesheet managed by this instance.',
+		type: 'CSSStyleSheet | null',
+		parameters: [],
+		notes: ['Equivalent to reading `sheet.sheet`. Returns `null` after `destroy()`.'],
+		example: `const nativeSheet = sheet.getSheet()
+
+if (nativeSheet) {
+	console.log(nativeSheet.cssRules.length)
+}`,
+	},
+	{
+		id: 'remove',
+		label: 'remove',
+		signature: 'sheet.remove(selector)',
+		summary: 'Deletes the first matching rule. Does nothing if no rule matches.',
+		parameters: [
+			{
+				name: 'selector',
+				type: 'string',
+				description:
+					'The exact selector to remove. Searches top-level rules and one level inside grouping rules, including `@media` blocks.',
+			},
+		],
+		notes: [
+			'Uses the same selector matching as `get()`. Removes the CSS rule; leaves matching HTML elements in place.',
+		],
+		example: `sheet.remove('.card')`,
+	},
+	{
+		id: 'remove-class',
+		label: 'removeClass',
+		signature: 'sheet.removeClass(className)',
+		summary: 'Removes a class rule. Accepts a class name with or without a leading dot.',
+		parameters: [
+			{
+				name: 'className',
+				type: 'string',
+				description: 'The class name, such as `badge` or `.badge`. Both target the `.badge` rule.',
+			},
+		],
+		notes: ['Uses `remove()` internally. Does not remove the class name from HTML elements.'],
+		example: `const badgeClass = sheet.addClass({ color: '#ffffff' })
+
+sheet.removeClass(badgeClass)
+sheet.removeClass('.legacy-badge')`,
+	},
+	{
+		id: 'destroy',
+		label: 'destroy',
+		signature: 'sheet.destroy()',
+		summary:
+			'Detaches the stylesheet from the document and clears the instance references. Call it when a component unmounts or its styles are no longer needed.',
+		parameters: [],
+		notes: [
+			'Removes the `<style>` element in `style-tag` mode, or removes the stylesheet from `document.adoptedStyleSheets` in `constructed` mode.',
+			'Sets `sheet.mode` and `sheet.sheet` to `null`. Create a new instance if you need to add styles again.',
+		],
+		example: `sheet.destroy()`,
+	},
+].map(entry => ({ ...entry, kind: 'Method' }))
+
+const entries = [constructor, ...properties, ...methods]
+const navigation = [
+	{
+		title: 'Getting started',
+		links: [
+			{ id: 'docs-start', label: 'Quick start' },
+			{ id: 'stylesheet-modes', label: 'Stylesheet modes' },
+			{ id: 'declarations', label: 'Writing declarations' },
+			{ id: 'public-api', label: 'API at a glance' },
+		],
+	},
+	{ title: 'Create a sheet', links: [constructor] },
+	{ title: 'Properties', links: properties },
+	{ title: 'Methods', links: methods },
+]
 ---
 
 <!doctype html>
@@ -433,193 +387,285 @@ if (rule) {
 	</head>
 	<body>
 		<Header />
-		<main id="main-content" tabindex="-1" class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
-			<article class="stack dyss-docs">
-				<header class="stack">
-					<p class="meta">Build / dyss</p>
+		<main
+			id="main-content"
+			tabindex="-1"
+			class="content content--wide docs-main"
+			transition:name="page-content"
+			transition:animate={pageContentTransition}
+		>
+			<article class="dyss-docs">
+				<header class="docs-header">
+					<p class="meta"><a href="/build/dyss">dyss</a> / Documentation</p>
 					<h1
 						class="transition-title"
 						style={`--view-transition-name: ${titleTransitionName};`}
 						transition:name={titleTransitionName}
-					>{pageTitle}</h1>
+					>
+						{pageTitle}
+					</h1>
 					<p class="lede">{pageDescription}</p>
+					<div class="docs-links">
+						<a href="#docs-start">Quick start <span aria-hidden="true">↓</span></a>
+						<a href="https://github.com/brnrd/dyss"
+							>Source on GitHub <span aria-hidden="true">↗</span></a
+						>
+						<a href="/build/dyss">Live examples <span aria-hidden="true">↗</span></a>
+					</div>
 				</header>
 
-				<section class="docs-panel stack" aria-labelledby="docs-overview">
-					<h2 id="docs-overview">Overview</h2>
-					<p>
-						<code>dyss</code> is a small CSSOM wrapper. It creates a stylesheet, inserts real CSS rules, and
-						lets you update them later without falling back to inline styles.
-					</p>
-					<p>
-						This page documents the public API from <code>src/dyss.js</code>: the instance properties and
-						methods you would reasonably rely on when using the library.
-					</p>
-					<div class="docs-actions">
-						<a href="/build/dyss">Back to dyss overview</a>
-						<a href="https://github.com/brnrd/dyss" target="_blank" rel="noreferrer">View package repo</a>
-					</div>
-				</section>
+				<div class="docs-layout">
+					<details class="docs-mobile-nav">
+						<summary>On this page</summary>
+						<nav aria-label="Mobile documentation sections">
+							{
+								navigation.map(group => (
+									<div class="nav-group">
+										<p class="nav-label">{group.title}</p>
+										<ul>
+											{group.links.map(link => (
+												<li>
+													<a href={`#${link.id}`}>{link.label}</a>
+												</li>
+											))}
+										</ul>
+									</div>
+								))
+							}
+						</nav>
+					</details>
+					<aside class="docs-sidebar">
+						<nav aria-label="Documentation sections">
+							{
+								navigation.map(group => (
+									<div class="nav-group">
+										<p class="nav-label">{group.title}</p>
+										<ul>
+											{group.links.map(link => (
+												<li>
+													<a href={`#${link.id}`}>{link.label}</a>
+												</li>
+											))}
+										</ul>
+									</div>
+								))
+							}
+						</nav>
+					</aside>
 
-				<section class="stack" aria-labelledby="docs-start">
-					<h2 id="docs-start">Install and start</h2>
-					<div class="docs-grid">
-						<div class="docs-panel stack">
-							<h3>Install</h3>
-							<pre><code>npm install dyss</code></pre>
-						</div>
-						<div class="docs-panel stack">
-							<h3>Minimal use</h3>
-							<pre><code>{`import Sheet from 'dyss'
+					<div class="docs-body">
+						<section class="docs-section" aria-labelledby="docs-start">
+							<p class="section-label">Getting started</p>
+							<h2 id="docs-start">Quick start</h2>
+							<p>
+								dyss is a small wrapper around the browser’s CSS Object Model (CSSOM). It creates a
+								stylesheet and edits real CSS rules, so styles apply to every matching element
+								through the normal CSS cascade.
+							</p>
+							<div class="code-example">
+								<p class="code-label">Terminal</p>
+								<Code
+									code="npm install dyss"
+									lang="sh"
+									themes={codeThemes}
+									tabindex="0"
+									aria-label="Install dyss"
+								/>
+							</div>
+							<p>Import the package into your browser code, create a sheet, and add a rule:</p>
+							<div class="code-example">
+								<p class="code-label">JavaScript</p>
+								<Code
+									code={`import Sheet from 'dyss'
 
 const sheet = new Sheet()
 
-sheet.add('.box', {
-\twidth: '120px',
-\theight: '120px',
-\tbackgroundColor: 'red'
-})`}</code></pre>
-						</div>
-					</div>
-				</section>
+sheet.add('.card', {
+	padding: '1rem',
+	backgroundColor: '#111827',
+	color: '#ffffff'
+})
 
-				<section class="stack" aria-labelledby="public-api">
-					<h2 id="public-api">Public API</h2>
-					<div class="docs-panel stack">
-						<h3>Public API surface</h3>
-						<p>
-							The current public surface in <code>dyss.js</code> is 15 items total: 2 instance properties and 13
-							non-underscored methods.
-						</p>
-						<div class="table-wrap">
-							<table>
-								<thead>
-									<tr>
-										<th scope="col">Kind</th>
-										<th scope="col">Name</th>
-										<th scope="col">Signature</th>
-									</tr>
-								</thead>
-								<tbody>
-									{publicProperties.map((entry) => (
-										<tr>
-											<td>Property</td>
-											<td><a href={`#${entry.id}`}>{entry.label}</a></td>
-											<td><code>{entry.signature}</code></td>
-										</tr>
-									))}
-									{publicApi.map((entry) => (
-										<tr>
-											<td>Method</td>
-											<td><a href={`#${entry.id}`}>{entry.label}</a></td>
-											<td><code>{entry.signature}</code></td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
-					</div>
-					{publicProperties.map((entry) => (
-						<section class="api-entry stack" id={entry.id} aria-labelledby={`${entry.id}-title`}>
-							<header class="api-heading stack">
-								<p class="api-kicker">Public Property</p>
-								<h3 id={`${entry.id}-title`}>{entry.label}</h3>
-								<code class="signature">{entry.signature}</code>
-							</header>
-							<p set:html={withInlineCode(entry.summary)}></p>
-							<p class="api-usage" set:html={withInlineCode(entry.whenToUse)}></p>
-							{hasMeaningfulReturn(entry.returns) && (
-								<p class="returns" set:html={withInlineCode(entry.returns)}></p>
-							)}
-							{entry.parameters.length > 0 && (
-								<div class="api-params stack">
-									<h4>Parameters</h4>
-									<div class="table-wrap">
-										<table>
-											<thead>
-												<tr>
-													<th scope="col">Name</th>
-													<th scope="col">Type</th>
-													<th scope="col">Description</th>
-												</tr>
-											</thead>
-											<tbody>
-												{entry.parameters.map((parameter) => (
-													<tr>
-														<td><code>{parameter.name}</code></td>
-														<td><code>{parameter.type}</code></td>
-														<td><span set:html={withInlineCode(parameter.description)}></span></td>
-													</tr>
-												))}
-											</tbody>
-										</table>
-									</div>
-								</div>
-							)}
-							<ul class="api-notes">
-								{entry.notes.map((note) => (
-									<li set:html={withInlineCode(note)}></li>
-								))}
-							</ul>
-							<pre><code>{entry.example}</code></pre>
+// Update every element with class="card".
+sheet.updateSet('.card', { backgroundColor: '#304e77' })`}
+									lang="js"
+									themes={codeThemes}
+									tabindex="0"
+									aria-label="Create and update a stylesheet"
+								/>
+							</div>
+							<p>
+								Call <a href="#destroy"><code>sheet.destroy()</code></a> during teardown to remove the
+								stylesheet.
+							</p>
+							<p class="docs-callout">
+								<strong>Browser only.</strong> Create the sheet in client-side code. In a server-rendered
+								app, wait until the component mounts. The examples below assume <code>Sheet</code> is
+								imported and <code>sheet</code> is an active instance.
+							</p>
 						</section>
-					))}
-					{publicApi.map((entry) => (
-						<section class="api-entry stack" id={entry.id} aria-labelledby={`${entry.id}-title`}>
-							<header class="api-heading stack">
-								<p class="api-kicker">Public Method</p>
-								<h3 id={`${entry.id}-title`}>{entry.label}</h3>
-								<code class="signature">{entry.signature}</code>
-							</header>
-							<p set:html={withInlineCode(entry.summary)}></p>
-							<p class="api-usage" set:html={withInlineCode(entry.whenToUse)}></p>
-							{hasMeaningfulReturn(entry.returns) && (
-								<p class="returns" set:html={withInlineCode(entry.returns)}></p>
-							)}
-							{entry.parameters.length > 0 && (
-								<div class="api-params stack">
-									<h4>Parameters</h4>
-									<div class="table-wrap">
-										<table>
-											<thead>
-												<tr>
-													<th scope="col">Name</th>
-													<th scope="col">Type</th>
-													<th scope="col">Description</th>
-												</tr>
-											</thead>
-											<tbody>
-												{entry.parameters.map((parameter) => (
-													<tr>
-														<td><code>{parameter.name}</code></td>
-														<td><code>{parameter.type}</code></td>
-														<td><span set:html={withInlineCode(parameter.description)}></span></td>
-													</tr>
-												))}
-											</tbody>
-										</table>
-									</div>
-								</div>
-							)}
-							{entry.notes.length > 0 && (
-								<ul class="api-notes">
-									{entry.notes.map((note) => (
-										<li set:html={withInlineCode(note)}></li>
-									))}
-								</ul>
-							)}
-							<pre><code>{entry.example}</code></pre>
-						</section>
-					))}
-				</section>
 
-				<section class="docs-panel stack" aria-labelledby="next-steps">
-					<h2 id="next-steps">Related pages</h2>
-					<p>
-						For practical demos, the <a href="/build/dyss">dyss overview page</a> links to interactive examples
-						built with the same package.
-					</p>
-				</section>
+						<section class="docs-section" aria-labelledby="stylesheet-modes">
+							<h2 id="stylesheet-modes">Stylesheet modes</h2>
+							<p>
+								Both modes expose the same rule API. Choose how the stylesheet is attached to the
+								document.
+							</p>
+							<div class="mode-grid">
+								<div class="mode-option">
+									<h3><code>style-tag</code> <span class="default-label">Default</span></h3>
+									<p>
+										Inserts a <code>&lt;style&gt;</code> element into <code>document.head</code>.
+										Supports <a href="#add-media-attribute">a media attribute</a> for the whole sheet.
+									</p>
+								</div>
+								<div class="mode-option">
+									<h3><code>constructed</code></h3>
+									<p>
+										Creates a <code>CSSStyleSheet</code> and adds it to <code
+											>document.adoptedStyleSheets</code
+										>. Requires browser support for both APIs.
+									</p>
+								</div>
+							</div>
+						</section>
+
+						<section class="docs-section" aria-labelledby="declarations">
+							<h2 id="declarations">Writing declarations</h2>
+							<p>
+								Pass a plain object with camelCase property names, such as <code
+									>backgroundColor</code
+								> or <code>borderRadius</code>. Use strings for values, including units where CSS
+								requires them: <code>'16px'</code>, <code>'1rem'</code>, or <code>'0'</code>.
+							</p>
+							<p>
+								Use <a href="#add"><code>add()</code></a> for a new rule, <a href="#update-set"
+									><code>updateSet()</code></a
+								> to change selected properties, and <a href="#replace-set"
+									><code>replaceSet()</code></a
+								> to replace all declarations.
+							</p>
+						</section>
+
+						<section class="docs-section" aria-labelledby="public-api">
+							<p class="section-label">Reference</p>
+							<h2 id="public-api">API at a glance</h2>
+							<p>
+								One constructor, {properties.length} instance properties, and {methods.length} methods.
+								Select a name to jump to its parameters and example.
+							</p>
+							<div
+								class="table-wrap api-index-wrap"
+								role="region"
+								aria-label="API quick reference; scroll horizontally on small screens"
+								tabindex="0"
+							>
+								<table class="api-index">
+									<caption class="sr-only">dyss public API</caption>
+									<thead
+										><tr
+											><th scope="col">Kind</th><th scope="col">Name</th><th scope="col"
+												>Signature</th
+											></tr
+										></thead
+									>
+									<tbody
+										>{
+											entries.map(entry => (
+												<tr>
+													<td class="api-kind">{entry.kind}</td>
+													<th scope="row">
+														<a href={`#${entry.id}`}>
+															<code>{entry.label}</code>
+														</a>
+													</th>
+													<td>
+														<code>{entry.signature}</code>
+													</td>
+												</tr>
+											))
+										}</tbody
+									>
+								</table>
+							</div>
+							<p class="reference-note">
+								Unless a return type is shown, methods return <code>undefined</code>. Methods are
+								called on a <code>Sheet</code> instance.
+							</p>
+						</section>
+
+						{
+							entries.map(entry => (
+								<section class="api-entry" id={entry.id} aria-labelledby={`${entry.id}-title`}>
+									<header class="api-heading">
+										<p class="section-label">{entry.kind}</p>
+										<h3 id={`${entry.id}-title`}>
+											<a href={`#${entry.id}`}>
+												<>
+													<code>{entry.label}</code>
+													<span class="anchor-mark" aria-hidden="true">
+														#
+													</span>
+												</>
+											</a>
+										</h3>
+										<code class="signature">{entry.signature}</code>
+									</header>
+									<p set:html={withInlineCode(entry.summary)} />
+									{entry.parameters.length > 0 && (
+										<div class="api-params">
+											<h4>Parameters</h4>
+											<dl>
+												{entry.parameters.map(parameter => (
+													<div class="api-param">
+														<dt>
+															<code>{parameter.name}</code>
+															<code class="param-type">{parameter.type}</code>
+														</dt>
+														<dd set:html={withInlineCode(parameter.description)} />
+													</div>
+												))}
+											</dl>
+										</div>
+									)}
+									{'type' in entry && entry.type && (
+										<p class="api-return">
+											<strong>{entry.kind === 'Property' ? 'Type' : 'Returns'}</strong>
+											<code>{entry.type}</code>
+										</p>
+									)}
+									{entry.notes.length > 0 && (
+										<ul class="api-notes">
+											{entry.notes.map(note => (
+												<li set:html={withInlineCode(note)} />
+											))}
+										</ul>
+									)}
+									<div class="code-example">
+										<p class="code-label">Example</p>
+										<Code
+											code={entry.example}
+											lang="js"
+											themes={codeThemes}
+											tabindex="0"
+											aria-label={`${entry.label} example`}
+										/>
+									</div>
+								</section>
+							))
+						}
+
+						<footer class="docs-next">
+							<h2>See it in practice</h2>
+							<p>
+								Explore interactive examples of themes, annotations, charts, and motion built with
+								dyss.
+							</p>
+							<a href="/build/dyss">Explore the examples <span aria-hidden="true">→</span></a>
+							<a href="#docs-start">Back to quick start <span aria-hidden="true">↑</span></a>
+						</footer>
+					</div>
+				</div>
 			</article>
 		</main>
 		<Footer />
@@ -627,121 +673,474 @@ sheet.add('.box', {
 </html>
 
 <style>
-	.dyss-docs :is(p, li) {
-		font-size: clamp(1rem, 1.2vw, 1.15rem);
-		line-height: 1.7;
+	.docs-main {
+		max-width: 1180px;
+	}
+
+	.dyss-docs {
+		max-width: none;
+		--docs-space: clamp(2.75rem, 5vw, 4rem);
+	}
+
+	.dyss-docs :is(p, li, dd) {
+		font-size: 0.95rem;
+		line-height: 1.75;
+		hyphens: none;
+	}
+
+	.dyss-docs :is(h2, h3, h4, p, ul, dl, pre) {
+		margin: 0;
+	}
+
+	.dyss-docs :is(section, code) {
+		overflow-wrap: normal;
+	}
+
+	.dyss-docs h2 {
+		font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+		letter-spacing: -0.035em;
+		line-height: 1.25;
+	}
+
+	.docs-header {
+		padding-block: 0.5rem 2.5rem;
+		border-bottom: 1px solid var(--hairline);
+	}
+
+	.docs-header h1 {
+		margin-block: 1rem;
 	}
 
 	.dyss-docs .lede {
-		max-width: 62ch;
+		max-width: 52ch;
+		font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+		line-height: 1.65;
 	}
 
-	.docs-panel,
-	.api-entry {
-		border: 1px solid var(--hairline);
-		border-radius: 0.9rem;
-		padding: 1rem;
-		background: color-mix(in oklab, var(--color-bg) 94%, white);
+	.docs-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem 1.75rem;
+		margin-top: 1.5rem;
+		font-size: 0.85rem;
 	}
 
-	.docs-actions,
-	.docs-grid {
+	.docs-links a {
+		text-underline-offset: 0.25em;
+	}
+
+	.docs-layout {
 		display: grid;
-		gap: 0.8rem;
+		grid-template-columns: 12rem minmax(0, 1fr);
+		gap: clamp(2rem, 5vw, 4.5rem);
+		align-items: start;
 	}
 
-	.docs-actions {
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	.docs-sidebar {
+		position: sticky;
+		top: 1.5rem;
+		max-height: calc(100dvh - 3rem);
+		overflow-y: auto;
+		padding-inline-end: 0.75rem;
+		scrollbar-width: thin;
 	}
 
-	.docs-grid {
-		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	.docs-mobile-nav {
+		display: none;
 	}
 
-	.docs-actions a,
-	.api-kicker,
-	.fine-print,
-	.signature,
-	.returns,
-	.api-usage {
+	.nav-group + .nav-group {
+		margin-top: 1.25rem;
+	}
+
+	.dyss-docs :is(.nav-label, .section-label, .code-label) {
 		font-family: var(--font-label);
-	}
-
-	.docs-actions a {
-		display: block;
-		padding: 0.8rem 0.9rem;
-		border: 1px solid var(--hairline);
-		border-radius: 0.7rem;
-		text-decoration: none;
-		background: color-mix(in oklab, var(--color-bg) 90%, white);
-		font-size: 0.78rem;
+		font-size: 0.7rem;
+		line-height: 1.5;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
+		color: var(--color-ink-muted);
 	}
 
-	.api-heading h3,
-	.docs-panel h3 {
+	.nav-group ul {
+		list-style: none;
+		padding: 0;
+		margin-top: 0.4rem;
+	}
+
+	.nav-group li + li {
 		margin: 0;
 	}
 
-	.api-kicker,
-	.fine-print,
-	.returns {
-		font-size: 0.74rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: color-mix(in oklab, var(--color-ink-muted) 80%, transparent);
-	}
-
-	.api-usage {
+	.nav-group a {
+		display: block;
+		padding: 0.25rem 0.5rem;
+		margin-inline-start: -0.5rem;
+		border-radius: 0.25rem;
+		color: var(--color-ink-muted);
 		font-size: 0.8rem;
 		line-height: 1.6;
-		padding: 0.55rem 0.7rem;
-		border-left: 2px solid var(--hairline);
-		background: rgba(20, 22, 26, 0.03);
+		text-decoration: none;
 	}
 
-	.api-params h4 {
-		font-family: var(--font-label);
-		font-size: 0.76rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		margin: 0;
+	.nav-group a:hover,
+	.nav-group a:focus-visible {
+		background: var(--color-wash);
+		color: var(--color-accent-2);
 	}
 
-	.api-params table :is(td, th) {
-		font-size: 0.88rem;
-		line-height: 1.5;
+	.docs-body {
+		min-width: 0;
 	}
 
-	.signature {
-		display: inline-block;
-		padding: 0.35rem 0.5rem;
-		border-radius: 0.5rem;
-		background: rgba(20, 22, 26, 0.06);
-		font-size: 0.8rem;
-		line-height: 1.5;
-		white-space: pre-wrap;
-		word-break: break-word;
+	.docs-section + .docs-section,
+	.api-entry,
+	.docs-next {
+		margin-top: var(--docs-space);
 	}
 
-	.api-entry {
-		scroll-margin-top: 1.5rem;
+	.docs-section > * + *,
+	.api-entry > * + * {
+		margin-top: 1.1rem;
 	}
 
-	.api-notes {
-		padding-left: 1.1rem;
-		margin: 0;
-	}
-
-	.api-notes li + li {
+	.docs-section > .section-label + h2 {
 		margin-top: 0.45rem;
 	}
 
+	.dyss-docs :is(section[id], h2[id]) {
+		scroll-margin-top: 2rem;
+	}
+
+	.docs-callout {
+		padding: 0.9rem 1.1rem;
+		border-inline-start: 3px solid var(--color-accent);
+		background: color-mix(in oklab, var(--color-wash) 50%, transparent);
+	}
+
+	.docs-callout strong {
+		color: var(--color-ink);
+	}
+
+	.mode-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.25rem;
+	}
+
+	.mode-option {
+		padding: 1.1rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0.4rem;
+	}
+
+	.mode-option h3 {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: 0.95rem;
+		line-height: 1.5;
+		margin-bottom: 0.65rem;
+	}
+
+	.mode-option h3 code {
+		padding: 0;
+		background: transparent;
+	}
+
+	.default-label {
+		font-family: var(--font-label);
+		font-size: 0.65rem;
+		font-weight: normal;
+		color: var(--color-accent-2);
+		background: var(--color-wash);
+		border-radius: 0.2rem;
+		padding: 0.15rem 0.4rem;
+	}
+
+	.dyss-docs .mode-option p {
+		font-size: 0.85rem;
+	}
+
+	.api-index-wrap {
+		border: 1px solid var(--hairline);
+		border-radius: 0.4rem;
+	}
+
+	.api-index {
+		table-layout: auto;
+		min-width: 38rem;
+		font-size: 0.8rem;
+		line-height: 1.6;
+	}
+
+	.api-index :is(th, td) {
+		padding: 0.75rem;
+	}
+
+	.api-index thead {
+		background: color-mix(in oklab, var(--color-wash) 60%, transparent);
+	}
+
+	.api-index thead th {
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		font-weight: normal;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.api-index :is(th:first-child, .api-kind) {
+		width: 1%;
+		white-space: nowrap;
+		word-break: normal;
+		hyphens: none;
+	}
+
+	.api-kind {
+		color: var(--color-ink-muted);
+		font-size: 0.75rem;
+	}
+
+	.api-index tbody th {
+		width: 1%;
+		white-space: nowrap;
+		font-weight: normal;
+	}
+
+	.api-index tbody tr:last-child > * {
+		border-bottom: 0;
+	}
+
+	.api-index tbody tr:hover {
+		background: color-mix(in oklab, var(--color-wash) 35%, transparent);
+	}
+
+	.api-index code {
+		padding: 0;
+		background: transparent;
+	}
+
+	.api-index td:last-child {
+		overflow-wrap: normal;
+		word-break: normal;
+	}
+
+	.dyss-docs .reference-note {
+		font-size: 0.8rem;
+	}
+
+	.api-entry {
+		border-top: 1px solid var(--hairline);
+		padding-top: 2rem;
+	}
+
+	.api-heading h3 {
+		font-size: 1.45rem;
+		line-height: 1.4;
+		margin-block: 0.35rem 0.8rem;
+	}
+
+	.api-heading h3 a {
+		color: var(--color-ink);
+		text-decoration: none;
+	}
+
+	.api-heading h3 code {
+		background: transparent;
+		padding: 0;
+	}
+
+	.anchor-mark {
+		margin-left: 0.6rem;
+		color: var(--color-accent);
+		opacity: 0;
+		font-size: 1rem;
+	}
+
+	.api-heading h3 a:hover .anchor-mark,
+	.api-heading h3 a:focus-visible .anchor-mark {
+		opacity: 1;
+	}
+
+	.signature {
+		display: block;
+		padding: 0.65rem 0.85rem;
+		border-radius: 0.25rem;
+		background: color-mix(in oklab, var(--color-wash) 60%, transparent);
+		font-size: 0.85rem;
+		line-height: 1.7;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+
+	.api-params h4 {
+		font-size: 0.85rem;
+		line-height: 1.5;
+		margin-bottom: 0.4rem;
+	}
+
+	.api-params dl {
+		display: block;
+	}
+
+	.api-param {
+		padding-block: 0.75rem;
+		border-bottom: 1px solid var(--hairline);
+	}
+
+	.api-param dt {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.35rem 0.85rem;
+		font-size: 0.85rem;
+		line-height: 1.6;
+	}
+
+	.param-type {
+		color: var(--color-ink-muted);
+		background: transparent;
+		font-weight: normal;
+		overflow-wrap: anywhere;
+	}
+
+	.dyss-docs .api-param dd {
+		margin: 0.4rem 0 0;
+		font-size: 0.85rem;
+		color: var(--color-ink-muted);
+	}
+
+	.dyss-docs .api-return {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.5rem 0.85rem;
+		font-size: 0.85rem;
+	}
+
+	.api-return strong {
+		color: var(--color-ink);
+	}
+
+	.api-notes {
+		padding-left: 1.2rem;
+	}
+
+	.dyss-docs .api-notes li {
+		font-size: 0.85rem;
+	}
+
+	.code-example {
+		min-width: 0;
+		border: 1px solid var(--hairline);
+		border-radius: 0.4rem;
+		overflow: hidden;
+	}
+
+	.dyss-docs .code-label {
+		padding: 0.55rem 1rem;
+		border-bottom: 1px solid var(--hairline);
+		background: color-mix(in oklab, var(--color-wash) 40%, transparent);
+		font-size: 0.65rem;
+	}
+
+	.code-example :global(pre) {
+		margin: 0;
+		padding: 1rem;
+		border-radius: 0;
+		font-size: 0.8rem;
+		line-height: 1.85;
+		tab-size: 2;
+	}
+
+	:global(html.theme-dark) .code-example :global(.astro-code),
+	:global(html.theme-dark) .code-example :global(.astro-code span) {
+		color: var(--shiki-dark) !important;
+		background-color: var(--shiki-dark-bg) !important;
+	}
+
+	.docs-next {
+		border-top: 1px solid var(--hairline);
+		padding-block: 2rem 0;
+	}
+
+	.docs-next p {
+		margin-block: 0.85rem 1rem;
+	}
+
+	.docs-next > a {
+		display: inline-block;
+		font-size: 0.85rem;
+		margin: 0.5rem 1.5rem 0 0;
+	}
+
+	@media (max-width: 900px) {
+		.docs-layout {
+			grid-template-columns: 10rem minmax(0, 1fr);
+			gap: 1.75rem;
+		}
+
+		.mode-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
 	@media (max-width: 720px) {
-		.docs-panel,
-		.api-entry {
-			padding: 0.85rem;
+		.docs-header {
+			padding-bottom: 1.75rem;
+		}
+
+		.docs-layout {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 2rem;
+		}
+
+		.docs-sidebar {
+			display: none;
+		}
+
+		.docs-mobile-nav {
+			display: block;
+			padding: 0 0 1rem;
+			border-bottom: 1px solid var(--hairline);
+			border-radius: 0;
+			background: transparent;
+		}
+
+		.docs-mobile-nav summary {
+			cursor: pointer;
+			font-size: 0.85rem;
+			font-weight: 600;
+			color: var(--color-ink);
+		}
+
+		.docs-mobile-nav nav {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 1rem;
+			margin-top: 1.25rem;
+		}
+
+		.nav-group + .nav-group {
+			margin-top: 0;
+		}
+
+		.nav-group:last-child {
+			grid-column: 1 / -1;
+		}
+
+		.nav-group:last-child ul {
+			columns: 2;
+		}
+
+		.nav-group li {
+			break-inside: avoid;
+		}
+
+		.api-heading h3 {
+			font-size: 1.25rem;
 		}
 	}
 </style>
