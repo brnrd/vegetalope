@@ -1,0 +1,352 @@
+---
+import DyssExample from '../../../../layouts/DyssExample.astro'
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro'
+const title = 'dyss: spring motion'
+const description = 'Motion with a reason: spring force, inertia, damping, and a place to settle.'
+---
+
+<DyssExample title={title} description={description} wide>
+	<div class="experiment-shell" data-dyss-spring>
+		<div class="experiment-heading">
+			<div>
+				<p class="experiment-kicker">Physical motion / live transforms</p><h2>
+					A little give. A little follow-through.
+				</h2>
+			</div><span class="experiment-label" data-spring-status role="status">Ready to release</span>
+		</div>
+		<div class="spring-layout">
+			<div class="spring-visual">
+				<div
+					class="spring-stage"
+					data-spring-stage
+					aria-label="Spring rail; click to move the rest position"
+				>
+					<span class="spring-anchor" aria-hidden="true"></span>
+					<div class="spring-rail" aria-hidden="true"></div>
+					<div class="spring-target" data-spring-target aria-hidden="true"><span>REST</span></div>
+					<svg class="spring-coil" data-spring-svg aria-hidden="true"
+						><path data-spring-coil fill="none"></path></svg
+					>
+					<button
+						type="button"
+						class="spring-mass"
+						data-spring-mass
+						aria-label="Spring mass. Drag and release, or use arrow keys to move the rest position."
+						><span>1.0</span><small>kg</small></button
+					>
+					<p>DRAG &amp; RELEASE <span>← MOVE REST POSITION →</span></p>
+				</div>
+				<div class="spring-readouts">
+					<div><span>Displacement</span><strong data-spring-displacement>−65 cm</strong></div><div>
+						<span>Velocity</span><strong data-spring-velocity>0.00 m/s</strong>
+					</div><div><span>Damping ratio / ζ</span><strong data-spring-ratio>0.60</strong></div>
+				</div>
+				<div class="spring-history">
+					<div>
+						<h3>Position over time</h3><span class="experiment-label"
+							>– – Rest &nbsp; ━━ Mass / last 6s</span
+						>
+					</div><svg
+						viewBox="0 0 600 100"
+						role="img"
+						aria-label="Position history showing the spring settling around its rest position"
+						><path class="spring-chart-grid" d="M0 10H600 M0 50H600 M0 90H600"></path><path
+							class="spring-rest-trace"
+							data-spring-rest-trace
+							fill="none"></path><path
+							class="spring-position-trace"
+							data-spring-position-trace
+							fill="none"></path></svg
+					>
+				</div>
+			</div>
+			<form class="experiment-controls spring-controls">
+				<h3>Feel the difference</h3><div
+					class="experiment-actions"
+					role="group"
+					aria-label="Spring presets"
+				>
+					<button
+						type="button"
+						class="experiment-button"
+						data-spring-preset="soft"
+						aria-pressed="false">Soft</button
+					><button
+						type="button"
+						class="experiment-button"
+						data-spring-preset="balanced"
+						aria-pressed="true">Balanced</button
+					><button
+						type="button"
+						class="experiment-button"
+						data-spring-preset="heavy"
+						aria-pressed="false">Heavy</button
+					>
+				</div>
+				{
+					[
+						{
+							key: 'stiffness',
+							label: 'Stiffness',
+							min: 40,
+							max: 300,
+							step: 5,
+							value: 100,
+							unit: 'N/m',
+						},
+						{
+							key: 'damping',
+							label: 'Damping',
+							min: 1,
+							max: 50,
+							step: 1,
+							value: 12,
+							unit: 'N·s/m',
+						},
+						{ key: 'mass', label: 'Mass', min: 0.3, max: 3, step: 0.1, value: 1, unit: 'kg' },
+					].map(p => (
+						<label class="spring-control">
+							<>
+								<span class="experiment-label">
+									{p.label}
+									<output data-spring-output={p.key}>
+										{p.value} {p.unit}
+									</output>
+								</span>
+								<input
+									type="range"
+									min={p.min}
+									max={p.max}
+									step={p.step}
+									value={p.value}
+									data-spring-param={p.key}
+								/>
+							</>
+						</label>
+					))
+				}
+				<p class="spring-behavior" data-spring-behavior></p><p class="experiment-meta">
+					Less damping lets the mass overshoot. More mass carries momentum longer. Click the rail or
+					use ← / → on the mass to move its rest position.
+				</p>
+			</form>
+		</div>
+		<div class="experiment-actions spring-actions">
+			<button type="button" class="experiment-button primary" data-spring-release
+				>Release test</button
+			><button type="button" class="experiment-button" data-spring-pause disabled
+				>Pause motion</button
+			><button type="button" class="experiment-button" data-spring-reset>Reset</button>
+		</div>
+		<p class="experiment-meta">
+			Illustrative one-dimensional spring: F = −kx − cv. Position comes from the same fixed-step
+			simulation at every screen refresh rate.
+		</p>
+		<details class="experiment-code">
+			<summary>Behind the motion / live dyss rules</summary><LiveCodeSection />
+		</details>
+	</div>
+	<script src="../../../../scripts/dyss-spring-motion.js"></script>
+</DyssExample>
+<style>
+	.spring-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1.7fr) minmax(230px, 0.8fr);
+		gap: 1.7rem;
+		align-items: start;
+	}
+	.spring-stage {
+		position: relative;
+		height: 250px;
+		border: 1px solid var(--hairline);
+		border-radius: 3px;
+		background: var(--color-bg);
+		overflow: hidden;
+		cursor: crosshair;
+	}
+	.spring-rail {
+		position: absolute;
+		left: 28px;
+		right: 22px;
+		top: 50%;
+		border-top: 1px dashed var(--hairline);
+	}
+	.spring-anchor {
+		position: absolute;
+		left: 24px;
+		top: calc(50% - 27px);
+		width: 6px;
+		height: 54px;
+		background: var(--color-ink-muted);
+		border-radius: 1px;
+	}
+	.spring-target {
+		position: absolute;
+		top: 25%;
+		bottom: 25%;
+		left: 50%;
+		border-left: 1px dashed var(--color-ink-muted);
+	}
+	.spring-target span {
+		white-space: nowrap;
+		position: absolute;
+		top: -1rem;
+		left: -0.7rem;
+		font: 0.5rem var(--font-label);
+		color: var(--color-ink-muted);
+	}
+	.spring-coil {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+	.spring-coil path {
+		stroke: #719f9a;
+		stroke-width: 2;
+		stroke-linejoin: round;
+	}
+	.spring-mass {
+		position: absolute;
+		left: 22.9167%;
+		top: 50%;
+		translate: -50% -50%;
+		width: 62px;
+		height: 62px;
+		border-radius: 7px;
+		border: 1px solid #345d5a;
+		background: #c0d6cd;
+		color: #25433e;
+		box-shadow: 0 4px 0 #25433e24;
+		cursor: grab;
+		touch-action: none;
+		user-select: none;
+		padding: 0;
+		font-family: var(--font-label);
+		text-transform: none;
+		letter-spacing: 0;
+	}
+	.spring-mass:active {
+		cursor: grabbing;
+		box-shadow: 0 1px 0 #25433e24;
+	}
+	.spring-mass span {
+		font-size: 1.05rem;
+		display: block;
+		line-height: 1.3;
+	}
+	.spring-mass small {
+		font-size: 0.52rem;
+	}
+	.spring-stage > p {
+		position: absolute;
+		inset: auto 0.8rem 0.6rem;
+		margin: 0;
+		display: flex;
+		justify-content: space-between;
+		gap: 0.5rem;
+		font: 0.5rem/1.7 var(--font-label);
+		color: var(--color-ink-muted);
+		pointer-events: none;
+	}
+	.spring-readouts {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		border-bottom: 1px solid var(--hairline);
+		gap: 0.5rem;
+		padding-block: 1rem;
+	}
+	.spring-readouts span {
+		display: block;
+		font: 0.55rem/1.6 var(--font-label);
+		color: var(--color-ink-muted);
+	}
+	.spring-readouts strong {
+		display: block;
+		font: 0.9rem/1.7 var(--font-label);
+		font-variant-numeric: tabular-nums;
+	}
+	.spring-history {
+		padding-top: 1.2rem;
+	}
+	.spring-history > div {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
+	.spring-history h3 {
+		font-size: 0.75rem;
+		margin: 0;
+	}
+	.spring-history .experiment-label {
+		font-size: 0.53rem;
+	}
+	.spring-history svg {
+		width: 100%;
+		display: block;
+		margin-top: 0.6rem;
+	}
+	.spring-chart-grid {
+		fill: none;
+		stroke: var(--hairline);
+		stroke-width: 0.6;
+	}
+	.spring-rest-trace {
+		stroke: var(--color-ink-muted);
+		stroke-width: 1;
+		stroke-dasharray: 4 4;
+	}
+	.spring-position-trace {
+		stroke: #719f9a;
+		stroke-width: 2;
+		stroke-linejoin: round;
+	}
+	.spring-controls h3 {
+		font-size: 0.8rem;
+		margin: 0 0 0.8rem;
+	}
+	.spring-control {
+		display: grid;
+		gap: 0.6rem;
+		margin-top: 1.5rem;
+	}
+	.spring-control > span {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
+	.spring-controls .spring-behavior {
+		font: 0.75rem/1.6 var(--font-label);
+		margin: 1.5rem 0 0;
+	}
+	.spring-actions {
+		padding-top: 1.2rem;
+		border-top: 1px solid var(--hairline);
+		margin-top: 1.2rem;
+	}
+	@media (max-width: 750px) {
+		.spring-layout {
+			grid-template-columns: 1fr;
+		}
+		.spring-stage {
+			height: 220px;
+		}
+		.spring-controls {
+			border-top: 1px solid var(--hairline);
+			padding-top: 1rem;
+		}
+		.spring-stage > p span {
+			display: none;
+		}
+	}
+	@media (max-width: 420px) {
+		.spring-readouts span {
+			font-size: 0.48rem;
+		}
+		.spring-readouts strong {
+			font-size: 0.75rem;
+		}
+	}
+</style>

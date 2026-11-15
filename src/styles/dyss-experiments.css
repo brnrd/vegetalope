@@ -1,0 +1,113 @@
+.experiment-shell {
+	--experiment-surface: color-mix(in oklab, var(--color-bg) 96%, var(--color-ink));
+	padding: clamp(0.9rem, 3vw, 1.5rem);
+	border: 1px solid var(--hairline);
+	border-radius: 0.5rem;
+	background: var(--experiment-surface);
+	min-width: 0;
+}
+.experiment-heading,
+.experiment-actions,
+.experiment-presets {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 0.7rem;
+}
+.experiment-heading {
+	margin-bottom: 1.4rem;
+}
+.experiment-heading h2 {
+	margin: 0;
+	font-size: clamp(1.25rem, 3vw, 1.6rem);
+	letter-spacing: -0.04em;
+}
+.experiment-shell .experiment-kicker,
+.experiment-label,
+.experiment-meta {
+	font-family: var(--font-label);
+	font-size: 0.65rem;
+	line-height: 1.65;
+	color: var(--color-ink-muted);
+}
+.experiment-shell .experiment-kicker {
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	margin: 0 0 0.35rem;
+}
+.experiment-shell .experiment-meta {
+	margin: 0.8rem 0 0;
+}
+.experiment-actions {
+	justify-content: flex-start;
+}
+.experiment-shell .experiment-button,
+.experiment-controls button,
+.experiment-controls select {
+	font: 0.65rem/1.5 var(--font-label);
+	letter-spacing: 0;
+	text-transform: none;
+	padding: 0.5rem 0.7rem;
+	border: 1px solid var(--hairline);
+	border-radius: 3px;
+	color: var(--color-ink);
+	background: transparent;
+	cursor: pointer;
+}
+.experiment-shell .experiment-button[aria-pressed='true'],
+.experiment-shell .experiment-button.primary {
+	color: var(--color-bg);
+	background: var(--color-ink);
+	border-color: var(--color-ink);
+}
+.experiment-shell button:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+.experiment-controls input:not([type='range']):not([type='color']):not([type='checkbox']) {
+	font: 0.72rem/1.4 var(--font-label);
+	min-width: 0;
+	width: 100%;
+	padding: 0.45rem;
+	color: var(--color-ink);
+	background: var(--color-bg);
+	border: 1px solid var(--hairline);
+	border-radius: 3px;
+}
+.experiment-controls input[type='range'] {
+	width: 100%;
+	min-width: 0;
+	accent-color: var(--color-accent);
+}
+.experiment-controls .dyss-color-input input[type='text'] {
+	padding-inline: 1.1rem 0.5rem;
+	border-radius: 0 3px 3px 0;
+}
+.experiment-code {
+	margin-top: 1.4rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--hairline);
+	min-width: 0;
+}
+.experiment-code summary {
+	font: 0.66rem/1.5 var(--font-label);
+	cursor: pointer;
+}
+.experiment-code .dyss-live-code {
+	margin-top: 1rem;
+	--dyss-code-max-height: 260px;
+}
+.experiment-code .dyss-live-code h3 {
+	font-size: 0.8rem;
+}
+.experiment-code pre {
+	border-radius: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+	.experiment-shell *,
+	.experiment-shell *::before,
+	.experiment-shell *::after {
+		transition-duration: 0s !important;
+	}
+}

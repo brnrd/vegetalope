@@ -1,238 +1,129 @@
-import Sheet from 'dyss';
-import { registerDemo } from './dyss-demo-lifecycle.js';
-
-function normalizeHex(value) {
-	const raw = String(value).trim().replace(/^#/, '');
-	if (raw.length === 3 && /^[0-9a-fA-F]{3}$/.test(raw)) {
-		return `#${raw
-			.split('')
-			.map((char) => char + char)
-			.join('')
-			.toLowerCase()}`;
-	}
-	if (raw.length === 6 && /^[0-9a-fA-F]{6}$/.test(raw)) {
-		return `#${raw.toLowerCase()}`;
-	}
-	return null;
+import Sheet from 'dyss'
+import { registerDemo } from './dyss-demo-lifecycle.js'
+import { normalizeHex } from './utils/hex-color.js'
+import { contrastRatio, readableInk } from './utils/contrast.js'
+const themes = {
+	signal: {
+		bg: '#f6f1e8',
+		ink: '#293448',
+		accent: '#a14132',
+		surfaceMix: 94,
+		typeScale: 1,
+		spaceScale: 1,
+	},
+	noir: {
+		bg: '#101925',
+		ink: '#eee9de',
+		accent: '#7fc8b5',
+		surfaceMix: 89,
+		typeScale: 1,
+		spaceScale: 1,
+	},
+	studio: {
+		bg: '#edf2f8',
+		ink: '#233750',
+		accent: '#6356a3',
+		surfaceMix: 95,
+		typeScale: 1.03,
+		spaceScale: 1.06,
+	},
 }
-
-function toHexFieldValue(value) {
-	return String(value).replace(/^#/, '');
-}
-
-function sanitizeHexInput(input) {
-	const cleaned = String(input.value)
-		.replace(/^#/, '')
-		.replace(/[^0-9a-fA-F]/g, '')
-		.slice(0, 6)
-		.toLowerCase();
-	if (input.value !== cleaned) input.value = cleaned;
-	return cleaned;
-}
-
-function parseHexInputValue(value, allowShort = false) {
-	const raw = String(value).trim().replace(/^#/, '');
-	if (raw.length === 6) return normalizeHex(raw);
-	if (allowShort && raw.length === 3) return normalizeHex(raw);
-	return null;
-}
-
-const defaults = {
-	bg: '#f6f1e8',
-	ink: '#14161a',
-	accent: '#c21f2b',
-	surfaceMix: 92,
-	typeScale: 1,
-	spaceScale: 1
-};
-
-function toNumber(value, fallback) {
-	const number = Number(value);
-	return Number.isFinite(number) ? number : fallback;
-}
-
-function clamp(value, min, max) {
-	return Math.min(max, Math.max(min, value));
-}
-
-function formatScale(value) {
-	return `${value.toFixed(2)}x`;
-}
-
-function updateOutputs(root, tokens) {
-	const surfaceOut = root.querySelector('[data-output="surfaceMix"]');
-	const typeOut = root.querySelector('[data-output="typeScale"]');
-	const spaceOut = root.querySelector('[data-output="spaceScale"]');
-	if (surfaceOut) surfaceOut.textContent = `${Math.round(tokens.surfaceMix)}%`;
-	if (typeOut) typeOut.textContent = formatScale(tokens.typeScale);
-	if (spaceOut) spaceOut.textContent = formatScale(tokens.spaceScale);
-}
-
-function updateCode(codeEl, selector, tokens) {
-	const codeTokens = {
-		bg: tokens.bg,
-		ink: tokens.ink,
-		accent: tokens.accent,
-		surfaceMix: Math.round(tokens.surfaceMix),
-		typeScale: Number(tokens.typeScale.toFixed(2)),
-		spaceScale: Number(tokens.spaceScale.toFixed(2))
-	};
-
-	codeEl.textContent = [
-		`const tokens = ${JSON.stringify(codeTokens, null, 2)};`,
-		'',
-		`sheet.updateSet('${selector}', {`,
-		`  '--tm-bg': tokens.bg,`,
-		`  '--tm-ink': tokens.ink,`,
-		`  '--tm-accent': tokens.accent,`,
-		`  '--tm-surface-mix': tokens.surfaceMix + '%',`,
-		`  '--tm-type-scale': tokens.typeScale,`,
-		`  '--tm-space-scale': tokens.spaceScale`,
-		`});`
-	].join('\n');
-}
-
 function mountThemeMixer(root) {
-	const controls = root.querySelector('[data-dyss-controls]');
-	const preview = root.querySelector('[data-theme-preview]');
-	const code = root.querySelector('[data-dyss-code]');
-
-	if (!controls || !preview || !code) return;
-
-	const sheet = new Sheet();
-	const className = `dyss-theme-${Math.random().toString(36).slice(2, 9)}`;
-	const selector = `.theme-preview.${className}`;
-	preview.classList.add(className);
-
-	const tokens = { ...defaults };
-	const hexTimers = new Map();
-
-	sheet.add(selector, {
-		'--tm-bg': tokens.bg,
-		'--tm-ink': tokens.ink,
-		'--tm-accent': tokens.accent,
-		'--tm-surface-mix': `${Math.round(tokens.surfaceMix)}%`,
-		'--tm-type-scale': tokens.typeScale,
-		'--tm-space-scale': tokens.spaceScale
-	});
-
-	const rule = sheet.get(selector);
-	if (!rule) return;
-
-	function applyTokens() {
-		rule.style.setProperty('--tm-bg', tokens.bg);
-		rule.style.setProperty('--tm-ink', tokens.ink);
-		rule.style.setProperty('--tm-accent', tokens.accent);
-		rule.style.setProperty('--tm-surface-mix', `${Math.round(tokens.surfaceMix)}%`);
-		rule.style.setProperty('--tm-type-scale', String(tokens.typeScale));
-		rule.style.setProperty('--tm-space-scale', String(tokens.spaceScale));
-		updateOutputs(root, tokens);
-		updateCode(code, selector, tokens);
-	}
-
+	const controls = root.querySelector('[data-dyss-controls]'),
+		preview = root.querySelector('[data-theme-preview]'),
+		code = root.querySelector('[data-dyss-code]')
+	const sheet = new Sheet(),
+		scope = `theme-${Math.random().toString(36).slice(2, 9)}`
+	preview.classList.add(scope)
+	const selector = `.theme-preview.${scope}`
+	let preset = 'signal',
+		tokens = { ...themes[preset] },
+		saved = false
 	function syncControls() {
-		const inputs = controls.querySelectorAll('[data-token]');
-		for (const input of inputs) {
-			if (!(input instanceof HTMLInputElement)) continue;
-			const token = input.getAttribute('data-token');
-			if (!token) continue;
-			if (token === 'bg' || token === 'ink' || token === 'accent') {
-				input.value = input.type === 'text' ? toHexFieldValue(tokens[token]) : tokens[token];
-			}
-			if (token === 'surfaceMix') {
-				input.value = String(tokens.surfaceMix);
-			}
-			if (token === 'typeScale') {
-				input.value = String(tokens.typeScale);
-			}
-			if (token === 'spaceScale') {
-				input.value = String(tokens.spaceScale);
-			}
+		for (const input of controls.querySelectorAll('[data-token]')) {
+			const key = input.dataset.token
+			input.value = input.type === 'text' ? String(tokens[key]).slice(1) : tokens[key]
 		}
 	}
-
-	function syncColorTokenInputs(token) {
-		const tokenInputs = controls.querySelectorAll(`[data-token="${token}"]`);
-		for (const input of tokenInputs) {
-			if (!(input instanceof HTMLInputElement)) continue;
-			input.value = input.type === 'text' ? toHexFieldValue(tokens[token]) : tokens[token];
-		}
+	function render(custom = false) {
+		if (!sheet.get(selector)) sheet.add(selector, {})
+		const rule = sheet.get(selector)
+		for (const [key, value] of Object.entries({
+			'--tm-bg': tokens.bg,
+			'--tm-ink': tokens.ink,
+			'--tm-accent': tokens.accent,
+			'--tm-accent-ink': readableInk(tokens.accent),
+			'--tm-surface-mix': `${tokens.surfaceMix}%`,
+			'--tm-type-scale': String(tokens.typeScale),
+			'--tm-space-scale': String(tokens.spaceScale),
+		}))
+			rule.style.setProperty(key, value)
+		for (const key of ['surfaceMix', 'typeScale', 'spaceScale'])
+			root.querySelector(`[data-output="${key}"]`).textContent =
+				key === 'surfaceMix' ? `${tokens[key]}%` : `${tokens[key].toFixed(2)}×`
+		for (const button of controls.querySelectorAll('[data-theme]'))
+			button.setAttribute('aria-pressed', String(button.dataset.theme === preset))
+		root.querySelector('[data-theme-status]').textContent =
+			`${preset[0].toUpperCase() + preset.slice(1)} / ${custom ? 'customized' : 'original'}`
+		const ratio = contrastRatio(tokens.bg, tokens.ink)
+		root.querySelector('[data-theme-contrast]').textContent =
+			`Paper / ink: ${ratio.toFixed(2)}:1 · ${ratio >= 4.5 ? 'passes' : 'below'} normal-text AA contrast. Button text adapts to the accent.`
+		code.textContent = [
+			`// One live dyss rule supplies every component token.`,
+			`const rule = sheet.get('${selector}');`,
+			`rule.style.setProperty('--tm-bg', '${tokens.bg}');`,
+			`rule.style.setProperty('--tm-ink', '${tokens.ink}');`,
+			`rule.style.setProperty('--tm-accent', '${tokens.accent}');`,
+			`rule.style.setProperty('--tm-accent-ink', '${readableInk(tokens.accent)}');`,
+			`rule.style.setProperty('--tm-surface-mix', '${tokens.surfaceMix}%');`,
+			`rule.style.setProperty('--tm-type-scale', '${tokens.typeScale}');`,
+			`rule.style.setProperty('--tm-space-scale', '${tokens.spaceScale}');`,
+		].join('\n')
 	}
-
-	function commitTokenHexInput(target, token, allowShort = false) {
-		const normalized = parseHexInputValue(target.value, allowShort);
-		if (!normalized) return;
-		tokens[token] = normalized;
-		syncColorTokenInputs(token);
-		applyTokens();
-	}
-
-	controls.addEventListener('input', (event) => {
-		const target = event.target;
-		if (!(target instanceof HTMLInputElement)) return;
-		const token = target.getAttribute('data-token');
-		if (!token) return;
-
-		if (token === 'bg' || token === 'ink' || token === 'accent') {
-			if (target.type === 'text') {
-				sanitizeHexInput(target);
-				const currentTimer = hexTimers.get(target);
-				if (currentTimer) window.clearTimeout(currentTimer);
-				const timer = window.setTimeout(() => {
-					commitTokenHexInput(target, token, false);
-					hexTimers.delete(target);
-				}, 180);
-				hexTimers.set(target, timer);
-				return;
-			} else {
-				tokens[token] = target.value;
-				syncColorTokenInputs(token);
-				applyTokens();
-				return;
-			}
-		}
-
-		if (token === 'surfaceMix') {
-			tokens.surfaceMix = clamp(toNumber(target.value, defaults.surfaceMix), 70, 98);
-		}
-
-		if (token === 'typeScale') {
-			tokens.typeScale = clamp(toNumber(target.value, defaults.typeScale), 0.85, 1.3);
-		}
-
-		if (token === 'spaceScale') {
-			tokens.spaceScale = clamp(toNumber(target.value, defaults.spaceScale), 0.8, 1.4);
-		}
-
-		applyTokens();
-	});
-
+	controls.addEventListener('submit', event => event.preventDefault())
+	controls.addEventListener('input', event => {
+		const input = event.target,
+			key = input.dataset.token
+		if (!key) return
+		if (['bg', 'ink', 'accent'].includes(key)) {
+			const value = normalizeHex(input.value)
+			if (!value) return
+			tokens[key] = value
+			for (const peer of controls.querySelectorAll(`[data-token="${key}"]`))
+				if (peer !== input) peer.value = peer.type === 'text' ? value.slice(1) : value
+		} else tokens[key] = Number(input.value)
+		render(true)
+	})
 	controls.addEventListener(
 		'blur',
-		(event) => {
-			const target = event.target;
-			if (!(target instanceof HTMLInputElement)) return;
-			if (target.type !== 'text') return;
-			const token = target.getAttribute('data-token');
-			if (token !== 'bg' && token !== 'ink' && token !== 'accent') return;
-			const currentTimer = hexTimers.get(target);
-			if (currentTimer) {
-				window.clearTimeout(currentTimer);
-				hexTimers.delete(target);
-			}
-			sanitizeHexInput(target);
-			commitTokenHexInput(target, token, true);
+		event => {
+			const input = event.target
+			const key = input.dataset.token
+			if (input.type !== 'text' || !['bg', 'ink', 'accent'].includes(key)) return
+			input.value = tokens[key].slice(1)
 		},
-		true
-	);
-
-	syncControls();
-	applyTokens();
-	return () => {
-		for (const timer of hexTimers.values()) window.clearTimeout(timer);
-		hexTimers.clear();
-		sheet.destroy();
-	};
+		true,
+	)
+	controls.addEventListener('click', event => {
+		const name = event.target.dataset.theme
+		if (name && themes[name]) preset = name
+		if (name || event.target.matches('[data-theme-reset]')) {
+			tokens = { ...themes[preset] }
+			syncControls()
+			render()
+		}
+	})
+	const save = root.querySelector('[data-theme-save]')
+	save.addEventListener('click', () => {
+		saved = !saved
+		save.setAttribute('aria-pressed', String(saved))
+		save.textContent = saved ? 'Saved to your list' : 'Save for later'
+		root.querySelector('[data-theme-save-note]').textContent = saved
+			? 'One good idea, kept for later.'
+			: 'Build a little reading space.'
+	})
+	syncControls()
+	render()
+	return () => sheet.destroy()
 }
-
-registerDemo('[data-dyss-theme-demo]', mountThemeMixer);
+registerDemo('[data-dyss-theme-demo]', mountThemeMixer)

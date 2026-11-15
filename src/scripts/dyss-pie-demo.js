@@ -1,442 +1,300 @@
-import Sheet from 'dyss';
-import { registerDemo } from './dyss-demo-lifecycle.js';
-
-function normalizeHex(value) {
-	const raw = String(value).trim().replace(/^#/, '');
-	if (raw.length === 3 && /^[0-9a-fA-F]{3}$/.test(raw)) {
-		return `#${raw
-			.split('')
-			.map((char) => char + char)
-			.join('')
-			.toLowerCase()}`;
-	}
-	if (raw.length === 6 && /^[0-9a-fA-F]{6}$/.test(raw)) {
-		return `#${raw.toLowerCase()}`;
-	}
-	return null;
-}
-
-function toHexFieldValue(value) {
-	return String(value).replace(/^#/, '');
-}
-
-function sanitizeHexInput(input) {
-	const cleaned = String(input.value)
-		.replace(/^#/, '')
-		.replace(/[^0-9a-fA-F]/g, '')
-		.slice(0, 6)
-		.toLowerCase();
-	if (input.value !== cleaned) input.value = cleaned;
-	return cleaned;
-}
-
-function parseHexInputValue(value, allowShort = false) {
-	const raw = String(value).trim().replace(/^#/, '');
-	if (raw.length === 6) return normalizeHex(raw);
-	if (allowShort && raw.length === 3) return normalizeHex(raw);
-	return null;
-}
-
-const starterSegments = [
-	{ label: 'Product', value: 44, color: '#0a7f78' },
-	{ label: 'Services', value: 31, color: '#ef6f6c' },
-	{ label: 'Support', value: 17, color: '#f8b133' },
-	{ label: 'Other', value: 8, color: '#2f3c5b' }
-];
-
-const colorPool = ['#0a7f78', '#ef6f6c', '#f8b133', '#2f3c5b', '#4181f2', '#7c5ce0', '#e554a6'];
-
-let nextId = 1;
-
-function makeSegment(partial = {}) {
-	return {
-		id: String(nextId++),
-		label: partial.label || `Service ${nextId - 1}`,
-		value: Number.isFinite(partial.value) ? partial.value : 25,
-		color: partial.color || colorPool[(nextId - 2) % colorPool.length]
-	};
-}
-
-function clampValue(value) {
-	const number = Number(value);
-	if (!Number.isFinite(number)) return 0;
-	return Math.max(0, Math.min(100, Math.round(number)));
-}
-
-function toSlices(rows) {
-	const total = rows.reduce((sum, row) => sum + row.value, 0);
-	if (total <= 0) {
-		return rows.map((row) => ({ ...row, pct: 0, start: 0, end: 0 }));
-	}
-
-	let cumulative = 0;
-	return rows.map((row, index) => {
-		const remaining = Math.max(0, 100 - cumulative);
-		const rawPct = (row.value / total) * 100;
-		const pct = index === rows.length - 1 ? remaining : Math.max(0, Math.min(rawPct, remaining));
-		const start = cumulative;
-		const end = index === rows.length - 1 ? 100 : start + pct;
-		cumulative = end;
-		return { ...row, pct: end - start, start, end };
-	});
-}
-
+import Sheet from 'dyss'
+import { registerDemo } from './dyss-demo-lifecycle.js'
+import {
+	initialRevenue,
+	revenueSlices,
+	revenueGradient,
+	createRevenueStream,
+	advanceRevenueStream,
+	setRevenueValue,
+	syncRevenueWindow,
+} from './dyss-revenue-model.js'
+import {
+	revenueFrame,
+	revenueTransition,
+	sampleRevenueTransition,
+} from './dyss-revenue-transition.js'
+const currency = new Intl.NumberFormat('en-US', {
+	style: 'currency',
+	currency: 'USD',
+	maximumFractionDigits: 0,
+})
 function mountDemo(root) {
-	const controls = root.querySelector('[data-dyss-controls]');
-	const rowsContainer = root.querySelector('[data-dyss-rows]');
-	const addButton = root.querySelector('[data-dyss-add]');
-	const liveButton = root.querySelector('[data-dyss-live]');
-	const intervalSelect = root.querySelector('[data-dyss-interval]');
-	const fpsOutput = root.querySelector('[data-dyss-fps]');
-	const pieList = root.querySelector('[data-dyss-pie]');
-	const code = root.querySelector('[data-dyss-code]');
-
-	if (
-		!controls ||
-		!rowsContainer ||
-		!addButton ||
-		!liveButton ||
-		!intervalSelect ||
-		!fpsOutput ||
-		!pieList ||
-		!code
-	) {
-		return;
-	}
-
-	const sheet = new Sheet();
-	const chartClass = `dyss-chart-${Math.random().toString(36).slice(2, 10)}`;
-	pieList.classList.add(chartClass);
-
-	let rows = starterSegments.map((segment) => makeSegment(segment));
-	let liveDataTimer = null;
-	let liveIntervalMs = Number(intervalSelect.value) || 50;
-	let renderCount = 0;
-	let fpsWindowStart = performance.now();
-	let fpsRafId = 0;
-	const hexTimers = new Map();
-
-	function commitRowHex(target, rowEl, row, allowShort = false) {
-		const normalized = parseHexInputValue(target.value, allowShort);
-		if (!normalized) return;
-		row.color = normalized;
-		target.value = toHexFieldValue(normalized);
-		const picker = rowEl.querySelector('input[data-field="color"]');
-		if (picker instanceof HTMLInputElement) picker.value = normalized;
-		renderChart();
-	}
-
-	function renderRows() {
-		rowsContainer.replaceChildren();
+	const find = selector => root.querySelector(selector)
+	const controls = find('[data-dyss-controls]'),
+		rowsContainer = find('[data-dyss-rows]')
+	const pie = find('[data-dyss-pie]'),
+		code = find('[data-dyss-code]')
+	const live = find('[data-dyss-live]'),
+		interval = find('[data-dyss-interval]')
+	const add = find('[data-dyss-add]'),
+		reset = find('[data-pie-reset]')
+	const totalOutput = find('[data-pie-total]'),
+		countOutput = find('[data-pie-count]')
+	const rate = find('[data-dyss-fps]'),
+		status = find('[data-pie-status]'),
+		latestOutput = find('[data-pie-latest]')
+	const sheet = new Sheet()
+	const scope = `revenue-${Math.random().toString(36).slice(2, 9)}`
+	root.classList.add(scope)
+	let nextId = 0,
+		rows = [],
+		running = false,
+		frame = 0,
+		lastFrame = 0
+	let stream,
+		renderClock = 0,
+		rateClock = 0,
+		updates = 0
+	const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
+	let displayed = null,
+		targetFrame = null,
+		transition = null,
+		motionFrame = 0
+	function build() {
+		rowsContainer.replaceChildren()
+		pie.replaceChildren()
 		for (const row of rows) {
-			const rowEl = document.createElement('div');
-			rowEl.className = 'dyss-row';
-			rowEl.dataset.rowId = row.id;
-
-			const labelInput = document.createElement('input');
-			labelInput.type = 'text';
-			labelInput.dataset.field = 'label';
-			labelInput.value = row.label;
-			labelInput.setAttribute('aria-label', 'Service label');
-
-			const valueInput = document.createElement('input');
-			valueInput.type = 'range';
-			valueInput.min = '0';
-			valueInput.max = '100';
-			valueInput.dataset.field = 'value';
-			valueInput.value = String(row.value);
-			valueInput.setAttribute('aria-label', 'Service value');
-
-			const output = document.createElement('output');
-			output.textContent = String(row.value);
-
-			const colorInput = document.createElement('input');
-			colorInput.type = 'color';
-			colorInput.dataset.field = 'color';
-			colorInput.value = row.color;
-			colorInput.setAttribute('aria-label', 'Service color');
-
-			const colorPair = document.createElement('div');
-			colorPair.className = 'dyss-color-pair';
-
-			const colorHexInput = document.createElement('input');
-			colorHexInput.type = 'text';
-			colorHexInput.dataset.field = 'colorHex';
-			colorHexInput.value = toHexFieldValue(row.color);
-			colorHexInput.maxLength = 6;
-			colorHexInput.setAttribute('spellcheck', 'false');
-			colorHexInput.setAttribute('autocapitalize', 'off');
-			colorHexInput.setAttribute('autocomplete', 'off');
-			colorHexInput.setAttribute('aria-label', 'Service color hex');
-
-			const colorHexWrap = document.createElement('span');
-			colorHexWrap.className = 'dyss-hex-wrap';
-			colorHexWrap.append(colorHexInput);
-
-			colorPair.append(colorInput, colorHexWrap);
-
-			const removeButton = document.createElement('button');
-			removeButton.type = 'button';
-			removeButton.dataset.remove = '';
-			removeButton.textContent = 'Remove';
-			if (rows.length === 1) removeButton.disabled = true;
-
-			rowEl.append(labelInput, valueInput, output, colorPair, removeButton);
-			rowsContainer.append(rowEl);
+			const element = document.createElement('div')
+			element.className = 'revenue-row'
+			element.dataset.id = row.id
+			const name = document.createElement('div')
+			name.className = 'revenue-name'
+			const color = document.createElement('input')
+			color.type = 'color'
+			color.value = row.color
+			color.dataset.field = 'color'
+			color.setAttribute('aria-label', `${row.label} color`)
+			const label = document.createElement('input')
+			label.value = row.label
+			label.dataset.field = 'label'
+			label.maxLength = 32
+			label.setAttribute('aria-label', 'Category name')
+			name.append(color, label)
+			const value = document.createElement('input')
+			value.type = 'number'
+			value.min = '0'
+			value.max = '1000000000'
+			value.step = '1'
+			value.value = row.value
+			value.dataset.field = 'value'
+			value.setAttribute('aria-label', `${row.label} revenue in dollars`)
+			const output = document.createElement('output')
+			output.setAttribute('aria-label', `${row.label} percentage`)
+			const remove = document.createElement('button')
+			remove.type = 'button'
+			remove.dataset.remove = ''
+			remove.textContent = '×'
+			remove.setAttribute('aria-label', `Remove ${row.label}`)
+			remove.disabled = rows.length <= 1
+			element.append(name, value, output, remove)
+			rowsContainer.append(element)
+			const slice = document.createElement('li')
+			slice.className = 'revenue-category'
+			pie.append(slice)
+			row.element = element
+			row.slice = slice
 		}
+		add.disabled = rows.length >= 8
 	}
-
-	function syncValueInputs() {
+	function paint(snapshot) {
+		displayed = snapshot
+		const total = snapshot.rows.reduce((sum, row) => sum + row.value, 0)
+		const slices = revenueSlices(snapshot.rows)
+		const gradient = revenueGradient(slices)
+		sheet.updateSet(`.${scope} .revenue-pie`, { background: gradient, opacity: snapshot.opacity })
+		const visualRows = new Map(slices.map(slice => [slice.row.id, slice]))
 		for (const row of rows) {
-			const rowEl = rowsContainer.querySelector(`[data-row-id="${row.id}"]`);
-			if (!rowEl) continue;
-			const valueInput = rowEl.querySelector('input[data-field="value"]');
-			const output = rowEl.querySelector('output');
-			if (valueInput instanceof HTMLInputElement) valueInput.value = String(row.value);
-			if (output) output.textContent = String(row.value);
+			const { row: visualRow, share } = visualRows.get(row.id) || { row: { value: 0 }, share: 0 }
+			row.slice.dataset.percentage = share.toFixed(1)
+			row.slice.dataset.color = row.color
+			row.slice.textContent = `${row.label}: ${currency.format(visualRow.value)}, ${share.toFixed(1)}%`
+			row.element.querySelector('output').textContent = `${share.toFixed(1)}%`
+			const input = row.element.querySelector('[data-field="value"]')
+			if (document.activeElement !== input) input.value = Math.round(visualRow.value)
 		}
-	}
-
-	function updateCode(slices) {
-		const rowsCode = rows.map((row) => ({ label: row.label, value: row.value, color: row.color }));
-		const liSample = slices
-			.map(
-				(slice) =>
-					`<li data-percentage="${slice.pct.toFixed(1)}" data-color="${slice.color}"><strong>${slice.label}</strong></li>`
-			)
-			.join('\n');
-		const ruleSample = slices
-			.map((slice) => {
-				const itemSelector = `.dyss-pie-item-${slice.id}`;
-				return [
-					`rule = sheet.get('${itemSelector}');`,
-					`rule.style.setProperty('--accum', '${slice.start.toFixed(4)}');`,
-					`rule.style.setProperty('--percentage', '${slice.pct.toFixed(4)}%');`,
-					`rule.style.setProperty('--weighing', '${(slice.pct / 100).toFixed(6)}');`,
-					`rule.style.setProperty('--bg-color', '${slice.color}');`
-				].join('\n');
-			})
-			.join('\n\n');
-
+		totalOutput.textContent = currency.format(total)
+		countOutput.textContent = total
+			? `${rows.length} ${rows.length === 1 ? 'category' : 'categories'}`
+			: 'No revenue yet'
 		code.textContent = [
-			`const values = ${JSON.stringify(rowsCode, null, 2)};`,
+			`// Amounts and slice boundaries interpolate together.`,
+			`// The circle stays closed during every animation frame.`,
+			`const total = ${Math.round(total)};`,
 			'',
-			'<figure>',
-			'  <figcaption>Revenue split</figcaption>',
-			'  <ul class="pie-chart">',
-			liSample ? `    ${liSample}` : '    <li data-percentage="100" data-color="#d9d9d9"><strong>No data</strong></li>',
-			'  </ul>',
-			'</figure>',
-			'',
-			ruleSample || '// No data rule updates.'
-		].join('\n');
+			`sheet.updateSet('.${scope} .revenue-pie', {`,
+			`  background: '${gradient}',`,
+			`  opacity: ${snapshot.opacity.toFixed(3)}`,
+			`});`,
+		].join('\n')
 	}
-
-	function ensureRule(selector) {
-		let rule = sheet.get(selector);
-		if (!rule) {
-			sheet.add(selector, {});
-			rule = sheet.get(selector);
+	function animate(now) {
+		motionFrame = 0
+		if (!transition) return
+		const snapshot = sampleRevenueTransition(transition, now)
+		paint(snapshot)
+		if (snapshot.complete) transition = null
+		else motionFrame = requestAnimationFrame(animate)
+	}
+	function updateVisuals(immediate) {
+		const next = revenueFrame(rows)
+		if (immediate || !displayed || motionPreference.matches || document.hidden) {
+			cancelAnimationFrame(motionFrame)
+			motionFrame = 0
+			transition = null
+			targetFrame = next
+			paint(next)
+			return
 		}
-		return rule;
-	}
-
-	function applySliceRule(slice) {
-		const itemSelector = `.${chartClass} .dyss-pie-item-${slice.id}`;
-		const rule = ensureRule(itemSelector);
-		if (!rule) return;
-		rule.style.setProperty('--accum', String(slice.start));
-		rule.style.setProperty('--percentage', `${slice.pct}%`);
-		rule.style.setProperty('--weighing', String(slice.pct / 100));
-		rule.style.setProperty('--bg-color', slice.color);
-	}
-
-	function renderChart() {
-		renderCount += 1;
-
-		const slices = toSlices(rows);
-		const total = rows.reduce((sum, row) => sum + row.value, 0);
-		pieList.replaceChildren();
-
-		if (rows.length === 0 || total <= 0) {
-			const li = document.createElement('li');
-			li.className = 'dyss-pie-item dyss-pie-item-empty';
-			li.setAttribute('data-color', '#d9d9d9');
-			li.setAttribute('data-percentage', '100.0');
-			const label = document.createElement('strong');
-			label.textContent = 'No data';
-			li.append(label);
-			pieList.append(li);
-			const emptyRule = ensureRule(`.${chartClass} .dyss-pie-item-empty`);
-			if (emptyRule) {
-				emptyRule.style.setProperty('--accum', '0');
-				emptyRule.style.setProperty('--percentage', '100%');
-				emptyRule.style.setProperty('--weighing', '1');
-				emptyRule.style.setProperty('--bg-color', '#d9d9d9');
-			}
-			updateCode([]);
-			return;
+		// Polling must not restart motion when the destination has not changed.
+		const unchanged =
+			targetFrame &&
+			next.rows.length === targetFrame.rows.length &&
+			next.rows.every((row, index) => {
+				const previous = targetFrame.rows[index]
+				return (
+					row.id === previous.id && row.value === previous.value && row.color === previous.color
+				)
+			})
+		const now = performance.now()
+		if (!unchanged) {
+			const current = transition ? sampleRevenueTransition(transition, now) : displayed
+			transition = revenueTransition(current, next, now)
+			targetFrame = next
 		}
-
-		for (const [index, slice] of slices.entries()) {
-			const li = document.createElement('li');
-			li.className = `dyss-pie-item dyss-pie-item-${slice.id}`;
-			li.style.setProperty('--layer', String(slices.length - index));
-			const explode = index === 0;
-			li.setAttribute('data-explode', explode ? 'true' : 'false');
-			li.setAttribute('data-color', slice.color);
-			li.setAttribute('data-percentage', slice.pct.toFixed(1));
-			const label = document.createElement('strong');
-			label.textContent = slice.label;
-			li.append(label);
-			pieList.append(li);
-			applySliceRule(slice);
-		}
-
-		updateCode(slices);
+		paint(transition ? sampleRevenueTransition(transition, now) : next)
+		if (transition && !motionFrame) motionFrame = requestAnimationFrame(animate)
 	}
-
-	function tickFPS(now) {
-		const elapsed = now - fpsWindowStart;
-		if (elapsed >= 500) {
-			const fps = (renderCount * 1000) / elapsed;
-			fpsOutput.textContent = `${fps.toFixed(1)} FPS`;
-			renderCount = 0;
-			fpsWindowStart = now;
-		}
-		fpsRafId = window.requestAnimationFrame(tickFPS);
-	}
-
-	function streamMockData() {
+	function draw({ immediate = false } = {}) {
 		for (const row of rows) {
-			const drift = (Math.random() - 0.5) * 10;
-			row.value = clampValue(row.value + drift);
+			row.element
+				.querySelector('[data-field="color"]')
+				.setAttribute('aria-label', `${row.label} color`)
+			row.element
+				.querySelector('[data-field="value"]')
+				.setAttribute('aria-label', `${row.label} revenue in dollars`)
+			row.element.querySelector('[data-remove]').setAttribute('aria-label', `Remove ${row.label}`)
+			row.element.toggleAttribute(
+				'data-recent-sale',
+				stream.latest?.id === row.id && stream.time - stream.latest.time < 1.3,
+			)
 		}
-		syncValueInputs();
-		renderChart();
+		const latestRow = rows.find(row => row.id === stream.latest?.id)
+		latestOutput.textContent = latestRow
+			? `${latestRow.label} +${currency.format(stream.latest.amount)}`
+			: 'Start sales to see the next transaction'
+		updateVisuals(immediate)
+		updates++
 	}
-
-	function setLiveMode(active) {
-		if (active) {
-			if (!liveDataTimer) {
-				liveDataTimer = window.setInterval(streamMockData, liveIntervalMs);
-			}
-			liveButton.setAttribute('aria-pressed', 'true');
-			liveButton.textContent = 'Stop live data';
+	function tick(now) {
+		const dt = Math.min((now - lastFrame) / 1000, 0.1)
+		lastFrame = now
+		advanceRevenueStream(stream, rows, dt)
+		renderClock += dt
+		rateClock += dt
+		if (renderClock >= Number(interval.value) / 1000) {
+			renderClock = 0
+			draw()
+		}
+		if (rateClock >= 1) {
+			rate.textContent = `${Math.round(updates / rateClock)} updates/s`
+			rateClock = 0
+			updates = 0
+		}
+		frame = requestAnimationFrame(tick)
+	}
+	function setRunning(value) {
+		running = value
+		live.setAttribute('aria-pressed', String(running))
+		live.textContent = running ? 'Pause sales' : 'Simulate sales'
+		status.textContent = `30-second window / ${running ? 'live sales' : 'paused'}`
+		cancelAnimationFrame(frame)
+		if (running && !document.hidden) {
+			lastFrame = performance.now()
+			frame = requestAnimationFrame(tick)
 		} else {
-			if (liveDataTimer) {
-				window.clearInterval(liveDataTimer);
-				liveDataTimer = null;
-			}
-			liveButton.setAttribute('aria-pressed', 'false');
-			liveButton.textContent = 'Start live data';
+			draw()
+			rate.textContent = '0 updates/s'
 		}
 	}
-
-	controls.addEventListener('input', (event) => {
-		const target = event.target;
-		if (!(target instanceof HTMLElement)) return;
-		const rowEl = target.closest('[data-row-id]');
-		if (!rowEl) return;
-		const id = rowEl.getAttribute('data-row-id');
-		const row = rows.find((item) => item.id === id);
-		if (!row) return;
-
-		const field = target.getAttribute('data-field');
-		if (field === 'label' && target instanceof HTMLInputElement) {
-			row.label = target.value.trim() || 'Untitled';
-		}
-		if (field === 'value' && target instanceof HTMLInputElement) {
-			row.value = clampValue(target.value);
-			const output = rowEl.querySelector('output');
-			if (output) output.textContent = String(row.value);
-		}
-		if (field === 'color' && target instanceof HTMLInputElement) {
-			row.color = target.value;
-			const hexInput = rowEl.querySelector('input[data-field="colorHex"]');
-			if (hexInput instanceof HTMLInputElement) hexInput.value = toHexFieldValue(row.color);
-		}
-		if (field === 'colorHex' && target instanceof HTMLInputElement) {
-			sanitizeHexInput(target);
-			const currentTimer = hexTimers.get(target);
-			if (currentTimer) window.clearTimeout(currentTimer);
-			const timer = window.setTimeout(() => {
-				commitRowHex(target, rowEl, row, false);
-				hexTimers.delete(target);
-			}, 180);
-			hexTimers.set(target, timer);
-			return;
-		}
-
-		renderChart();
-	});
-
+	function resetSample() {
+		setRunning(false)
+		rows = initialRevenue.map(row => ({ ...row, id: ++nextId }))
+		stream = createRevenueStream(rows)
+		renderClock = rateClock = updates = 0
+		build()
+		draw({ immediate: true })
+	}
+	controls.addEventListener('submit', event => event.preventDefault())
+	controls.addEventListener('input', event => {
+		const input = event.target
+		const row = rows.find(row => String(row.id) === input.closest('[data-id]')?.dataset.id)
+		if (!row) return
+		if (input.dataset.field === 'value')
+			setRevenueValue(stream, row, Math.max(0, Math.min(1e9, Math.round(Number(input.value) || 0))))
+		if (input.dataset.field === 'label') row.label = input.value.trim() || 'Untitled'
+		if (input.dataset.field === 'color') row.color = input.value
+		draw()
+	})
 	controls.addEventListener(
 		'blur',
-		(event) => {
-			const target = event.target;
-			if (!(target instanceof HTMLInputElement)) return;
-			if (target.getAttribute('data-field') !== 'colorHex') return;
-			const rowEl = target.closest('[data-row-id]');
-			if (!rowEl) return;
-			const id = rowEl.getAttribute('data-row-id');
-			const row = rows.find((item) => item.id === id);
-			if (!row) return;
-			const currentTimer = hexTimers.get(target);
-			if (currentTimer) {
-				window.clearTimeout(currentTimer);
-				hexTimers.delete(target);
+		event => {
+			if (event.target.dataset.field !== 'value') return
+			const row = rows.find(row => String(row.id) === event.target.closest('[data-id]')?.dataset.id)
+			if (row) {
+				const snapshot = transition
+					? sampleRevenueTransition(transition, performance.now())
+					: displayed
+				event.target.value = Math.round(
+					snapshot.rows.find(item => item.id === row.id)?.value ?? row.value,
+				)
 			}
-			sanitizeHexInput(target);
-			commitRowHex(target, rowEl, row, true);
 		},
-		true
-	);
+		true,
+	)
 
-	controls.addEventListener('click', (event) => {
-		const target = event.target;
-		if (!(target instanceof HTMLElement)) return;
-		if (!target.matches('[data-remove]')) return;
-		const rowEl = target.closest('[data-row-id]');
-		if (!rowEl) return;
-		const id = rowEl.getAttribute('data-row-id');
-		rows = rows.filter((row) => row.id !== id);
-		if (rows.length === 0) {
-			rows = [makeSegment({ label: 'Service 1', value: 0, color: '#d9d9d9' })];
+	controls.addEventListener('click', event => {
+		if (!event.target.matches('[data-remove]') || rows.length <= 1) return
+		const id = event.target.closest('[data-id]').dataset.id
+		rows = rows.filter(row => String(row.id) !== id)
+		syncRevenueWindow(stream, rows)
+		build()
+		draw()
+	})
+	add.addEventListener('click', () => {
+		if (rows.length >= 8) return
+		const row = {
+			id: ++nextId,
+			label: `Category ${rows.length + 1}`,
+			value: 200,
+			color: ['#889a70', '#b591b0', '#729bbb', '#bba482'][rows.length % 4],
 		}
-		renderRows();
-		renderChart();
-	});
-
-	addButton.addEventListener('click', () => {
-		rows.push(makeSegment({ value: 20 }));
-		renderRows();
-		renderChart();
-	});
-
-	liveButton.addEventListener('click', () => {
-		const isLive = liveButton.getAttribute('aria-pressed') === 'true';
-		setLiveMode(!isLive);
-	});
-
-	intervalSelect.addEventListener('change', () => {
-		liveIntervalMs = Number(intervalSelect.value) || 50;
-		if (liveDataTimer) {
-			window.clearInterval(liveDataTimer);
-			liveDataTimer = window.setInterval(streamMockData, liveIntervalMs);
-		}
-	});
-
-	renderRows();
-	renderChart();
-	fpsRafId = window.requestAnimationFrame(tickFPS);
+		rows.push(row)
+		setRevenueValue(stream, row, row.value)
+		build()
+		draw()
+	})
+	live.addEventListener('click', () => setRunning(!running))
+	reset.addEventListener('click', resetSample)
+	function visibility() {
+		setRunning(running)
+	}
+	document.addEventListener('visibilitychange', visibility)
+	function motionChanged() {
+		if (motionPreference.matches) draw({ immediate: true })
+	}
+	motionPreference.addEventListener('change', motionChanged)
+	// Populate before toggling playback, so the first draw always has a category.
+	rows = initialRevenue.map(row => ({ ...row, id: ++nextId }))
+	stream = createRevenueStream(rows)
+	build()
+	draw()
 	return () => {
-		for (const timer of hexTimers.values()) window.clearTimeout(timer);
-		hexTimers.clear();
-		setLiveMode(false);
-		window.cancelAnimationFrame(fpsRafId);
-		sheet.destroy();
-	};
+		cancelAnimationFrame(frame)
+		cancelAnimationFrame(motionFrame)
+		document.removeEventListener('visibilitychange', visibility)
+		motionPreference.removeEventListener('change', motionChanged)
+		sheet.destroy()
+	}
 }
-
-registerDemo('[data-dyss-demo]', mountDemo);
+registerDemo('[data-dyss-demo]', mountDemo)

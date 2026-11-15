@@ -1,63 +1,93 @@
 ---
-import BaseHead from '../../../components/BaseHead.astro';
-import Header from '../../../components/Header.astro';
-import Footer from '../../../components/Footer.astro';
-import { pageContentTransition, viewTransitionNameFromPath } from '../../../utils/viewTransitionName';
+import BaseHead from '../../../components/BaseHead.astro'
+import Header from '../../../components/Header.astro'
+import Footer from '../../../components/Footer.astro'
+import ExperimentCard from '../../../components/dyss/ExperimentCard.astro'
+import {
+	pageContentTransition,
+	viewTransitionNameFromPath,
+} from '../../../utils/viewTransitionName'
 
-const pageTitle = 'dyss';
-const pageDescription = 'A tiny utility to dynamically create and update CSS stylesheets from JavaScript.';
-const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
+const pageTitle = 'dyss'
+const pageDescription =
+	'A tiny utility to dynamically create and update CSS stylesheets from JavaScript.'
+const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname)
 
-const examples = [
+const groups = [
 	{
-		title: 'Benchmark lab',
-		href: '/build/dyss/benchmark',
-		description:
-			'Compare inline styles, shared CSS variables, raw CSSOM updates, and dyss on large element sets.'
+		title: 'Start here',
+		description: 'Four studies in data, documents, and motion.',
+		items: [
+			{
+				title: 'AFR fuel map',
+				href: '/build/dyss/examples/fuel-map',
+				type: 'fuel',
+				label: '01 / Engine simulation',
+				description:
+					'Follow a drive cycle across a target map, with delayed sensor readings and a visible operating path.',
+			},
+			{
+				title: 'Text annotations',
+				href: '/build/dyss/examples/text-highlights',
+				type: 'annotations',
+				label: '02 / Document review',
+				description:
+					'Mark a research memo, overlap annotation groups, and recolor every matching passage at once.',
+			},
+			{
+				title: 'Spring motion',
+				href: '/build/dyss/examples/spring-motion',
+				type: 'spring',
+				label: '03 / Physical motion',
+				description: 'Drag, release, and feel the difference between stiffness, mass, and damping.',
+			},
+			{
+				title: 'Revenue mix',
+				href: '/build/dyss/examples/pie-chart',
+				type: 'revenue',
+				label: '04 / Live data',
+				description:
+					'A continuous donut chart, editable contributions, and a rolling view of recent sales.',
+			},
+		],
 	},
 	{
-		title: 'Pie chart playground',
-		href: '/build/dyss/examples/pie-chart',
-		description:
-			'Dynamic conic-gradient slices with live controls, stream updates, and runtime FPS feedback.'
+		title: 'Design tools',
+		description: 'Explore a system, then inspect the choices it makes.',
+		items: [
+			{
+				title: 'Theme studio',
+				href: '/build/dyss/examples/theme-mixer',
+				type: 'theme',
+				label: '05 / Design tokens',
+				description:
+					'Three atmospheres, a complete editorial artboard, and one shared set of live tokens.',
+			},
+			{
+				title: 'Contrast lab',
+				href: '/build/dyss/examples/contrast-lab',
+				type: 'contrast',
+				label: '06 / Adaptive color',
+				description:
+					'Compare a CSS lightness approximation with measured contrast and see where each text choice lands.',
+			},
+		],
 	},
 	{
-		title: 'Border-shape playground',
-		href: '/build/dyss/examples/border-shape',
-		description:
-			'Pulse, morph, and spin CSS border-shape outlines with live rules driven by dyss.'
+		title: 'At the edge',
+		description: 'An experimental CSS study, with a matching fallback.',
+		items: [
+			{
+				title: 'Border-shape lab',
+				href: '/build/dyss/examples/border-shape',
+				type: 'border',
+				label: '07 / Browser experiment',
+				description:
+					'A moving perimeter and a draggable network of elastic curves. Native shapes where supported; SVG elsewhere.',
+			},
+		],
 	},
-	{
-		title: 'Text highlights',
-		href: '/build/dyss/examples/text-highlights',
-		description:
-			'Pretend OCR word spans with overlapping highlight layers and editable color palette.'
-	},
-	{
-		title: 'Theme mixer',
-		href: '/build/dyss/examples/theme-mixer',
-		description:
-			'Live tokens for background, text, accent, contrast, and scale using dyss rules.'
-	},
-	{
-		title: 'AFR fuel map',
-		href: '/build/dyss/examples/fuel-map',
-		description:
-			'Fuel-map style AFR table with per-cell banded colors and coherent live updates.'
-	},
-	{
-		title: 'Live artboard themes',
-		href: '/build/dyss/examples/artboard-themes',
-		description:
-			'Swap full UI themes instantly with dyss updating shared artboard rules.'
-	},
-	{
-		title: 'Contrast lab',
-		href: '/build/dyss/examples/contrast-lab',
-		description:
-			'Approximate contrast-color() using OKLCH relative color syntax and live dyss updates.'
-	},
-];
+]
 ---
 
 <!doctype html>
@@ -67,73 +97,102 @@ const examples = [
 	</head>
 	<body>
 		<Header />
-		<main id="main-content" tabindex="-1" class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
-			<article class="stack">
+		<main
+			id="main-content"
+			tabindex="-1"
+			class="content content--wide stack"
+			transition:name="page-content"
+			transition:animate={pageContentTransition}
+		>
+			<article class="stack dyss-gallery">
 				<header class="stack">
 					<h1
 						class="transition-title"
 						style={`--view-transition-name: ${titleTransitionName};`}
 						transition:name={titleTransitionName}
-					>{pageTitle}</h1>
+					>
+						{pageTitle}
+					</h1>
 					<p>{pageDescription}</p>
 				</header>
 
-				<section class="stack" aria-labelledby="dyss-docs-link">
-					<h2 id="dyss-docs-link">Documentation</h2>
-					<div class="dyss-doc-card">
-						<a
-							href="/build/dyss/docs"
-							class="transition-title-link"
-							style={`--view-transition-name: ${viewTransitionNameFromPath('/build/dyss/docs')};`}
-							transition:name={viewTransitionNameFromPath('/build/dyss/docs')}
-						>
-							Read the full dyss docs
-						</a>
-						<p>
-							Reference docs for every current method in the package, with signatures, notes, and
-							practical examples.
+				<div class="dyss-gallery-intro">
+					<span>07 studies / 01 toolkit</span><p>
+						Small experiments with a clear purpose. Each one puts runtime styles to work, with the
+						rules available to inspect.
+					</p>
+				</div>
+				{
+					groups.map((group, index) => (
+						<section class="stack dyss-gallery-group" aria-labelledby={`dyss-group-${index}`}>
+							<>
+								<header>
+									<>
+										<h2 id={`dyss-group-${index}`}>{group.title}</h2>
+										<p>{group.description}</p>
+									</>
+								</header>
+								<ul class="dyss-example-list">
+									{group.items.map(example => (
+										<ExperimentCard {...example} />
+									))}
+								</ul>
+							</>
+						</section>
+					))
+				}
+				<section class="stack dyss-toolkit" aria-labelledby="dyss-toolkit-title">
+					<header>
+						<h2 id="dyss-toolkit-title">The toolkit</h2><p>
+							Reference and measurement, separate from the visual studies.
 						</p>
+					</header><div class="dyss-toolkit-grid">
+						<a href="/build/dyss/docs"
+							><span>REFERENCE ↗</span><h3>Documentation</h3><p>
+								Methods, signatures, and practical examples for using dyss.
+							</p></a
+						><a href="/build/dyss/benchmark"
+							><span>MEASUREMENT ↗</span><h3>Benchmark lab</h3><p>
+								Compare eight update strategies on the same live surface, with measured timings.
+							</p></a
+						>
 					</div>
 				</section>
 
-				<section class="stack" aria-labelledby="dyss-example-list">
-					<h2 id="dyss-example-list">Examples</h2>
-					<ul class="dyss-example-list">
-						{examples.map((example) => (
-							<li>
-								<a
-									href={example.href}
-									class="transition-title-link"
-									style={`--view-transition-name: ${viewTransitionNameFromPath(example.href)};`}
-									transition:name={viewTransitionNameFromPath(example.href)}
-								>
-									{example.title}
-								</a>
-								<p>{example.description}</p>
-							</li>
-						))}
-					</ul>
-				</section>
-
 				<p>
-					<a href="https://github.com/brnrd/dyss">dyss</a> is a tiny runtime stylesheet utility I originally built while working at Textensor, on products such as <a href="https://www.opus2.com/">Opus 2 Magnum</a> and <a href="https://www.annotate.com/">Annotate</a>. At the time, I was looking for a cleaner way to generate and update styles dynamically in complex interfaces, without relying on large amounts of inline styles or string-based templating.
-					I first presented the idea at <a href="https://groups.google.com/g/edinburghjs/c/2UGDKE9qPJ0">Edinburgh JS</a> on 9 April 2015, in a talk called “Dynamic CSS with JavaScript”.
-					The original implementation was written in CoffeeScript and, almost ten years later, I finally rewrote it in modern JavaScript, with some welcome help from OpenAI Codex.
+					<a href="https://github.com/brnrd/dyss">dyss</a> is a tiny runtime stylesheet utility I originally
+					built while working at Textensor, on products such as <a href="https://www.opus2.com/"
+						>Opus 2 Magnum</a
+					> and <a href="https://www.annotate.com/">Annotate</a>. At the time, I was looking for a
+					cleaner way to generate and update styles dynamically in complex interfaces, without
+					relying on large amounts of inline styles or string-based templating. I first presented
+					the idea at <a href="https://groups.google.com/g/edinburghjs/c/2UGDKE9qPJ0"
+						>Edinburgh JS</a
+					> on 9 April 2015, in a talk called “Dynamic CSS with JavaScript”. The original implementation
+					was written in CoffeeScript and, almost ten years later, I finally rewrote it in modern JavaScript,
+					with some welcome help from OpenAI Codex.
 				</p>
 
 				<p>
-					The core principle has not changed. dyss is built on a little-known but extremely useful feature of the browser: every <code>&lt;style&gt;</code> element exposes a live stylesheet object through the DOM.
-					From JavaScript, this stylesheet can be queried and, more importantly, mutated using the standard CSS Object Model (CSSOM).
+					The core principle has not changed. dyss is built on a little-known but extremely useful
+					feature of the browser: every <code>&lt;style&gt;</code> element exposes a live stylesheet object
+					through the DOM. From JavaScript, this stylesheet can be queried and, more importantly, mutated
+					using the standard CSS Object Model (CSSOM).
 				</p>
 
 				<p>
-					Concretely, dyss creates its own <code>&lt;style&gt;</code> element, attaches it to the document, and then inserts and updates rules directly on the underlying stylesheet using APIs such as <code>insertRule</code> and <code>cssRules</code>.
-					This means styles are stored and managed exactly like regular CSS rules, not as inline styles on elements.
+					Concretely, dyss creates its own <code>&lt;style&gt;</code> element, attaches it to the document,
+					and then inserts and updates rules directly on the underlying stylesheet using APIs such as
+					<code>insertRule</code> and <code>cssRules</code>. This means styles are stored and
+					managed exactly like regular CSS rules, not as inline styles on elements.
 				</p>
 
 				<p>
-					This approach makes it possible to generate selectors or classes at runtime, update their declarations efficiently, and reuse them across many elements, while keeping a clean separation between structure and presentation.
-					In practice, dyss acts as a very small, focused layer on top of the browser’s native CSS engine, letting JavaScript drive styling logic without bypassing the CSS cascade or the browser’s own optimisation mechanisms.
+					This approach makes it possible to generate selectors or classes at runtime, update their
+					declarations efficiently, and reuse them across many elements, while keeping a clean
+					separation between structure and presentation. In practice, dyss acts as a very small,
+					focused layer on top of the browser’s native CSS engine, letting JavaScript drive styling
+					logic without bypassing the CSS cascade or the browser’s own optimisation mechanisms.
 				</p>
 			</article>
 		</main>
@@ -142,48 +201,112 @@ const examples = [
 </html>
 
 <style>
-	.dyss-doc-card {
-		border: 1px solid var(--hairline);
-		padding: 1rem;
-		border-radius: 0.75rem;
-		background: color-mix(in oklab, var(--color-bg) 93%, white);
+	.content--wide {
+		max-width: 1120px;
 	}
-
-	.dyss-doc-card a {
-		font-family: var(--font-label);
-		font-size: 0.76rem;
-		letter-spacing: 0.11em;
+	.dyss-gallery {
+		max-width: none;
+	}
+	.dyss-gallery > header {
+		max-width: 64ch;
+	}
+	.dyss-gallery-intro {
+		border-block: 1px solid var(--hairline);
+		padding-block: 1.1rem;
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: 1.5rem;
+		align-items: start;
+	}
+	.dyss-gallery-intro > span {
+		font: 0.65rem/1.7 var(--font-label);
 		text-transform: uppercase;
+		letter-spacing: 0.08em;
 	}
-
-	.dyss-doc-card p {
-		font-size: 1.05rem;
-		margin-top: 0.6rem;
+	.dyss-gallery-intro p {
+		font-size: 0.8rem;
+		line-height: 1.7;
+		margin: 0;
+		color: var(--color-ink-muted);
 	}
-
+	.dyss-gallery-group {
+		padding-top: 1.2rem;
+	}
+	.dyss-gallery-group > header h2,
+	.dyss-toolkit h2 {
+		font-size: 1.35rem;
+		letter-spacing: -0.03em;
+		margin: 0;
+	}
+	.dyss-gallery-group > header p,
+	.dyss-toolkit > header p {
+		font-size: 0.78rem;
+		line-height: 1.7;
+		margin: 0.4rem 0 0;
+		color: var(--color-ink-muted);
+	}
 	.dyss-example-list {
 		list-style: none;
 		margin: 0;
 		padding: 0;
 		display: grid;
-		gap: 0.9rem;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
 	}
-
-	.dyss-example-list li {
+	.dyss-gallery-group:last-of-type .dyss-example-list {
+		max-width: calc(50% - 0.5rem);
+	}
+	.dyss-toolkit {
+		padding-block: 1.5rem;
+		border-block: 1px solid var(--hairline);
+	}
+	.dyss-toolkit-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+	.dyss-toolkit-grid > a {
 		border: 1px solid var(--hairline);
-		padding: 0.9rem;
-		background: color-mix(in oklab, var(--color-bg) 94%, white);
+		border-radius: 4px;
+		padding: 1.1rem;
+		text-decoration: none;
+		color: var(--color-ink);
 	}
-
-	.dyss-example-list a {
-		font-family: var(--font-label);
-		font-size: 0.76rem;
-		letter-spacing: 0.11em;
-		text-transform: uppercase;
+	.dyss-toolkit-grid span {
+		font: 0.55rem var(--font-label);
+		letter-spacing: 0.1em;
+		color: var(--color-ink-muted);
 	}
-
-	.dyss-example-list p {
+	.dyss-toolkit-grid h3 {
 		font-size: 1.05rem;
-		margin-top: 0.5rem;
+		margin: 0.65rem 0 0.4rem;
+	}
+	.dyss-toolkit-grid p {
+		font-size: 0.76rem;
+		line-height: 1.7;
+		margin: 0;
+		color: var(--color-ink-muted);
+	}
+	.dyss-toolkit-grid > a:hover h3 {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+	.dyss-gallery > p {
+		max-width: 70ch;
+		font-size: 0.9rem;
+		line-height: 1.8;
+	}
+	@media (max-width: 600px) {
+		.dyss-example-list,
+		.dyss-toolkit-grid,
+		.dyss-gallery-intro {
+			grid-template-columns: 1fr;
+		}
+		.dyss-gallery-group:last-of-type .dyss-example-list {
+			max-width: none;
+		}
+		.dyss-gallery-intro {
+			gap: 0.5rem;
+		}
 	}
 </style>

@@ -129,7 +129,7 @@ const description =
 	'Measure how different runtime styling strategies scale when one visual change fans out across many elements.'
 ---
 
-<DyssExample title={title} description={description} backLabel="Back to dyss">
+<DyssExample title={title} description={description} backLabel="Back to dyss" wide>
 	<p>
 		This page compares several ways to restyle a large batch of elements: direct inline writes,
 		shared CSS custom properties, parent class switches, raw CSSOM rule updates, constructable
@@ -138,8 +138,15 @@ const description =
 		browser, with an optional forced style read so the work is less theoretical.
 	</p>
 
-	<div class="benchmark-shell stack" data-dyss-benchmark>
-		<form class="benchmark-controls" data-benchmark-controls>
+	<div class="benchmark-shell experiment-shell stack" data-dyss-benchmark>
+		<div class="experiment-heading">
+			<div>
+				<p class="experiment-kicker">Measurement / eight strategies</p><h2>
+					Same surface. Different paths.
+				</h2>
+			</div>
+		</div>
+		<form class="benchmark-controls experiment-controls" data-benchmark-controls>
 			<fieldset>
 				<legend>Benchmark controls</legend>
 				<div class="benchmark-grid">
@@ -174,7 +181,15 @@ const description =
 				Results will appear here after the first run.
 			</p>
 
-			<div class="benchmark-table-wrap">
+			<p class="experiment-meta">Average synchronous time / shorter bars are faster.</p>
+			<div class="benchmark-ranking" data-benchmark-ranking aria-label="Average time comparison">
+			</div>
+			<div
+				class="benchmark-table-wrap"
+				tabindex="0"
+				role="region"
+				aria-label="Detailed benchmark results"
+			>
 				<table class="benchmark-table">
 					<thead>
 						<tr>
@@ -274,11 +289,8 @@ const description =
 		padding: 1rem;
 		border: 1px solid var(--hairline);
 		border-radius: 0.75rem;
-		background: linear-gradient(
-				180deg,
-				color-mix(in oklab, var(--color-bg) 94%, white),
-				transparent
-			),
+		background:
+			linear-gradient(180deg, color-mix(in oklab, var(--color-bg) 94%, white), transparent),
 			color-mix(in oklab, var(--color-bg) 90%, white);
 	}
 
@@ -381,7 +393,7 @@ const description =
 	}
 
 	.benchmark-table th,
-	.benchmark-table td {
+	.benchmark-table :global(td) {
 		padding: 0.6rem 0.55rem;
 		border-bottom: 1px solid var(--hairline);
 		text-align: left;
@@ -396,7 +408,7 @@ const description =
 		color: var(--color-ink-muted);
 	}
 
-	.benchmark-table td:first-child {
+	.benchmark-table :global(td:first-child) {
 		font-weight: 600;
 	}
 
@@ -487,7 +499,8 @@ const description =
 		padding: 0.75rem;
 		border: 1px solid var(--hairline);
 		border-radius: 0.75rem;
-		background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.3), transparent 38%),
+		background:
+			radial-gradient(circle at top left, rgba(255, 255, 255, 0.3), transparent 38%),
 			color-mix(in oklab, var(--color-bg) 86%, black);
 		max-block-size: 24rem;
 		overflow: auto;
@@ -513,6 +526,62 @@ const description =
 		transform: var(--bench-transform, translate3d(0, 0, 0) scale(1));
 	}
 
+	.benchmark-ranking {
+		display: grid;
+		gap: 0.75rem;
+		margin-block: 0.5rem 1rem;
+	}
+	.benchmark-ranking :global(.benchmark-rank) {
+		display: grid;
+		grid-template-columns: minmax(140px, 1fr) minmax(80px, 2fr) 90px;
+		align-items: center;
+		gap: 0.8rem;
+		font: 0.65rem var(--font-label);
+	}
+	.benchmark-ranking :global(meter) {
+		width: 100%;
+		height: 10px;
+	}
+	.benchmark-ranking :global(meter::-webkit-meter-bar) {
+		border: 0;
+		border-radius: 2px;
+		background: var(--hairline);
+	}
+	.benchmark-ranking :global(meter::-webkit-meter-optimum-value) {
+		background: #719f9a;
+		border-radius: 2px;
+	}
+	.benchmark-ranking :global(.benchmark-rank strong) {
+		font: inherit;
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+	.benchmark-shell {
+		background: var(--experiment-surface);
+		border-radius: 0.5rem;
+	}
+	.benchmark-actions p,
+	.benchmark-support-note,
+	.benchmark-winner,
+	.benchmark-note {
+		font-size: 0.75rem;
+		line-height: 1.7;
+	}
+	.benchmark-actions button {
+		font-size: 0.65rem;
+		text-transform: none;
+		letter-spacing: 0;
+		border-radius: 3px;
+		background: var(--color-ink);
+		color: var(--color-bg);
+	}
+	@media (max-width: 600px) {
+		.benchmark-ranking :global(.benchmark-rank) {
+			grid-template-columns: 1fr 1fr 70px;
+			gap: 0.4rem;
+			font-size: 0.52rem;
+		}
+	}
 	@media (max-width: 40rem) {
 		:global(.dyss-benchmark-stage) {
 			grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));

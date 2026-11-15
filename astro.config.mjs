@@ -47,6 +47,10 @@ export default defineConfig({
 		}),
 	],
 	redirects: {
+		'/build/dyss/examples/artboard-themes': {
+			status: 301,
+			destination: '/build/dyss/examples/theme-mixer',
+		},
 		'/build/keylo': {
 			status: 301,
 			destination: '/build/kieli',

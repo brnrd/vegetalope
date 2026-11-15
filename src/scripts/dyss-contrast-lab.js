@@ -1,411 +1,215 @@
-import Sheet from 'dyss';
-import { registerDemo } from './dyss-demo-lifecycle.js';
-
-function normalizeHex(value) {
-	const raw = String(value).trim().replace(/^#/, '');
-	if (raw.length === 3 && /^[0-9a-fA-F]{3}$/.test(raw)) {
-		return `#${raw
-			.split('')
-			.map((char) => char + char)
-			.join('')
-			.toLowerCase()}`;
-	}
-	if (raw.length === 6 && /^[0-9a-fA-F]{6}$/.test(raw)) {
-		return `#${raw.toLowerCase()}`;
-	}
-	return null;
-}
-
-function toHexFieldValue(value) {
-	return String(value).replace(/^#/, '');
-}
-
-function sanitizeHexInput(input) {
-	const cleaned = String(input.value)
-		.replace(/^#/, '')
-		.replace(/[^0-9a-fA-F]/g, '')
-		.slice(0, 6)
-		.toLowerCase();
-	if (input.value !== cleaned) input.value = cleaned;
-	return cleaned;
-}
-
-function parseHexInputValue(value, allowShort = false) {
-	const raw = String(value).trim().replace(/^#/, '');
-	if (raw.length === 6) return normalizeHex(raw);
-	if (allowShort && raw.length === 3) return normalizeHex(raw);
-	return null;
-}
-
-const defaultSwatches = [
-	{ id: 'c1', label: 'Primary', color: '#1f6feb' },
-	{ id: 'c2', label: 'Warning', color: '#f2b636' },
-	{ id: 'c3', label: 'Success', color: '#2fbf71' },
-	{ id: 'c4', label: 'Critical', color: '#d84f4f' }
-];
-
-let nextId = 5;
-
-function makeSwatch(partial = {}) {
-	return {
-		id: partial.id || `c${nextId++}`,
-		label: partial.label || `Swatch ${nextId - 1}`,
-		color: partial.color || '#7b6de0'
-	};
-}
-
-function clampThreshold(value) {
-	const number = Number(value);
-	if (!Number.isFinite(number)) return 1.21;
-	return Math.max(1.12, Math.min(1.3, number));
-}
-
-function hexToRgb(hex) {
-	const clean = hex.replace('#', '');
-	if (clean.length !== 6) return { r: 255, g: 255, b: 255 };
-	return {
-		r: Number.parseInt(clean.slice(0, 2), 16),
-		g: Number.parseInt(clean.slice(2, 4), 16),
-		b: Number.parseInt(clean.slice(4, 6), 16)
-	};
-}
-
+import Sheet from 'dyss'
+import { registerDemo } from './dyss-demo-lifecycle.js'
+import { normalizeHex } from './utils/hex-color.js'
+import { contrastRatio } from './utils/contrast.js'
+const initial = [
+	{ label: 'Ocean', color: '#315e80' },
+	{ label: 'Sand', color: '#d8bc7d' },
+	{ label: 'Fern', color: '#4e9276' },
+	{ label: 'Clay', color: '#c87762' },
+	{ label: 'Mist', color: '#bacbd3' },
+	{ label: 'Ink', color: '#263448' },
+]
 function mountContrastLab(root) {
-	const controls = root.querySelector('[data-dyss-controls]');
-	const rowsContainer = root.querySelector('[data-dyss-rows]');
-	const thresholdInput = root.querySelector('[data-dyss-threshold]');
-	const thresholdOutput = root.querySelector('[data-dyss-threshold-output]');
-	const lightTextInput = root.querySelector('[data-dyss-light-text]');
-	const lightTextHexInput = root.querySelector('[data-dyss-light-text-hex]');
-	const darkTextInput = root.querySelector('[data-dyss-dark-text]');
-	const darkTextHexInput = root.querySelector('[data-dyss-dark-text-hex]');
-	const addButton = root.querySelector('[data-dyss-add]');
-	const preview = root.querySelector('[data-dyss-preview]');
-	const support = root.querySelector('[data-dyss-support]');
-	const code = root.querySelector('[data-dyss-code]');
-
-	if (
-		!controls ||
-		!rowsContainer ||
-		!thresholdInput ||
-		!thresholdOutput ||
-		!lightTextInput ||
-		!darkTextInput ||
-		!addButton ||
-		!preview ||
-		!support ||
-		!code
-	) {
-		return;
+	const find = selector => root.querySelector(selector)
+	const controls = find('[data-dyss-controls]'),
+		rowsBox = find('[data-dyss-rows]'),
+		preview = find('[data-dyss-preview]')
+	const code = find('[data-dyss-code]'),
+		support = find('[data-dyss-support]'),
+		summary = find('[data-contrast-summary]')
+	const cutoff = find('[data-contrast-cutoff]'),
+		cutoffOutput = find('[data-contrast-cutoff-output]'),
+		add = find('[data-dyss-add]')
+	const sheet = new Sheet(),
+		scope = `contrast-${Math.random().toString(36).slice(2, 9)}`
+	root.classList.add(scope)
+	let nextId = 0,
+		swatches = initial.map(swatch => ({ ...swatch, id: ++nextId })),
+		mode = 'measured'
+	let light = '#ffffff',
+		dark = '#14161a'
+	// A one-pixel canvas resolves the browser's relative-color result for measurement.
+	const context = document.createElement('canvas').getContext('2d', { willReadFrequently: true })
+	function cssFormula(bg) {
+		const lightRGB = light
+			.slice(1)
+			.match(/../g)
+			.map(c => parseInt(c, 16))
+		const darkRGB = dark
+			.slice(1)
+			.match(/../g)
+			.map(c => parseInt(c, 16))
+		return `rgb(from oklch(from ${bg} round(${(Number(cutoff.value) + 0.5).toFixed(2)} - l) 0 0) ${lightRGB.map((c, i) => `calc((${['r', 'g', 'b'][i]} / 255) * ${c - darkRGB[i]} + ${darkRGB[i]})`).join(' ')})`
 	}
-
-	const sheet = new Sheet();
-	let threshold = clampThreshold(thresholdInput.value);
-	let lightText = lightTextInput.value;
-	let darkText = darkTextInput.value;
-	let swatches = defaultSwatches.map((item) => makeSwatch(item));
-	const hexTimers = new Map();
-
-	function syncCandidateInputs() {
-		lightTextInput.value = lightText;
-		darkTextInput.value = darkText;
-		if (lightTextHexInput instanceof HTMLInputElement) lightTextHexInput.value = toHexFieldValue(lightText);
-		if (darkTextHexInput instanceof HTMLInputElement) darkTextHexInput.value = toHexFieldValue(darkText);
-	}
-
-	function commitCandidateHexInput(target, allowShort = false) {
-		if (target === lightTextHexInput) {
-			const normalized = parseHexInputValue(target.value, allowShort);
-			if (!normalized) return;
-			lightText = normalized;
-			syncCandidateInputs();
-			renderRows();
-			renderPreview();
-		}
-		if (target === darkTextHexInput) {
-			const normalized = parseHexInputValue(target.value, allowShort);
-			if (!normalized) return;
-			darkText = normalized;
-			syncCandidateInputs();
-			renderRows();
-			renderPreview();
-		}
-	}
-
-	function commitRowHexInput(target, row, swatch, allowShort = false) {
-		const normalized = parseHexInputValue(target.value, allowShort);
-		if (!normalized) return;
-		swatch.color = normalized;
-		target.value = toHexFieldValue(normalized);
-		const picker = row.querySelector('input[data-field="color"]');
-		if (picker instanceof HTMLInputElement) picker.value = normalized;
-		renderPreview();
-	}
-
-	function textFormula(backgroundColor) {
-		const light = hexToRgb(lightText);
-		const dark = hexToRgb(darkText);
-		return `rgb(from oklch(from ${backgroundColor} round(${threshold.toFixed(2)} - l) 0 0) calc((r / 255) * ${light.r - dark.r} + ${dark.r}) calc((g / 255) * ${light.g - dark.g} + ${dark.g}) calc((b / 255) * ${light.b - dark.b} + ${dark.b}))`;
-	}
-
-	function supportMessage() {
-		const formula = textFormula('#3366cc');
-		if (typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('color', formula)) {
-			return `Relative color syntax supported. Text toggles between ${lightText} and ${darkText}.`;
-		}
-		return `Relative color syntax unsupported in this browser; cards fall back to inherited text color.`;
-	}
-
-	function renderRows() {
-		rowsContainer.replaceChildren();
+	function build() {
+		rowsBox.replaceChildren()
+		preview.replaceChildren()
 		for (const swatch of swatches) {
-			const row = document.createElement('div');
-			row.className = 'contrast-row';
-			row.dataset.swatchId = swatch.id;
-
-			const labelInput = document.createElement('input');
-			labelInput.type = 'text';
-			labelInput.dataset.field = 'label';
-			labelInput.value = swatch.label;
-			labelInput.setAttribute('aria-label', 'Swatch label');
-
-			const colorInput = document.createElement('input');
-			colorInput.type = 'color';
-			colorInput.dataset.field = 'color';
-			colorInput.value = swatch.color;
-			colorInput.setAttribute('aria-label', 'Swatch color');
-
-			const colorPair = document.createElement('div');
-			colorPair.className = 'contrast-color-pair';
-
-			const colorHexInput = document.createElement('input');
-			colorHexInput.type = 'text';
-			colorHexInput.dataset.field = 'colorHex';
-			colorHexInput.value = toHexFieldValue(swatch.color);
-			colorHexInput.maxLength = 6;
-			colorHexInput.setAttribute('spellcheck', 'false');
-			colorHexInput.setAttribute('autocapitalize', 'off');
-			colorHexInput.setAttribute('autocomplete', 'off');
-			colorHexInput.setAttribute('aria-label', 'Swatch color hex');
-
-			const colorHexWrap = document.createElement('span');
-			colorHexWrap.className = 'contrast-hex-wrap';
-			colorHexWrap.append(colorHexInput);
-
-			colorPair.append(colorInput, colorHexWrap);
-
-			const formula = document.createElement('code');
-			formula.textContent = `${lightText} / ${darkText}`;
-
-			const removeButton = document.createElement('button');
-			removeButton.type = 'button';
-			removeButton.dataset.remove = '';
-			removeButton.textContent = 'Remove';
-			if (swatches.length === 1) removeButton.disabled = true;
-
-			row.append(labelInput, colorPair, formula, removeButton);
-			rowsContainer.append(row);
+			const row = document.createElement('div')
+			row.className = 'contrast-row'
+			row.dataset.id = swatch.id
+			const label = document.createElement('input')
+			label.value = swatch.label
+			label.dataset.field = 'label'
+			label.maxLength = 24
+			label.setAttribute('aria-label', 'Background name')
+			const picker = document.createElement('input')
+			picker.type = 'color'
+			picker.value = swatch.color
+			picker.dataset.field = 'color'
+			picker.setAttribute('aria-label', `${swatch.label} background`)
+			const hex = document.createElement('input')
+			hex.value = swatch.color.slice(1)
+			hex.dataset.field = 'hex'
+			hex.maxLength = 6
+			hex.spellcheck = false
+			hex.setAttribute('aria-label', `${swatch.label} background hex`)
+			const remove = document.createElement('button')
+			remove.type = 'button'
+			remove.dataset.remove = ''
+			remove.textContent = '×'
+			remove.disabled = swatches.length <= 1
+			remove.setAttribute('aria-label', `Remove ${swatch.label}`)
+			row.append(label, picker, hex, remove)
+			rowsBox.append(row)
+			const card = document.createElement('article')
+			card.className = `contrast-card contrast-card-${swatch.id}`
+			const title = document.createElement('h4'),
+				sample = document.createElement('span'),
+				body = document.createElement('p'),
+				ratio = document.createElement('strong'),
+				grade = document.createElement('span')
+			sample.className = 'contrast-sample'
+			sample.textContent = 'Aa'
+			body.textContent = 'A little clarity goes a long way.'
+			ratio.className = 'contrast-ratio'
+			grade.className = 'contrast-grade'
+			card.append(title, sample, body, ratio, grade)
+			preview.append(card)
+			swatch.card = card
 		}
+		add.disabled = swatches.length >= 8
 	}
-
-	function ensureRule(selector) {
-		let rule = sheet.get(selector);
-		if (!rule) {
-			sheet.add(selector, {});
-			rule = sheet.get(selector);
-		}
-		return rule;
-	}
-
-	function updateCode() {
-		const swatchesCode = swatches.map((swatch) => ({ label: swatch.label, color: swatch.color }));
-		const updates = swatches
-			.map((swatch) => {
-				const selector = `.contrast-card-${swatch.id}`;
-				const formula = textFormula(swatch.color);
-				return [
-					`sheet.updateSet('${selector}', {`,
-					`  backgroundColor: '${swatch.color}',`,
-					`  color: '${formula}'`,
-					`});`
-				].join('\n');
-			})
-			.join('\n\n');
-
-		code.textContent = [
-			`const threshold = ${threshold.toFixed(2)};`,
-			`const lightText = '${lightText}';`,
-			`const darkText = '${darkText}';`,
-			`const swatches = ${JSON.stringify(swatchesCode, null, 2)};`,
-			'',
-			updates
-		].join('\n');
-	}
-
-	function renderPreview() {
-		preview.replaceChildren();
+	function render() {
+		let passing = 0
+		const supported = CSS.supports('color', cssFormula('#315e80'))
 		for (const swatch of swatches) {
-			const card = document.createElement('article');
-			card.className = `contrast-card contrast-card-${swatch.id}`;
-
-			const title = document.createElement('h4');
-			title.textContent = swatch.label;
-
-			const body = document.createElement('p');
-			body.textContent = 'Adaptive text color computed from background lightness.';
-
-			const chip = document.createElement('span');
-			chip.className = 'contrast-chip';
-			chip.textContent = swatch.color;
-
-			card.append(title, body, chip);
-			preview.append(card);
-
-			const formula = textFormula(swatch.color);
-			sheet.updateSet(`.contrast-card-${swatch.id}`, {
+			const best =
+				contrastRatio(swatch.color, light) > contrastRatio(swatch.color, dark) ? light : dark
+			const color = mode === 'css' && supported ? cssFormula(swatch.color) : best
+			sheet.updateSet(`.${scope} .contrast-card-${swatch.id}`, {
 				backgroundColor: swatch.color,
-				color: formula
-			});
+				color,
+			})
+			let chosen = best
+			if (mode === 'css' && supported && context) {
+				context.clearRect(0, 0, 1, 1)
+				context.fillStyle = getComputedStyle(swatch.card).color
+				context.fillRect(0, 0, 1, 1)
+				const pixel = context.getImageData(0, 0, 1, 1).data
+				chosen = `#${[...pixel]
+					.slice(0, 3)
+					.map(c => c.toString(16).padStart(2, '0'))
+					.join('')}`
+			}
+			const ratio = contrastRatio(swatch.color, chosen)
+			if (ratio >= 4.5) passing++
+			swatch.card.querySelector('h4').textContent = swatch.label
+			swatch.card.querySelector('.contrast-ratio').textContent = `${ratio.toFixed(2)}:1`
+			swatch.card.querySelector('.contrast-grade').textContent =
+				`Normal ${ratio >= 4.5 ? 'PASS' : 'FAIL'} · Large ${ratio >= 3 ? 'PASS' : 'FAIL'}\n${swatch.color} / ${chosen}`
 		}
-
-		support.textContent = supportMessage();
-		updateCode();
+		summary.textContent = `${passing} / ${swatches.length} pass for normal text`
+		support.textContent =
+			mode === 'measured'
+				? 'Compares both candidates and picks the higher contrast ratio.'
+				: supported
+					? 'Relative color syntax active. Change the cutoff and compare the measured results.'
+					: 'Relative color syntax unavailable here; using measured contrast as the fallback.'
+		cutoff.disabled = mode !== 'css'
+		cutoffOutput.textContent = Number(cutoff.value).toFixed(2)
+		for (const button of root.querySelectorAll('[data-contrast-mode]'))
+			button.setAttribute('aria-pressed', String(button.dataset.contrastMode === mode))
+		const first = swatches[0],
+			chosen = contrastRatio(first.color, light) > contrastRatio(first.color, dark) ? light : dark
+		code.textContent = [
+			`// ${mode === 'measured' ? 'Compare the two candidates using WCAG relative luminance.' : 'A CSS lightness threshold is an approximation.'}`,
+			`sheet.updateSet('.${scope} .contrast-card-${first.id}', {`,
+			`  backgroundColor: '${first.color}',`,
+			`  color: '${mode === 'css' && supported ? cssFormula(first.color) : chosen}'`,
+			`});`,
+		].join('\n')
 	}
-
-	controls.addEventListener('input', (event) => {
-		const target = event.target;
-		if (!(target instanceof HTMLInputElement)) return;
-
-		if (target === thresholdInput) {
-			threshold = clampThreshold(target.value);
-			target.value = threshold.toFixed(2);
-			thresholdOutput.textContent = threshold.toFixed(2);
-			renderRows();
-			renderPreview();
-			return;
+	controls.addEventListener('submit', e => e.preventDefault())
+	controls.addEventListener('click', event => {
+		const target = event.target
+		if (target.dataset.contrastMode) {
+			mode = target.dataset.contrastMode
+			render()
 		}
-		if (target === lightTextInput) {
-			lightText = target.value;
-			syncCandidateInputs();
-			renderRows();
-			renderPreview();
-			return;
+		if (target.matches('[data-remove]') && swatches.length > 1) {
+			const id = target.closest('[data-id]').dataset.id
+			sheet.remove(`.${scope} .contrast-card-${id}`)
+			swatches = swatches.filter(s => String(s.id) !== id)
+			build()
+			render()
 		}
-		if (target === lightTextHexInput) {
-			sanitizeHexInput(target);
-			const currentTimer = hexTimers.get(target);
-			if (currentTimer) window.clearTimeout(currentTimer);
-			const timer = window.setTimeout(() => {
-				commitCandidateHexInput(target, false);
-				hexTimers.delete(target);
-			}, 180);
-			hexTimers.set(target, timer);
-			return;
+	})
+	controls.addEventListener('input', event => {
+		const target = event.target
+		if (target === cutoff) {
+			render()
+			return
 		}
-		if (target === darkTextInput) {
-			darkText = target.value;
-			syncCandidateInputs();
-			renderRows();
-			renderPreview();
-			return;
+		for (const name of ['light', 'dark']) {
+			if (target.matches(`[data-contrast-${name}], [data-contrast-${name}-hex]`)) {
+				const value = normalizeHex(target.value)
+				if (!value) return
+				if (name === 'light') light = value
+				else dark = value
+				for (const input of controls.querySelectorAll(
+					`[data-contrast-${name}], [data-contrast-${name}-hex]`,
+				))
+					if (input !== target) input.value = input.type === 'color' ? value : value.slice(1)
+				render()
+				return
+			}
 		}
-		if (target === darkTextHexInput) {
-			sanitizeHexInput(target);
-			const currentTimer = hexTimers.get(target);
-			if (currentTimer) window.clearTimeout(currentTimer);
-			const timer = window.setTimeout(() => {
-				commitCandidateHexInput(target, false);
-				hexTimers.delete(target);
-			}, 180);
-			hexTimers.set(target, timer);
-			return;
+		const row = target.closest('[data-id]'),
+			swatch = swatches.find(s => String(s.id) === row?.dataset.id)
+		if (!swatch) return
+		if (target.dataset.field === 'label') swatch.label = target.value.trim() || 'Untitled'
+		if (target.dataset.field === 'color' || target.dataset.field === 'hex') {
+			const color = normalizeHex(target.value)
+			if (!color) return
+			swatch.color = color
+			row.querySelector('[data-field="color"]').value = color
+			if (target.dataset.field !== 'hex')
+				row.querySelector('[data-field="hex"]').value = color.slice(1)
 		}
-
-		const row = target.closest('[data-swatch-id]');
-		if (!row) return;
-		const id = row.getAttribute('data-swatch-id');
-		const swatch = swatches.find((item) => item.id === id);
-		if (!swatch) return;
-		const field = target.getAttribute('data-field');
-		if (field === 'label') {
-			swatch.label = target.value.trim() || 'Untitled';
-		}
-		if (field === 'color') {
-			swatch.color = target.value;
-			const hexInput = row.querySelector('input[data-field="colorHex"]');
-			if (hexInput instanceof HTMLInputElement) hexInput.value = toHexFieldValue(swatch.color);
-		}
-		if (field === 'colorHex') {
-			sanitizeHexInput(target);
-			const currentTimer = hexTimers.get(target);
-			if (currentTimer) window.clearTimeout(currentTimer);
-			const timer = window.setTimeout(() => {
-				commitRowHexInput(target, row, swatch, false);
-				hexTimers.delete(target);
-			}, 180);
-			hexTimers.set(target, timer);
-			return;
-		}
-
-		renderPreview();
-	});
-
+		render()
+	})
 	controls.addEventListener(
 		'blur',
-		(event) => {
-			const target = event.target;
-			if (!(target instanceof HTMLInputElement)) return;
-			const isCandidate = target === lightTextHexInput || target === darkTextHexInput;
-			const isRowHex = target.getAttribute('data-field') === 'colorHex';
-			if (!isCandidate && !isRowHex) return;
-			const currentTimer = hexTimers.get(target);
-			if (currentTimer) {
-				window.clearTimeout(currentTimer);
-				hexTimers.delete(target);
-			}
-			sanitizeHexInput(target);
-			if (isCandidate) {
-				commitCandidateHexInput(target, true);
-				return;
-			}
-			const row = target.closest('[data-swatch-id]');
-			if (!row) return;
-			const id = row.getAttribute('data-swatch-id');
-			const swatch = swatches.find((item) => item.id === id);
-			if (!swatch) return;
-			commitRowHexInput(target, row, swatch, true);
+		event => {
+			const input = event.target
+			if (input.matches('[data-contrast-light-hex]')) input.value = light.slice(1)
+			if (input.matches('[data-contrast-dark-hex]')) input.value = dark.slice(1)
+			if (input.dataset.field !== 'hex') return
+			const swatch = swatches.find(s => String(s.id) === input.closest('[data-id]')?.dataset.id)
+			if (swatch) input.value = swatch.color.slice(1)
 		},
-		true
-	);
-
-	controls.addEventListener('click', (event) => {
-		const target = event.target;
-		if (!(target instanceof HTMLElement)) return;
-		if (!target.matches('[data-remove]')) return;
-		const row = target.closest('[data-swatch-id]');
-		if (!row) return;
-		const id = row.getAttribute('data-swatch-id');
-		swatches = swatches.filter((item) => item.id !== id);
-		if (swatches.length === 0) swatches = [makeSwatch({ label: 'Fallback', color: '#7b6de0' })];
-		renderRows();
-		renderPreview();
-	});
-
-	addButton.addEventListener('click', () => {
-		swatches.push(makeSwatch());
-		renderRows();
-		renderPreview();
-	});
-
-	thresholdOutput.textContent = threshold.toFixed(2);
-	syncCandidateInputs();
-	renderRows();
-	renderPreview();
-	return () => {
-		for (const timer of hexTimers.values()) window.clearTimeout(timer);
-		hexTimers.clear();
-		sheet.destroy();
-	};
+		true,
+	)
+	add.addEventListener('click', () => {
+		if (swatches.length >= 8) return
+		swatches.push({ id: ++nextId, label: 'New background', color: '#9487b4' })
+		build()
+		render()
+	})
+	build()
+	render()
+	return () => sheet.destroy()
 }
-
-registerDemo('[data-dyss-contrast-lab]', mountContrastLab);
+registerDemo('[data-dyss-contrast-lab]', mountContrastLab)

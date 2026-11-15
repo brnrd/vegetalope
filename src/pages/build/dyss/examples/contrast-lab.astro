@@ -1,274 +1,194 @@
 ---
-import DyssExample from '../../../../layouts/DyssExample.astro';
-import ColorPickerHex from '../../../../components/dyss/ColorPickerHex.svelte';
-import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
-
-const title = 'dyss: contrast lab';
-const description = 'Approximate contrast-color() with relative color syntax and dyss runtime rules.';
+import DyssExample from '../../../../layouts/DyssExample.astro'
+import ColorPickerHex from '../../../../components/dyss/ColorPickerHex.astro'
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro'
+const title = 'dyss: contrast lab'
+const description =
+	'Put adaptive text color to the test, with measured contrast beside every choice.'
 ---
 
-<DyssExample title={title} description={description}>
-	<p>
-		This lab applies a pure-CSS text-color formula to dynamic backgrounds:
-		<code>oklch(from bg round(threshold - l) 0 0)</code>. Use it to switch between dark and light text at
-		runtime.
-	</p>
-
-	<div class="contrast-lab-demo stack" data-dyss-contrast-lab>
-		<form class="contrast-lab-controls stack" data-dyss-controls>
-			<fieldset>
-				<legend>Contrast inputs</legend>
-				<label class="contrast-threshold">
-					<span>Threshold</span>
-					<input type="range" min="1.12" max="1.30" step="0.01" value="1.21" data-dyss-threshold />
-					<output data-dyss-threshold-output>1.21</output>
-				</label>
+<DyssExample title={title} description={description} wide>
+	<div class="experiment-shell" data-dyss-contrast-lab>
+		<div class="experiment-heading">
+			<div>
+				<p class="experiment-kicker">Adaptive color / measured against the background</p><h2>
+					Make the choice visible.
+				</h2>
+			</div><span class="experiment-label" data-contrast-summary role="status"></span>
+		</div>
+		<div class="contrast-layout">
+			<form class="experiment-controls contrast-controls" data-dyss-controls>
+				<h3>Text selection</h3>
+				<div class="experiment-actions" role="group" aria-label="Text selection method">
+					<button
+						type="button"
+						class="experiment-button"
+						data-contrast-mode="measured"
+						aria-pressed="true">Best contrast</button
+					><button
+						type="button"
+						class="experiment-button"
+						data-contrast-mode="css"
+						aria-pressed="false">CSS approximation</button
+					>
+				</div>
 				<div class="contrast-candidates">
-					<label>
-						<span>Light text</span>
-							<ColorPickerHex
-								client:load
-								className="contrast-color-fields"
-								value="#ffffff"
-								pickerAttrs={{ 'data-dyss-light-text': '', 'aria-label': 'Light text color' }}
-							hexAttrs={{ 'data-dyss-light-text-hex': '', 'aria-label': 'Light text color hex' }}
+					<div>
+						<span class="experiment-label">Light candidate</span><ColorPickerHex
+							value="#ffffff"
+							pickerAttrs={{ 'data-contrast-light': '', 'aria-label': 'Light text color' }}
+							hexAttrs={{ 'data-contrast-light-hex': '', 'aria-label': 'Light text color hex' }}
 						/>
-					</label>
-					<label>
-						<span>Dark text</span>
-							<ColorPickerHex
-								client:load
-								className="contrast-color-fields"
-								value="#14161a"
-								pickerAttrs={{ 'data-dyss-dark-text': '', 'aria-label': 'Dark text color' }}
-							hexAttrs={{ 'data-dyss-dark-text-hex': '', 'aria-label': 'Dark text color hex' }}
+					</div>
+					<div>
+						<span class="experiment-label">Dark candidate</span><ColorPickerHex
+							value="#14161a"
+							pickerAttrs={{ 'data-contrast-dark': '', 'aria-label': 'Dark text color' }}
+							hexAttrs={{ 'data-contrast-dark-hex': '', 'aria-label': 'Dark text color hex' }}
 						/>
-					</label>
+					</div>
 				</div>
-				<div class="contrast-rows stack" data-dyss-rows></div>
-				<div class="contrast-actions">
-					<button type="button" data-dyss-add>Add swatch</button>
-				</div>
-			</fieldset>
-		</form>
-
-		<section class="contrast-preview stack">
-			<p class="contrast-support" data-dyss-support></p>
-			<div class="contrast-grid" data-dyss-preview></div>
-		</section>
-
-		<LiveCodeSection className="contrast-code" />
+				<label class="contrast-threshold"
+					><span class="experiment-label"
+						>CSS lightness cutoff <output data-contrast-cutoff-output>0.71</output></span
+					><input
+						type="range"
+						min="0.55"
+						max="0.85"
+						step="0.01"
+						value="0.71"
+						data-contrast-cutoff
+						disabled
+					/><small class="experiment-label">Active in CSS approximation mode.</small></label
+				>
+				<h3>Backgrounds</h3><div data-dyss-rows></div>
+				<button type="button" class="experiment-button" data-dyss-add>Add background</button>
+				<p class="experiment-meta" data-dyss-support></p>
+			</form>
+			<section aria-label="Live contrast samples">
+				<div class="contrast-grid" data-dyss-preview></div>
+			</section>
+		</div>
+		<p class="experiment-meta">
+			Ratios use opaque sRGB colors. Normal text needs 4.5:1; large text needs 3:1 under <a
+				href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum"
+				>WCAG AA contrast guidance</a
+			>. A lightness cutoff alone does not guarantee either.
+		</p>
+		<details class="experiment-code">
+			<summary>Behind the swatches / live dyss rules</summary><LiveCodeSection />
+		</details>
 	</div>
-
 	<script src="../../../../scripts/dyss-contrast-lab.js"></script>
 </DyssExample>
-
 <style>
-	.contrast-lab-demo {
-		padding: 1rem;
-		border: 1px solid var(--hairline);
-		border-radius: 0.75rem;
-		background: color-mix(in oklab, var(--color-bg) 92%, white);
-	}
-
-	.contrast-lab-controls fieldset {
-		border: 1px solid var(--hairline);
-		padding: 0.9rem;
-		margin: 0;
-	}
-
-	.contrast-lab-controls legend {
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-	}
-
-	.contrast-threshold {
+	.contrast-layout {
 		display: grid;
-		grid-template-columns: auto minmax(160px, 1fr) auto;
-		align-items: center;
-		gap: 0.7rem;
+		grid-template-columns: minmax(270px, 0.85fr) minmax(0, 1.15fr);
+		gap: 1.8rem;
+		align-items: start;
 	}
-
-	.contrast-threshold span {
-		font-family: var(--font-label);
-		font-size: 0.68rem;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
+	.contrast-controls h3 {
+		font-size: 0.8rem;
+		margin: 0 0 0.8rem;
 	}
-
-	.contrast-threshold output {
-		font-family: var(--font-label);
-		font-size: 0.75rem;
-		color: var(--color-ink-muted);
-	}
-
 	.contrast-candidates {
-		margin-top: 0.7rem;
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-		gap: 0.7rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.8rem;
+		margin-block: 1.2rem;
 	}
-
-	.contrast-candidates label {
+	.contrast-candidates > div {
 		display: grid;
 		gap: 0.35rem;
 	}
-
-	.contrast-candidates > label > span {
-		font-family: var(--font-label);
-		font-size: 0.66rem;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
-
-	.contrast-color-fields {
-		--dyss-color-height: 34px;
-	}
-
-	:global(.contrast-color-pair) {
-		--picker-size: 46px;
-		--hex-size: 108px;
+	.contrast-threshold {
 		display: grid;
-		grid-template-columns: var(--picker-size) var(--hex-size);
-		inline-size: calc(var(--picker-size) + var(--hex-size));
-		gap: 0;
-		align-items: center;
-	}
-
-	:global(.contrast-color-pair input[type='color']) {
-		inline-size: 46px;
-		block-size: 34px;
-		padding: 0;
-		border: 1px solid var(--hairline);
-		border-right: 0;
-		border-radius: 0.35rem 0 0 0.35rem;
-		background: transparent;
-	}
-
-	:global(.contrast-hex-wrap) {
-		position: relative;
-		display: inline-flex;
-	}
-
-	:global(.contrast-hex-wrap)::before {
-		content: '#';
-		position: absolute;
-		inset-inline-start: 0.5rem;
-		inset-block-start: 50%;
-		transform: translateY(-50%);
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		color: var(--color-ink-muted);
-		pointer-events: none;
-	}
-
-	:global(.contrast-hex-wrap input[type='text']) {
-		inline-size: 100%;
-		block-size: 34px;
-		padding-inline: 1.1rem 0.5rem;
-		border: 1px solid var(--hairline);
-		border-radius: 0 0.35rem 0.35rem 0;
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		letter-spacing: 0.06em;
-		text-transform: lowercase;
-	}
-
-	.contrast-rows {
-		margin-top: 0.75rem;
-	}
-
-	:global(.contrast-row) {
-		display: grid;
-		grid-template-columns: minmax(120px, 170px) 154px minmax(120px, 1fr) auto;
 		gap: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+	.contrast-threshold > span {
+		display: flex;
+		justify-content: space-between;
+	}
+	.contrast-controls :global(.contrast-row) {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 28px 80px 24px;
 		align-items: center;
+		gap: 0.4rem;
+		border-top: 1px solid var(--hairline);
+		padding-block: 0.6rem;
 	}
-
-	:global(.contrast-row input[data-field='label']) {
-		inline-size: 100%;
-	}
-
-	:global(.contrast-row code) {
-		font-size: 0.68rem;
-	}
-
-	:global(.contrast-row button) {
-		padding: 0.38rem 0.6rem;
-		font-size: 0.62rem;
+	.contrast-controls :global(input[type='color']) {
+		padding: 0;
 		background: transparent;
-		color: var(--color-ink);
-		border: 1px solid var(--hairline);
+		border: 0;
+		width: 26px;
+		height: 28px;
+		cursor: pointer;
 	}
-
-	.contrast-actions {
-		margin-top: 0.8rem;
+	.contrast-controls :global(button[data-remove]) {
+		padding: 0.1rem;
+		border-color: transparent;
+		font-size: 0.9rem;
 	}
-
-	.contrast-actions button {
-		padding: 0.45rem 0.75rem;
-		font-size: 0.62rem;
-		background: transparent;
-		color: var(--color-ink);
-		border: 1px solid var(--hairline);
+	.contrast-controls > button {
+		margin-top: 0.7rem;
 	}
-
-	.contrast-preview {
-		margin-top: 1rem;
-	}
-
-	.contrast-support {
-		margin: 0;
-		font-family: var(--font-label);
-		font-size: 0.66rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--color-ink-muted);
-	}
-
 	.contrast-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: 0.75rem;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.7rem;
 	}
-
-	:global(.contrast-card) {
-		border: 1px solid var(--hairline);
-		padding: 0.75rem;
-		display: grid;
-		gap: 0.6rem;
-		color: var(--color-ink);
+	.contrast-grid :global(.contrast-card) {
+		min-width: 0;
+		border-radius: 3px;
+		padding: 1.1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.65rem;
 	}
-
-	:global(.contrast-card h4) {
-		margin: 0;
-		font-size: 1rem;
-	}
-
-	:global(.contrast-card p) {
-		margin: 0;
-		font-size: 0.86rem;
-	}
-
-	:global(.contrast-card .contrast-chip) {
-		inline-size: fit-content;
+	.contrast-grid :global(.contrast-card h4) {
+		font-size: 0.65rem;
 		font-family: var(--font-label);
-		font-size: 0.6rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		padding: 0.25rem 0.45rem;
-		border: 1px solid currentColor;
+		font-weight: 400;
+		margin: 0;
+		color: inherit;
+		overflow-wrap: anywhere;
 	}
-
-	.contrast-code {
-		--dyss-code-max-height: 300px;
+	.contrast-grid :global(.contrast-sample) {
+		font-size: 2.2rem;
+		font-weight: 500;
+		line-height: 1;
+		letter-spacing: -0.07em;
+		color: inherit;
 	}
-
-	@media (max-width: 900px) {
-		:global(.contrast-row) {
+	.contrast-grid :global(.contrast-card p) {
+		font-size: 0.72rem;
+		line-height: 1.5;
+		margin: 0;
+		color: inherit;
+	}
+	.contrast-grid :global(.contrast-ratio) {
+		font: 1rem/1.4 var(--font-label);
+		font-variant-numeric: tabular-nums;
+		margin-top: auto;
+		padding-top: 0.5rem;
+	}
+	.contrast-grid :global(.contrast-grade) {
+		white-space: pre-line;
+		font: 0.52rem/1.7 var(--font-label);
+		padding-top: 0.45rem;
+		border-top: 1px solid currentColor;
+	}
+	@media (max-width: 800px) {
+		.contrast-layout {
 			grid-template-columns: 1fr;
+		}
+	}
+	@media (max-width: 420px) {
+		.contrast-grid :global(.contrast-card) {
+			padding: 0.8rem;
 		}
 	}
 </style>

@@ -2,9 +2,10 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import '../styles/dyss-experiments.css';
 import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName';
 
-const { title, description, backHref = '/build/dyss', backLabel = 'Back to dyss examples' } = Astro.props;
+const { title, description, backHref = '/build/dyss', backLabel = 'Back to dyss examples', wide = false } = Astro.props;
 const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 ---
 
@@ -15,8 +16,8 @@ const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 	</head>
 	<body>
 		<Header />
-	<main id="main-content" tabindex="-1" class="content stack" transition:name="page-content" transition:animate={pageContentTransition}>
-			<article class="stack dyss-example">
+	<main id="main-content" tabindex="-1" class:list={['content', 'stack', { 'content--wide': wide }]} transition:name="page-content" transition:animate={pageContentTransition}>
+			<article class:list={['stack', 'dyss-example', { 'dyss-example--wide': wide }]}>
 				<header class="stack">
 					<h1
 						class="transition-title"
@@ -42,6 +43,14 @@ const titleTransitionName = viewTransitionNameFromPath(Astro.url.pathname);
 </html>
 
 <style>
+	.content--wide {
+		max-width: 1120px;
+	}
+
+	.dyss-example--wide {
+		max-width: none;
+	}
+
 	.dyss-example .dyss-back {
 		font-family: var(--font-label);
 		font-size: 0.7rem;

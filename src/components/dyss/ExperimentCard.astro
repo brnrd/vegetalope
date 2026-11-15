@@ -1,0 +1,352 @@
+---
+import { viewTransitionNameFromPath } from '../../utils/viewTransitionName'
+const { title, href, description, type, label } = Astro.props
+---
+
+<li class="experiment-card">
+	<a href={href}>
+		<div class:list={['experiment-cover', `cover-${type}`]} aria-hidden="true">
+			{
+				type === 'fuel' && (
+					<div class="cover-heatmap">
+						{Array.from({ length: 48 }, (_, i) => (
+							<span style={`--row:${Math.floor(i / 8)}`} />
+						))}
+					</div>
+				)
+			}
+			{
+				type === 'annotations' && (
+					<div class="cover-document">
+						<>
+							<span>FIELD NOTES / 07</span>
+							<p>
+								A quieter kind
+								<br />
+								of <mark>progress.</mark>
+							</p>
+							<i />
+							<i />
+							<i />
+						</>
+					</div>
+				)
+			}
+			{
+				type === 'spring' && (
+					<div class="cover-spring">
+						<>
+							<svg viewBox="0 0 250 70">
+								<>
+									<path
+										d="M10 35H30l8-15 12 30 12-30 12 30 12-30 12 30 12-30 12 30 12-30 12 30 8-15H180"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+									/>
+									<path d="M220 5v60" stroke="currentColor" stroke-dasharray="3 4" opacity=".4" />
+								</>
+							</svg>
+							<span>
+								1.0<small>kg</small>
+							</span>
+						</>
+					</div>
+				)
+			}
+			{
+				type === 'revenue' && (
+					<div class="cover-donut">
+						<span>$1,000</span>
+					</div>
+				)
+			}
+			{
+				type === 'theme' && (
+					<div class="cover-theme">
+						<>
+							<span>Fieldwork.</span>
+							<p>
+								Good ideas need
+								<br />
+								room to breathe.
+							</p>
+							<i />
+						</>
+					</div>
+				)
+			}
+			{
+				type === 'contrast' && (
+					<div class="cover-contrast">
+						<>
+							<span>
+								Aa<small>6.90:1</small>
+							</span>
+							<span>
+								Aa<small>9.84:1</small>
+							</span>
+						</>
+					</div>
+				)
+			}
+			{
+				type === 'border' && (
+					<div class="cover-border">
+						Follow
+						<br />
+						the edge.
+					</div>
+				)
+			}
+		</div>
+		<div class="experiment-card-copy">
+			<span>{label} <i>↗</i></span><h3
+				class="transition-title-link"
+				style={`--view-transition-name:${viewTransitionNameFromPath(href)};`}
+				transition:name={viewTransitionNameFromPath(href)}
+			>
+				{title}
+			</h3><p>{description}</p>
+		</div>
+	</a>
+</li>
+<style>
+	.experiment-card {
+		min-width: 0;
+		border: 1px solid var(--hairline);
+		border-radius: 4px;
+		overflow: hidden;
+		list-style: none;
+	}
+	.experiment-card > a {
+		display: block;
+		height: 100%;
+		text-decoration: none;
+		color: var(--color-ink);
+	}
+	.experiment-card > a:hover .experiment-card-copy h3 {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+	.experiment-cover {
+		height: 190px;
+		display: grid;
+		place-items: center;
+		overflow: hidden;
+		border-bottom: 1px solid var(--hairline);
+		background: color-mix(in oklab, var(--color-bg) 94%, var(--color-ink));
+	}
+	.experiment-card-copy {
+		padding: 1.1rem;
+	}
+	.experiment-card-copy > span {
+		display: flex;
+		justify-content: space-between;
+		font: 0.56rem/1.5 var(--font-label);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--color-ink-muted);
+	}
+	.experiment-card-copy i {
+		font-style: normal;
+		font-size: 0.8rem;
+	}
+	.experiment-card-copy h3 {
+		font-size: 1.12rem;
+		margin: 0.65rem 0 0.5rem;
+		letter-spacing: -0.03em;
+	}
+	.experiment-card-copy p {
+		font-size: 0.76rem;
+		line-height: 1.7;
+		margin: 0;
+		color: var(--color-ink-muted);
+	}
+	.cover-heatmap {
+		width: 78%;
+		display: grid;
+		grid-template-columns: repeat(8, 1fr);
+		gap: 2px;
+		position: relative;
+	}
+	.cover-heatmap span {
+		height: 17px;
+		background: color-mix(in oklab, #e6da9e calc(100% - var(--row) * 20%), #489daf);
+		opacity: 0.8;
+	}
+	.cover-heatmap::after {
+		content: '';
+		position: absolute;
+		left: 54%;
+		top: 67%;
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		background: white;
+		border: 2px solid #293448;
+		box-shadow: 0 0 0 4px #fff5;
+	}
+	.cover-document {
+		width: 210px;
+		height: 220px;
+		background: #f5f0e5;
+		color: #293448;
+		padding: 1.2rem;
+		rotate: -4deg;
+		translate: 0 35px;
+		box-shadow: 0 2px 12px #0001;
+	}
+	.cover-document > span {
+		font: 0.4rem var(--font-label);
+		letter-spacing: 0.1em;
+	}
+	.cover-document p {
+		font: 1.1rem/1.4 var(--font-reading);
+		margin: 0.8rem 0;
+		color: inherit;
+	}
+	.cover-document mark {
+		background: #dec66580;
+		color: inherit;
+	}
+	.cover-document i {
+		display: block;
+		margin-top: 6px;
+		height: 3px;
+		background: #2934482e;
+		width: 90%;
+	}
+	.cover-document i:last-child {
+		width: 66%;
+	}
+	.cover-spring {
+		width: 76%;
+		position: relative;
+		color: #719f9a;
+	}
+	.cover-spring svg {
+		display: block;
+		width: 100%;
+	}
+	.cover-spring > span {
+		position: absolute;
+		top: 50%;
+		left: 68%;
+		translate: -50% -50%;
+		width: 50px;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		background: #c0d6cd;
+		border: 1px solid #345d5a;
+		color: #25433e;
+		border-radius: 5px;
+		font: 0.8rem var(--font-label);
+		box-shadow: 0 3px 0 #25433e24;
+	}
+	.cover-spring small {
+		font-size: 0.4rem;
+		margin-top: 3px;
+	}
+	.cover-donut {
+		width: 130px;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: conic-gradient(#4d9b91 44%, #ce8065 44% 75%, #d8b36b 75% 92%, #7c8eac 92%);
+		display: grid;
+		place-items: center;
+	}
+	.cover-donut span {
+		display: grid;
+		place-items: center;
+		width: 76px;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--color-bg);
+		font: 0.75rem var(--font-label);
+	}
+	.cover-theme {
+		background: #f6f1e8;
+		color: #293448;
+		width: 70%;
+		padding: 1rem 1.2rem;
+		box-shadow: 0 2px 12px #0001;
+	}
+	.cover-theme > span {
+		font: italic 1rem var(--font-reading);
+		letter-spacing: -0.04em;
+		display: block;
+		border-bottom: 1px solid #293448;
+		padding-bottom: 0.4rem;
+	}
+	.cover-theme p {
+		font: 0.95rem/1.15 var(--font-reading);
+		margin: 0.5rem 0;
+		color: inherit;
+	}
+	.cover-theme i {
+		display: block;
+		width: 3rem;
+		height: 0.6rem;
+		background: #a14132;
+	}
+	.cover-contrast {
+		display: flex;
+		width: 70%;
+		height: 110px;
+	}
+	.cover-contrast > span {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background: #315e80;
+		color: white;
+		font: 2rem var(--font-body);
+	}
+	.cover-contrast > span:last-child {
+		background: #d8bc7d;
+		color: #14161a;
+	}
+	.cover-contrast small {
+		font: 0.45rem var(--font-label);
+		margin-top: 0.5rem;
+	}
+	.cover-border {
+		width: 150px;
+		padding: 1.4rem;
+		background: #101925;
+		color: #9de5df;
+		outline: 2px solid #70f9ff;
+		font: 1.3rem/1.1 var(--font-label);
+		clip-path: polygon(
+			0 3%,
+			18% 0,
+			40% 4%,
+			60% 0,
+			82% 3%,
+			100% 0,
+			98% 30%,
+			100% 58%,
+			97% 78%,
+			100% 100%,
+			75% 97%,
+			48% 100%,
+			22% 97%,
+			0 100%,
+			2% 70%,
+			0 45%,
+			3% 20%
+		);
+		box-shadow: inset 0 0 0 3px #70f9ff;
+	}
+	@media (max-width: 600px) {
+		.experiment-cover {
+			height: 170px;
+		}
+	}
+</style>

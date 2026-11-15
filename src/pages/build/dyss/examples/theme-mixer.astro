@@ -1,298 +1,337 @@
 ---
-import DyssExample from '../../../../layouts/DyssExample.astro';
-import ColorPickerHex from '../../../../components/dyss/ColorPickerHex.svelte';
-import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
-
-const title = 'dyss: theme mixer';
-const description = 'Tune theme tokens and watch a preview UI restyle itself in real time.';
+import DyssExample from '../../../../layouts/DyssExample.astro'
+import ColorPickerHex from '../../../../components/dyss/ColorPickerHex.astro'
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro'
+const title = 'dyss: theme studio'
+const description =
+	'A complete artboard and a small set of tokens. Change one rule, see the whole system respond.'
 ---
 
-<DyssExample title={title} description={description}>
-	<p>
-		Adjust the tokens below and the preview will update immediately. dyss updates runtime CSS rules instead of
-		inlining styles everywhere.
-	</p>
-
-	<div class="theme-mixer stack" data-dyss-theme-demo>
-		<form class="theme-controls" data-dyss-controls>
-			<fieldset>
-				<legend>Theme tokens</legend>
-				<div class="theme-grid">
-					<label class="theme-control">
-						<span>Background</span>
-						<ColorPickerHex
-							client:load
-							className="theme-color-fields"
-							value="#f6f1e8"
-							pickerAttrs={{ 'data-token': 'bg', 'aria-label': 'Background color' }}
-							hexAttrs={{ 'data-token': 'bg', 'aria-label': 'Background color hex' }}
-						/>
-					</label>
-					<label class="theme-control">
-						<span>Text</span>
-						<ColorPickerHex
-							client:load
-							className="theme-color-fields"
-							value="#14161a"
-							pickerAttrs={{ 'data-token': 'ink', 'aria-label': 'Text color' }}
-							hexAttrs={{ 'data-token': 'ink', 'aria-label': 'Text color hex' }}
-						/>
-					</label>
-					<label class="theme-control">
-						<span>Accent</span>
-						<ColorPickerHex
-							client:load
-							className="theme-color-fields"
-							value="#c21f2b"
-							pickerAttrs={{ 'data-token': 'accent', 'aria-label': 'Accent color' }}
-							hexAttrs={{ 'data-token': 'accent', 'aria-label': 'Accent color hex' }}
-						/>
-					</label>
-					<label class="theme-control">
-						<span>Surface mix</span>
-						<input type="range" min="70" max="98" step="1" value="92" data-token="surfaceMix" />
-						<output data-output="surfaceMix">92%</output>
-					</label>
-					<label class="theme-control">
-						<span>Type scale</span>
-						<input type="range" min="0.85" max="1.3" step="0.01" value="1" data-token="typeScale" />
-						<output data-output="typeScale">1.00x</output>
-					</label>
-					<label class="theme-control">
-						<span>Space scale</span>
-						<input type="range" min="0.8" max="1.4" step="0.01" value="1" data-token="spaceScale" />
-						<output data-output="spaceScale">1.00x</output>
-					</label>
+<DyssExample title={title} description={description} wide>
+	<div class="experiment-shell" data-dyss-theme-demo>
+		<div class="experiment-heading">
+			<div>
+				<p class="experiment-kicker">Design systems / one shared rule</p><h2>
+					Find a different atmosphere.
+				</h2>
+			</div><span class="experiment-label" data-theme-status role="status">Signal / original</span>
+		</div>
+		<div class="theme-layout">
+			<form class="experiment-controls theme-controls" data-dyss-controls>
+				<h3>Start with an atmosphere</h3>
+				<div class="experiment-actions" role="group" aria-label="Theme presets">
+					<button type="button" class="experiment-button" data-theme="signal" aria-pressed="true"
+						>Signal</button
+					><button type="button" class="experiment-button" data-theme="noir" aria-pressed="false"
+						>Noir</button
+					><button type="button" class="experiment-button" data-theme="studio" aria-pressed="false"
+						>Studio</button
+					>
 				</div>
-			</fieldset>
-		</form>
-
-		<div class="theme-preview" data-theme-preview>
-			<header class="preview-header">
-				<div>
-					<p class="preview-kicker">Mix &amp; match</p>
-					<h3>Editorial Launch</h3>
-					<p>Dial the sliders to steer the theme. dyss keeps the rules clean.</p>
+				<div class="theme-color-grid">
+					{
+						[
+							{ key: 'bg', label: 'Paper', value: '#f6f1e8' },
+							{ key: 'ink', label: 'Ink', value: '#293448' },
+							{ key: 'accent', label: 'Accent', value: '#a14132' },
+						].map(token => (
+							<div>
+								<>
+									<span class="experiment-label">{token.label}</span>
+									<ColorPickerHex
+										value={token.value}
+										pickerAttrs={{ 'data-token': token.key, 'aria-label': `${token.label} color` }}
+										hexAttrs={{ 'data-token': token.key, 'aria-label': `${token.label} color hex` }}
+									/>
+								</>
+							</div>
+						))
+					}
 				</div>
-				<button class="preview-button primary" type="button">Primary action</button>
-			</header>
-
-			<div class="preview-grid">
-				<section class="preview-card">
-					<h4>Campaign summary</h4>
-					<p>Short content blocks are easy to restyle when the tokens move.</p>
-					<div class="preview-badges">
-						<span>New</span>
-						<span>Editor pick</span>
-						<span>2026</span>
+				{
+					[
+						{ key: 'surfaceMix', label: 'Surface mix', min: 70, max: 98, step: 1, value: 94 },
+						{ key: 'typeScale', label: 'Type scale', min: 0.85, max: 1.3, step: 0.01, value: 1 },
+						{ key: 'spaceScale', label: 'Space scale', min: 0.8, max: 1.4, step: 0.01, value: 1 },
+					].map(token => (
+						<label class="theme-range">
+							<>
+								<span class="experiment-label">
+									{token.label}
+									<output data-output={token.key} />
+								</span>
+								<input
+									type="range"
+									min={token.min}
+									max={token.max}
+									step={token.step}
+									value={token.value}
+									data-token={token.key}
+								/>
+							</>
+						</label>
+					))
+				}
+				<button type="button" class="experiment-button" data-theme-reset>Reset atmosphere</button>
+				<p class="experiment-meta" data-theme-contrast></p>
+			</form>
+			<div class="theme-preview" data-theme-preview>
+				<header class="preview-masthead">
+					<span class="preview-wordmark">Fieldwork.</span><span
+						>THE WEEKLY JOURNAL<br />VOL. 07 / NOV 2026</span
+					>
+				</header>
+				<div class="preview-swatch-strip" aria-hidden="true">
+					<span></span><span></span><span></span><span></span>
+				</div>
+				<article class="preview-story">
+					<p class="preview-kicker">Design &amp; everyday life</p><h3>
+						Good ideas need<br />room to breathe.
+					</h3>
+					<p class="preview-deck">
+						A journal about the details that change how we live, think, and make things.
+					</p>
+					<div class="preview-byline">
+						<span class="preview-avatar" aria-hidden="true">FW</span><span
+							>From the editorial desk<br /><small>6 minute read · Issue 07</small></span
+						>
 					</div>
-				</section>
-				<section class="preview-card">
-					<h4>Key metrics</h4>
-					<ul class="preview-list">
-						<li><strong>8.2%</strong><span>Engagement</span></li>
-						<li><strong>12.4k</strong><span>Subscribers</span></li>
-						<li><strong>4m 18s</strong><span>Avg. read</span></li>
-					</ul>
-					<button class="preview-button ghost" type="button">Secondary action</button>
-				</section>
+					<div class="preview-actions">
+						<button
+							class="preview-button primary"
+							type="button"
+							data-theme-save
+							aria-pressed="false">Save for later</button
+						><span data-theme-save-note>Build a little reading space.</span>
+					</div>
+				</article>
+				<div class="preview-grid">
+					<section class="preview-card">
+						<span>01 / OBSERVATIONS</span><h4>The useful pause</h4><p>
+							What becomes visible when we leave a little space between things?
+						</p>
+					</section><section class="preview-card">
+						<span>02 / PRACTICE</span><h4>Make it a habit</h4><p>
+							Small, repeatable changes have a way of finding their own rhythm.
+						</p>
+					</section>
+				</div>
+				<footer class="preview-footer">
+					<span>INDEPENDENT THOUGHT. SHARED WEEKLY.</span><span>↗ FIELDWORK JOURNAL</span>
+				</footer>
 			</div>
 		</div>
-
-		<LiveCodeSection className="theme-code" />
+		<p class="experiment-meta">
+			Presets from the former artboard experiment now live here. Tokens affect typography, spacing,
+			surfaces, and the saved state together.
+		</p>
+		<details class="experiment-code">
+			<summary>Behind the artboard / live dyss rules</summary><LiveCodeSection />
+		</details>
 	</div>
-
 	<script src="../../../../scripts/dyss-theme-mixer.js"></script>
 </DyssExample>
-
 <style>
-	.theme-mixer {
-		padding: 1rem;
-		border: 1px solid var(--hairline);
-		border-radius: 0.75rem;
-		background: color-mix(in oklab, var(--color-bg) 92%, white);
-	}
-
-	.theme-controls fieldset {
-		border: 1px solid var(--hairline);
-		padding: 0.9rem;
-		margin: 0;
-	}
-
-	.theme-controls legend {
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-	}
-
-	.theme-grid {
-		margin-top: 0.6rem;
+	.theme-layout {
 		display: grid;
-		gap: 0.75rem;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		grid-template-columns: minmax(235px, 0.65fr) minmax(0, 1.35fr);
+		gap: 1.6rem;
+		align-items: start;
 	}
-
-	.theme-control {
+	.theme-controls h3 {
+		font-size: 0.8rem;
+		margin: 0 0 0.8rem;
+	}
+	.theme-color-grid {
 		display: grid;
-		gap: 0.4rem;
-		font-size: 0.85rem;
+		gap: 0.8rem;
+		margin-block: 1.3rem;
 	}
-
-	.theme-control > span {
-		font-family: var(--font-label);
-		font-size: 0.7rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
+	.theme-color-grid > div {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+		flex-wrap: wrap;
 	}
-
-	.theme-color-fields {
-		--dyss-color-height: 38px;
+	.theme-range {
+		display: grid;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
 	}
-
-	.theme-control input[type='range'] {
-		inline-size: 100%;
+	.theme-range > span {
+		display: flex;
+		justify-content: space-between;
 	}
-
-	.theme-control output {
-		font-family: var(--font-label);
-		font-size: 0.75rem;
-		color: var(--color-ink-muted);
-	}
-
 	.theme-preview {
 		--tm-bg: #f6f1e8;
-		--tm-ink: #14161a;
-		--tm-accent: #c21f2b;
-		--tm-surface-mix: 92%;
+		--tm-ink: #293448;
+		--tm-accent: #a14132;
+		--tm-accent-ink: #ffffff;
+		--tm-surface-mix: 94%;
 		--tm-type-scale: 1;
 		--tm-space-scale: 1;
 		background: var(--tm-bg);
 		color: var(--tm-ink);
-		border: 1px solid color-mix(in oklab, var(--tm-ink) 15%, transparent);
-		padding: calc(1.1rem * var(--tm-space-scale));
-		border-radius: 0.8rem;
-		display: grid;
-		gap: calc(1rem * var(--tm-space-scale));
+		border: 1px solid color-mix(in oklab, var(--tm-ink) 20%, transparent);
+		padding: calc(1.3rem * var(--tm-space-scale));
+		min-width: 0;
 	}
-
-	.theme-preview h3,
-	.theme-preview h4 {
-		margin: 0;
+	.theme-preview :is(h3, h4, p) {
+		color: inherit;
 	}
-
-	.preview-kicker {
-		font-family: var(--font-label);
-		font-size: calc(0.7rem * var(--tm-type-scale));
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-		margin: 0;
-		color: color-mix(in oklab, var(--tm-ink) 70%, transparent);
-	}
-
-	.preview-header {
+	.preview-masthead {
 		display: flex;
-		gap: 1rem;
-		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
+		gap: 0.7rem;
+		border-bottom: 1px solid currentColor;
+		padding-bottom: calc(0.8rem * var(--tm-space-scale));
 	}
-
-	.preview-header h3 {
-		font-size: calc(1.4rem * var(--tm-type-scale));
+	.preview-wordmark {
+		font: italic calc(1.7rem * var(--tm-type-scale))/1 var(--font-reading);
+		letter-spacing: -0.07em;
 	}
-
-	.preview-header p {
-		margin: 0.4rem 0 0;
-		font-size: calc(0.95rem * var(--tm-type-scale));
-		max-width: 42ch;
+	.preview-masthead > span:last-child {
+		font: 0.45rem/1.7 var(--font-label);
+		text-align: right;
 	}
-
-	.preview-grid {
-		display: grid;
-		gap: calc(0.9rem * var(--tm-space-scale));
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-	}
-
-	.preview-card {
-		background: color-mix(in oklab, var(--tm-bg) var(--tm-surface-mix), var(--tm-ink));
-		border: 1px solid color-mix(in oklab, var(--tm-ink) 12%, transparent);
-		padding: calc(0.9rem * var(--tm-space-scale));
-		display: grid;
-		gap: 0.6rem;
-	}
-
-	.preview-card p {
-		margin: 0;
-		font-size: calc(0.9rem * var(--tm-type-scale));
-	}
-
-	.preview-badges {
+	.preview-swatch-strip {
 		display: flex;
-		gap: 0.4rem;
+		height: 6px;
+		gap: 3px;
+		margin-block: calc(1rem * var(--tm-space-scale));
+	}
+	.preview-swatch-strip span {
+		flex: 1;
+		background: var(--tm-accent);
+	}
+	.preview-swatch-strip span:nth-child(2) {
+		opacity: 0.65;
+	}
+	.preview-swatch-strip span:nth-child(3) {
+		opacity: 0.35;
+	}
+	.preview-swatch-strip span:nth-child(4) {
+		opacity: 0.12;
+	}
+	.preview-story {
+		padding-block: calc(0.9rem * var(--tm-space-scale));
+	}
+	.preview-kicker {
+		font: calc(0.55rem * var(--tm-type-scale))/1.6 var(--font-label);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		margin: 0 0 calc(0.9rem * var(--tm-space-scale));
+	}
+	.preview-story h3 {
+		font: calc(2.2rem * var(--tm-type-scale))/1.08 var(--font-reading);
+		letter-spacing: -0.04em;
+		margin: 0 0 calc(1rem * var(--tm-space-scale));
+	}
+	.preview-deck {
+		font: calc(0.82rem * var(--tm-type-scale))/1.6 var(--font-body);
+		margin: 0 0 calc(1.2rem * var(--tm-space-scale));
+	}
+	.preview-byline {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font: calc(0.56rem * var(--tm-type-scale))/1.6 var(--font-label);
+	}
+	.preview-byline small {
+		font-size: 0.9em;
+		opacity: 0.7;
+	}
+	.preview-avatar {
+		background: var(--tm-accent);
+		color: var(--tm-accent-ink);
+		width: 2rem;
+		height: 2rem;
+		display: grid;
+		place-items: center;
+		border-radius: 50%;
+	}
+	.preview-actions {
+		display: flex;
+		gap: 0.7rem;
+		align-items: center;
 		flex-wrap: wrap;
+		margin-block: calc(1.2rem * var(--tm-space-scale));
 	}
-
-	.preview-badges span {
-		font-family: var(--font-label);
-		font-size: calc(0.6rem * var(--tm-type-scale));
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		padding: 0.25rem 0.5rem;
-		border: 1px solid color-mix(in oklab, var(--tm-ink) 20%, transparent);
+	.preview-actions > span {
+		font: calc(0.54rem * var(--tm-type-scale))/1.6 var(--font-label);
 	}
-
-	.preview-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: grid;
-		gap: 0.5rem;
-	}
-
-	.preview-list li {
-		display: grid;
-		gap: 0.2rem;
-		border-top: 1px dashed color-mix(in oklab, var(--tm-ink) 18%, transparent);
-		padding-top: 0.4rem;
-	}
-
-	.preview-list strong {
-		font-size: calc(1.15rem * var(--tm-type-scale));
-	}
-
-	.preview-list span {
-		font-size: calc(0.75rem * var(--tm-type-scale));
-		color: color-mix(in oklab, var(--tm-ink) 70%, transparent);
-	}
-
 	.preview-button {
-		font-family: var(--font-label);
-		font-size: calc(0.65rem * var(--tm-type-scale));
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-		padding: 0.55rem 0.8rem;
-		border: 1px solid transparent;
-		background: transparent;
+		font: calc(0.57rem * var(--tm-type-scale))/1.5 var(--font-label);
+		letter-spacing: 0;
+		text-transform: none;
+		border: 0;
+		border-radius: 2px;
+		padding: calc(0.6rem * var(--tm-space-scale)) calc(0.8rem * var(--tm-space-scale));
 		cursor: pointer;
 	}
-
 	.preview-button.primary {
 		background: var(--tm-accent);
-		color: #fff;
+		color: var(--tm-accent-ink);
 	}
-
-	.preview-button.ghost {
-		border-color: color-mix(in oklab, var(--tm-ink) 25%, transparent);
-		color: var(--tm-ink);
+	.preview-button[aria-pressed='true'] {
+		outline: 1px solid var(--tm-accent);
+		outline-offset: 3px;
 	}
-
-	.theme-code {
-		--dyss-code-max-height: 320px;
+	.preview-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: calc(0.8rem * var(--tm-space-scale));
 	}
-	@media (max-width: 720px) {
+	.preview-card {
+		background: color-mix(in oklab, var(--tm-bg) var(--tm-surface-mix), var(--tm-ink));
+		padding: calc(0.9rem * var(--tm-space-scale));
+		border-top: 2px solid var(--tm-accent);
+	}
+	.preview-card > span {
+		font: calc(0.45rem * var(--tm-type-scale))/1.5 var(--font-label);
+	}
+	.preview-card h4 {
+		font: calc(1.1rem * var(--tm-type-scale))/1.2 var(--font-reading);
+		margin: calc(0.7rem * var(--tm-space-scale)) 0;
+	}
+	.preview-card p {
+		font-size: calc(0.65rem * var(--tm-type-scale));
+		line-height: 1.65;
+		margin: 0;
+	}
+	.preview-footer {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.7rem;
+		flex-wrap: wrap;
+		font: 0.42rem/1.5 var(--font-label);
+		margin-top: calc(1.2rem * var(--tm-space-scale));
+		border-top: 1px solid currentColor;
+		padding-top: 0.65rem;
+	}
+	@media (max-width: 800px) {
+		.theme-layout {
+			grid-template-columns: 1fr;
+		}
+		.theme-color-grid {
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		}
+		.theme-color-grid > div {
+			display: grid;
+			justify-content: start;
+		}
+	}
+	@media (max-width: 420px) {
+		.preview-story h3 {
+			font-size: calc(1.8rem * var(--tm-type-scale));
+		}
+		.preview-grid {
+			grid-template-columns: 1fr;
+		}
 		.theme-preview {
-			padding: 0.9rem;
+			padding: calc(0.9rem * var(--tm-space-scale));
 		}
 	}
 </style>

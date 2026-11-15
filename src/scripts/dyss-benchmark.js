@@ -240,6 +240,24 @@ function renderResults(tbody, winner, results) {
 		fastest.metrics.average,
 	)}). ${slowest.label} was ${multiplier.toFixed(2)}x slower.`
 
+	const ranking = tbody.closest('[data-dyss-benchmark]').querySelector('[data-benchmark-ranking]')
+	ranking.replaceChildren()
+	for (const result of sorted) {
+		const row = document.createElement('div')
+		row.className = 'benchmark-rank'
+		const label = document.createElement('span')
+		label.textContent = result.label
+		const meter = document.createElement('meter')
+		meter.min = 0
+		meter.max = Math.max(slowest.metrics.average, 0.001)
+		meter.value = result.metrics.average
+		meter.setAttribute('aria-label', `${result.label} average time in milliseconds`)
+		const value = document.createElement('strong')
+		value.textContent = formatMs(result.metrics.average)
+		row.append(label, meter, value)
+		ranking.append(row)
+	}
+
 	for (const result of sorted) {
 		const row = document.createElement('tr')
 		const relative = `${(result.metrics.average / baseline).toFixed(2)}x`
@@ -496,6 +514,7 @@ function mountBenchmark(root) {
 		const results = []
 
 		runButton.disabled = true
+		for (const input of [countInput, samplesInput, flushInput]) input.disabled = true
 		status.textContent = `Running ${methods.length} methods across ${currentCount} elements...`
 
 		try {
@@ -535,6 +554,7 @@ function mountBenchmark(root) {
 			if (!disposed) resetStageSurface()
 			activeMethod.textContent = 'Idle'
 			runButton.disabled = false
+			for (const input of [countInput, samplesInput, flushInput]) input.disabled = false
 		}
 	}
 
@@ -566,7 +586,9 @@ function mountBenchmark(root) {
 		cssomRule?.parentStyleSheet?.ownerNode?.remove()
 		const constructedSheet = constructedRule?.parentStyleSheet
 		if (constructedSheet) {
-			document.adoptedStyleSheets = document.adoptedStyleSheets.filter(sheet => sheet !== constructedSheet)
+			document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
+				sheet => sheet !== constructedSheet,
+			)
 		}
 		dyssHandle.sheet.destroy()
 		cssTextStyle.remove()

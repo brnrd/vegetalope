@@ -1,16 +1,17 @@
 ---
-import DyssExample from '../../../../layouts/DyssExample.astro';
-import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
+import DyssExample from '../../../../layouts/DyssExample.astro'
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro'
 
-const title = 'dyss: border-shape playground';
-const description = 'An electric frame and a growing network of circles, redrawn as live CSS rules.';
+const title = 'dyss: border-shape playground'
+const description =
+	'An animated perimeter and an elastic node network, with a matching fallback for every browser.'
 ---
 
-<DyssExample title={title} description={description}>
+<DyssExample title={title} description={description} wide>
 	<p>
-		These experiments push <code>border-shape</code> beyond regular polygons. The first continually redraws a
-		charged frame; the second bends shaped borders between draggable circles. Every path, position, and connector
-		is managed through dyss.
+		These experiments push <code>border-shape</code> beyond regular polygons. The first continually redraws
+		a charged frame; the second bends shaped borders between draggable circles. Every path, position,
+		and connector is managed through dyss.
 	</p>
 
 	<div class="support-note" data-support-note role="status">
@@ -18,23 +19,26 @@ const description = 'An electric frame and a growing network of circles, redrawn
 		<span data-support-copy>Checking border-shape support…</span>
 	</div>
 
+	<button type="button" class="renderer-switch" data-shape-renderer hidden
+		>Preview SVG fallback</button
+	>
 	<div class="shape-lab stack" data-border-shape-demo>
 		<section class="experiment electric-experiment" aria-labelledby="electric-title">
 			<header class="experiment-header">
 				<div>
 					<p class="eyebrow">01 / animated perimeter</p>
 					<h2 id="electric-title">High voltage</h2>
-					<p>A restless border redraws itself around the content without clipping the glow.</p>
+					<p>A decorative current follows the perimeter. Pause it to inspect the outline.</p>
 				</div>
 				<div class="control-bank electric-controls">
 					<button type="button" data-electric-play aria-pressed="true">Pause current</button>
 					<label>
-						<span>Voltage</span>
+						<span>Energy</span>
 						<input data-voltage type="range" min="1" max="12" step="1" value="7" />
-						<output data-voltage-output>7kV</output>
+						<output data-voltage-output>7 / 12</output>
 					</label>
 					<label>
-						<span>Charge</span>
+						<span>Width</span>
 						<input data-charge type="range" min="1" max="8" step="1" value="4" />
 						<output data-charge-output>4px</output>
 					</label>
@@ -43,19 +47,28 @@ const description = 'An electric frame and a growing network of circles, redrawn
 
 			<div class="electric-stage">
 				<div class="electric-card" data-electric-card>
-					<span class="card-index">DYSS / 18.7 kHz</span>
+					<span class="card-index">DYSS / PERIMETER STUDY</span>
 					<strong>Do not<br />touch<br />the edge.</strong>
-					<p>The box is ordinary. Its border is not.</p>
+					<p>One outline. A continuous current.</p><svg
+						class="electric-outline"
+						viewBox="0 0 100 100"
+						preserveAspectRatio="none"
+						aria-hidden="true"
+						><path data-electric-fallback fill="none" vector-effect="non-scaling-stroke"
+						></path></svg
+					>
 				</div>
 				<div class="spark-field" aria-hidden="true">
 					<span></span><span></span><span></span><span></span><span></span>
 				</div>
 			</div>
-			<LiveCodeSection
-				className="shape-code experiment-code"
-				title="Electric frame rule"
-				codeAttrs={{ 'data-electric-code': '' }}
-			/>
+			<details class="shape-code-details">
+				<summary>Behind the outline / live dyss rules</summary><LiveCodeSection
+					className="shape-code experiment-code"
+					title="Electric frame rule"
+					codeAttrs={{ 'data-electric-code': '' }}
+				/>
+			</details>
 		</section>
 
 		<section class="experiment network-experiment" aria-labelledby="network-title">
@@ -84,16 +97,24 @@ const description = 'An electric frame and a growing network of circles, redrawn
 				</div>
 			</header>
 
-			<div class="network-board" data-network-board aria-label="Draggable circle connector playground">
-				<div class="connector-layer" data-connector-layer aria-hidden="true"></div>
+			<div
+				class="network-board"
+				data-network-board
+				aria-label="Draggable circle connector playground"
+			>
+				<div class="connector-layer" data-connector-layer aria-hidden="true">
+					<svg class="network-fallback" data-network-fallback></svg>
+				</div>
 				<div class="node-layer" data-node-layer></div>
-				<p class="drag-note">Drag the circles · up to 8 nodes</p>
+				<p class="drag-note">Drag circles or use arrow keys · up to 8 nodes</p>
 			</div>
-			<LiveCodeSection
-				className="shape-code experiment-code"
-				title="Latest connector mutation"
-				codeAttrs={{ 'data-network-code': '' }}
-			/>
+			<details class="shape-code-details">
+				<summary>Behind the network / live dyss rules</summary><LiveCodeSection
+					className="shape-code experiment-code"
+					title="Latest connector mutation"
+					codeAttrs={{ 'data-network-code': '' }}
+				/>
+			</details>
 		</section>
 	</div>
 
@@ -154,7 +175,7 @@ const description = 'An electric frame and a growing network of circles, redrawn
 
 	.experiment-header {
 		display: grid;
-		grid-template-columns: minmax(220px, 1fr) minmax(330px, auto);
+		grid-template-columns: 1fr;
 		gap: 1rem;
 		align-items: end;
 		padding: clamp(0.9rem, 2vw, 1.25rem);
@@ -163,8 +184,8 @@ const description = 'An electric frame and a growing network of circles, redrawn
 
 	.experiment-header h2 {
 		margin: 0.1rem 0 0.35rem;
-		font-size: clamp(2rem, 5vw, 3.2rem);
-		line-height: 0.9;
+		font-size: clamp(1.6rem, 4vw, 2.3rem);
+		line-height: 1.1;
 	}
 
 	.experiment-header p {
@@ -181,7 +202,7 @@ const description = 'An electric frame and a growing network of circles, redrawn
 
 	.control-bank {
 		display: flex;
-		justify-content: flex-end;
+		justify-content: flex-start;
 		align-items: center;
 		gap: 0.6rem;
 		flex-wrap: wrap;
@@ -239,13 +260,16 @@ const description = 'An electric frame and a growing network of circles, redrawn
 			radial-gradient(circle at 50% 48%, rgb(66 104 255 / 0.18), transparent 34%),
 			linear-gradient(rgb(112 249 255 / 0.05) 1px, transparent 1px),
 			linear-gradient(90deg, rgb(112 249 255 / 0.05) 1px, transparent 1px);
-		background-size: auto, 28px 28px, 28px 28px;
+		background-size:
+			auto,
+			28px 28px,
+			28px 28px;
 	}
 
 	.electric-card {
 		position: relative;
 		z-index: 2;
-		inline-size: min(72vw, 480px);
+		inline-size: min(100%, 480px);
 		min-block-size: 350px;
 		display: grid;
 		grid-template-rows: auto 1fr auto;
@@ -287,12 +311,34 @@ const description = 'An electric frame and a growing network of circles, redrawn
 		box-shadow: 0 0 12px 3px var(--electric);
 	}
 
-	.spark-field span:nth-child(1) { inset: 18% auto auto 14%; }
-	.spark-field span:nth-child(2) { inset: 28% 18% auto auto; }
-	.spark-field span:nth-child(3) { inset: auto auto 17% 22%; }
-	.spark-field span:nth-child(4) { inset: auto 12% 28% auto; }
-	.spark-field span:nth-child(5) { inset: 50% auto auto 7%; }
+	.spark-field span:nth-child(1) {
+		inset: 18% auto auto 14%;
+	}
+	.spark-field span:nth-child(2) {
+		inset: 28% 18% auto auto;
+	}
+	.spark-field span:nth-child(3) {
+		inset: auto auto 17% 22%;
+	}
+	.spark-field span:nth-child(4) {
+		inset: auto 12% 28% auto;
+	}
+	.spark-field span:nth-child(5) {
+		inset: 50% auto auto 7%;
+	}
 
+	.network-experiment :is(h2, p) {
+		color: inherit;
+	}
+	.renderer-switch {
+		font: 0.65rem var(--font-label);
+		padding: 0.5rem 0.7rem;
+		border: 1px solid var(--hairline);
+		background: transparent;
+		color: var(--color-ink);
+		cursor: pointer;
+		width: fit-content;
+	}
 	.network-experiment {
 		background: #fffaf0;
 	}
@@ -315,8 +361,13 @@ const description = 'An electric frame and a growing network of circles, redrawn
 		inset: 0;
 	}
 
-	.connector-layer { z-index: 1; pointer-events: none; }
-	.node-layer { z-index: 2; }
+	.connector-layer {
+		z-index: 1;
+		pointer-events: none;
+	}
+	.node-layer {
+		z-index: 2;
+	}
 
 	:global(.network-node) {
 		position: absolute;
@@ -349,13 +400,6 @@ const description = 'An electric frame and a growing network of circles, redrawn
 		filter: drop-shadow(0 4px 0 rgb(23 18 45 / 0.08));
 	}
 
-	:global(.network-connector::after) {
-		content: '';
-		position: absolute;
-		inset: auto 0 -11px;
-		border-bottom: 1px dashed rgb(23 18 45 / 0.42);
-	}
-
 	.drag-note {
 		position: absolute;
 		z-index: 3;
@@ -383,7 +427,9 @@ const description = 'An electric frame and a growing network of circles, redrawn
 		color: var(--lab-ink);
 	}
 
-	.reference-note { font-size: 0.9rem; }
+	.reference-note {
+		font-size: 0.9rem;
+	}
 
 	@media (max-width: 800px) {
 		.experiment-header {
@@ -391,8 +437,12 @@ const description = 'An electric frame and a growing network of circles, redrawn
 			align-items: start;
 		}
 
-		.control-bank { justify-content: flex-start; }
-		.network-board { min-block-size: 460px; }
+		.control-bank {
+			justify-content: flex-start;
+		}
+		.network-board {
+			min-block-size: 460px;
+		}
 	}
 
 	@media (max-width: 520px) {
@@ -401,13 +451,63 @@ const description = 'An electric frame and a growing network of circles, redrawn
 			grid-template-columns: 4.2rem 1fr 3rem;
 		}
 
-		.network-controls button { flex: 1; }
-		.electric-stage { min-block-size: 390px; }
-		.electric-card { inline-size: 82vw; min-block-size: 310px; }
-		:global(.network-node) { inline-size: 64px; }
+		.network-controls button {
+			flex: 1;
+		}
+		.electric-stage {
+			min-block-size: 390px;
+		}
+		.electric-card {
+			inline-size: 100%;
+			min-block-size: 310px;
+		}
+		:global(.network-node) {
+			inline-size: 64px;
+		}
 	}
 
+	.electric-outline {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		overflow: visible;
+	}
+	.electric-outline path {
+		stroke: var(--electric);
+		stroke-width: 4;
+		filter: drop-shadow(0 0 5px var(--electric));
+	}
+	.network-fallback {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+		fill: none;
+	}
+	.shape-lab[data-border-supported='true'] .electric-outline,
+	.shape-lab[data-border-supported='true'] .network-fallback {
+		display: none;
+	}
+	.shape-lab[data-border-supported='false'] :global(.network-connector) {
+		display: none;
+	}
+	.shape-code-details {
+		border-radius: 0;
+		border-top: 1px solid #29344833;
+		background: #fffaf0;
+		color: #17122d;
+	}
+	.shape-code-details summary {
+		padding: 0.9rem;
+		cursor: pointer;
+		font: 0.65rem var(--font-label);
+	}
 	@media (prefers-reduced-motion: reduce) {
-		.spark-field { display: none; }
+		.spark-field {
+			display: none;
+		}
 	}
 </style>

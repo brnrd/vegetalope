@@ -1,384 +1,236 @@
 ---
-import DyssExample from '../../../../layouts/DyssExample.astro';
-import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro';
-
-const title = 'dyss: dynamic pie chart playground';
-const description = 'A small dyss use-case: tweak pie chart inputs and let CSS update itself.';
+import DyssExample from '../../../../layouts/DyssExample.astro'
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro'
+const title = 'dyss: revenue mix'
+const description = 'One dataset, a live chart, and a clear view of every contribution.'
 ---
 
-<DyssExample title={title} description={description}>
-	<p>
-		This version keeps the chart semantic first: the pie is an actual list of entries, each item exposing
-		<code>data-percentage</code> and <code>data-color</code>.
-	</p>
-
-	<p>
-		The controls update those list items live, and the chart redraws from the same HTML data structure.
-	</p>
-
-	<div class="dyss-demo stack" data-dyss-demo>
-		<form class="dyss-controls stack" data-dyss-controls>
-			<fieldset>
-				<legend>Pie chart values</legend>
-				<div class="dyss-rows stack" data-dyss-rows></div>
-				<div class="dyss-actions">
-					<button type="button" data-dyss-add>Add service</button>
-				</div>
-			</fieldset>
-		</form>
-
-		<div class="dyss-preview stack">
-			<figure class="dyss-chart-wrap">
-				<ul class="dyss-pie" data-dyss-pie aria-label="Revenue split pie chart data"></ul>
-				<figcaption>Revenue split</figcaption>
-				<div class="dyss-runtime">
-					<button type="button" data-dyss-live aria-pressed="false">Start live data</button>
-					<label class="dyss-interval">
-						<span>Interval</span>
-						<select data-dyss-interval>
-							<option value="1">1ms</option>
-							<option value="10">10ms</option>
-							<option value="50" selected>50ms</option>
-							<option value="100">100ms</option>
-							<option value="500">500ms</option>
-							<option value="1000">1000ms</option>
-						</select>
-					</label>
-					<p data-dyss-fps>0.0 FPS</p>
-				</div>
-			</figure>
+<DyssExample title={title} description={description} wide>
+	<div class="experiment-shell" data-dyss-demo>
+		<div class="experiment-heading">
+			<div>
+				<p class="experiment-kicker">Data visualization / conic gradients</p><h2>
+					Every slice has a story.
+				</h2>
+			</div>
+			<span class="experiment-label" data-pie-status role="status">30-second window / paused</span>
 		</div>
-
-		<LiveCodeSection className="dyss-code" />
+		<div class="revenue-layout">
+			<figure class="revenue-figure">
+				<div class="revenue-donut">
+					<ul class="revenue-pie" data-dyss-pie aria-label="Revenue share by category"></ul>
+					<div class="revenue-total">
+						<span>Last 30s revenue</span><strong data-pie-total>$1,000</strong><small data-pie-count
+							>4 categories</small
+						>
+					</div>
+				</div>
+				<figcaption>
+					A rolling view of recent sales.<br />Edit a value to redistribute the chart.
+				</figcaption>
+			</figure>
+			<form class="experiment-controls revenue-controls" data-dyss-controls>
+				<div class="revenue-column-labels">
+					<span>Category / color</span><span>Revenue ($)</span><span>Share</span>
+				</div>
+				<div data-dyss-rows></div>
+				<button type="button" class="experiment-button" data-dyss-add>Add category</button>
+			</form>
+		</div>
+		<div class="revenue-stream">
+			<span class="experiment-label">Latest sale</span>
+			<strong data-pie-latest>Start sales to see the next transaction</strong>
+		</div>
+		<div class="experiment-actions revenue-actions">
+			<button type="button" class="experiment-button primary" data-dyss-live aria-pressed="false"
+				>Simulate sales</button
+			>
+			<button type="button" class="experiment-button" data-pie-reset>Reset sample</button>
+			<label class="experiment-label revenue-refresh"
+				>Refresh <select data-dyss-interval aria-label="Chart refresh interval"
+					><option value="50">50ms</option><option value="250" selected>250ms</option><option
+						value="1000">1s</option
+					></select
+				></label
+			>
+			<span class="experiment-label" data-dyss-fps>0 updates/s</span>
+		</div>
+		<p class="experiment-meta">
+			Illustrative sales arrive about once a second and leave the window after 30 seconds. Smaller
+			opening balances keep each transaction visible. Refresh controls when new data reaches the
+			chart; the circle eases smoothly between updates.
+		</p>
+		<details class="experiment-code">
+			<summary>Behind the chart / live dyss rules</summary><LiveCodeSection />
+		</details>
 	</div>
-
-	<p class="dyss-note">
-		CSS-Tricks reference:
-		<a href="https://css-tricks.com/trying-to-make-the-perfect-pie-chart-in-css/">
-			Trying to make the perfect pie chart in CSS
-		</a>
-	</p>
-
 	<script src="../../../../scripts/dyss-pie-demo.js"></script>
 </DyssExample>
-
 <style>
-	.dyss-demo {
-		padding: 1rem;
-		border: 1px solid var(--hairline);
-		border-radius: 0.75rem;
-		background: color-mix(in oklab, var(--color-bg) 92%, white);
-	}
-
-	.dyss-controls fieldset {
-		border: 1px solid var(--hairline);
-		padding: 0.9rem;
-		margin: 0;
-	}
-
-	.dyss-controls legend {
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-	}
-
-	.dyss-rows {
-		margin-top: 0.5rem;
-	}
-
-	:global(.dyss-row) {
+	.revenue-layout {
 		display: grid;
-		grid-template-columns: minmax(110px, 160px) 1fr 48px 154px auto;
-		gap: 0.5rem;
+		grid-template-columns: minmax(250px, 0.85fr) minmax(0, 1.15fr);
+		gap: 2rem;
 		align-items: center;
 	}
-
-	:global(.dyss-row input[data-field='label']) {
-		inline-size: 100%;
-	}
-
-	:global(.dyss-row input[type='range']) {
-		inline-size: 100%;
-	}
-
-	:global(.dyss-row output) {
-		font-family: var(--font-label);
-		font-size: 0.8rem;
-		text-align: right;
-	}
-
-	:global(.dyss-color-pair) {
-		--picker-size: 46px;
-		--hex-size: 108px;
-		display: grid;
-		grid-template-columns: var(--picker-size) var(--hex-size);
-		inline-size: calc(var(--picker-size) + var(--hex-size));
-		gap: 0;
-		align-items: center;
-	}
-
-	:global(.dyss-color-pair input[type='color']) {
-		inline-size: 46px;
-		block-size: 34px;
-		padding: 0;
-		border: 1px solid var(--hairline);
-		border-right: 0;
-		border-radius: 0.35rem 0 0 0.35rem;
-		background: transparent;
-	}
-
-	:global(.dyss-hex-wrap) {
-		position: relative;
-		display: inline-flex;
-	}
-
-	:global(.dyss-hex-wrap)::before {
-		content: '#';
-		position: absolute;
-		inset-inline-start: 0.5rem;
-		inset-block-start: 50%;
-		transform: translateY(-50%);
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		color: var(--color-ink-muted);
-		pointer-events: none;
-	}
-
-	:global(.dyss-hex-wrap input[data-field='colorHex']) {
-		inline-size: 100%;
-		block-size: 34px;
-		padding-inline: 1.1rem 0.5rem;
-		border: 1px solid var(--hairline);
-		border-radius: 0 0.35rem 0.35rem 0;
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		letter-spacing: 0.06em;
-		text-transform: lowercase;
-	}
-
-	:global(.dyss-row button) {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		block-size: 34px;
-		padding: 0.45rem 0.6rem;
-		font-size: 0.62rem;
-		background: transparent;
-		color: var(--color-ink);
-		border: 1px solid var(--hairline);
-	}
-
-	.dyss-actions {
-		margin-top: 0.8rem;
-	}
-
-	.dyss-actions button {
-		padding: 0.45rem 0.75rem;
-		font-size: 0.62rem;
-		background: transparent;
-		color: var(--color-ink);
-		border: 1px solid var(--hairline);
-	}
-
-	.dyss-actions button:hover,
-	:global(.dyss-row button:hover) {
-		background: color-mix(in oklab, var(--color-bg) 78%, var(--color-ink) 22%);
-		color: var(--color-ink);
-	}
-
-	:global(.dyss-row button[disabled]) {
-		opacity: 0.55;
-		cursor: not-allowed;
-	}
-
-	.dyss-code {
-		margin-top: 1rem;
-	}
-
-	.dyss-code {
-		--dyss-code-max-height: 280px;
-	}
-
-	.dyss-preview {
-		margin-top: 1rem;
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 1rem;
-		align-items: start;
-	}
-
-	.dyss-chart-wrap {
+	.revenue-figure {
 		margin: 0;
 		display: grid;
-		gap: 0.7rem;
 		justify-items: center;
-		width: fit-content;
-		padding: 2.6rem 3rem 0.35rem;
+		gap: 1.5rem;
+		padding-block: 1rem;
 	}
-
-	.dyss-chart-wrap figcaption {
-		font-size: 0.82rem;
-		color: var(--color-ink-muted);
+	.revenue-donut {
+		position: relative;
+		width: min(100%, 290px);
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--hairline);
 	}
-
-	.dyss-runtime {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.6rem;
-		flex-wrap: wrap;
-	}
-
-	.dyss-runtime button {
-		padding: 0.4rem 0.65rem;
-		font-size: 0.62rem;
-		background: var(--color-bg);
-		color: var(--color-ink);
-		border: 1px solid var(--hairline);
-	}
-
-	.dyss-runtime button:hover {
-		background: color-mix(in oklab, var(--color-bg) 75%, var(--color-ink) 25%);
-		color: var(--color-ink);
-	}
-
-	.dyss-runtime button[aria-pressed='true'] {
-		background: var(--color-ink);
-		color: var(--color-bg);
-	}
-
-	.dyss-runtime p {
-		margin: 0;
-		font-family: var(--font-label);
-		font-size: 0.68rem;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
-
-	.dyss-interval {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4rem;
-		font-family: var(--font-label);
-		font-size: 0.62rem;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
-
-	.dyss-interval select {
-		padding: 0.3rem 0.45rem;
-		background: var(--color-bg);
-		color: var(--color-ink);
-		border: 1px solid var(--hairline);
-		border-radius: 0;
-	}
-
-	.dyss-pie {
-		--radius: min(22vmin, 110px);
-		--gap: 2.1rem;
+	.revenue-pie {
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		display: grid;
-		place-items: center;
-		position: relative;
-		inline-size: calc(var(--radius) * 2);
-		aspect-ratio: 1 / 1;
+		position: absolute;
+		inset: 0;
 		border-radius: 50%;
-		border: 0;
-		background: transparent;
-		box-shadow: none;
-		overflow: visible;
+		background: var(--hairline);
+		overflow: hidden;
 	}
-
-	:global(.dyss-pie-item) {
-		--accum: 0;
-		--weighing: 0;
-		--percentage: 0%;
-		--bg-color: #d9d9d9;
-		--slice-overlap: 0.18%;
-		--layer: 1;
-		--offset: calc(360deg * var(--accum) / 100);
-		--theta: calc((360deg * var(--weighing)) / 2 + var(--offset) - 90deg);
-		--pos-x: calc(cos(var(--theta)) * (var(--radius) + var(--gap)));
-		--pos-y: calc(sin(var(--theta)) * (var(--radius) + var(--gap)));
-		grid-row: 1;
-		grid-column: 1;
-		z-index: var(--layer);
-		inline-size: calc(var(--radius) * 2);
-		aspect-ratio: 1 / 1;
-		border-radius: 50%;
-		display: grid;
-		place-items: center;
-		background: conic-gradient(
-			from var(--offset),
-			var(--bg-color) 0% calc(var(--percentage) + var(--slice-overlap)),
-			transparent calc(var(--percentage) + var(--slice-overlap)) 100%
-		);
-	}
-
-	:global(.dyss-pie-item[data-explode='true']) {
-		transform: translate(0, 3px);
-	}
-
-	:global(.dyss-pie-item strong),
-	:global(.dyss-pie-item::after) {
-		grid-row: 1;
-		grid-column: 1;
-		background: color-mix(in oklab, var(--color-bg) 85%, white);
-		padding: 0.1rem 0.35rem;
-		border: 1px solid var(--hairline);
-		font-size: 0.66rem;
-		line-height: 1.2;
+	.revenue-pie :global(li) {
+		position: absolute;
+		margin: 0;
+		padding: 0;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
 		white-space: nowrap;
 	}
-
-	:global(.dyss-pie-item strong) {
-		font-size: 0.68rem;
-		font-weight: 600;
-		transform: translateX(var(--pos-x)) translateY(var(--pos-y));
+	.revenue-total {
+		position: absolute;
+		inset: 23%;
+		border-radius: 50%;
+		background: var(--experiment-surface);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		text-align: center;
+		pointer-events: none;
 	}
-
-	:global(.dyss-pie-item::after) {
-		content: attr(data-percentage) '%';
-		--pos-y: calc(sin(var(--theta)) * (var(--radius) + var(--gap)) + 1.4lh);
-		transform: translateX(var(--pos-x)) translateY(var(--pos-y));
+	.revenue-total span,
+	.revenue-total small,
+	.revenue-figure figcaption {
+		font: 0.64rem/1.7 var(--font-label);
 		color: var(--color-ink-muted);
 	}
-
-	.dyss-note {
-		font-size: 0.88rem;
-		color: var(--color-ink-muted);
+	.revenue-total strong {
+		font: 1.2rem/1.5 var(--font-label);
+		letter-spacing: -0.05em;
+		font-variant-numeric: tabular-nums;
 	}
-
-	@media (max-width: 900px) {
-		:global(.dyss-row) {
+	.revenue-figure figcaption {
+		text-align: center;
+	}
+	.revenue-column-labels {
+		display: grid;
+		grid-template-columns: 1fr 100px 55px 24px;
+		font: 0.58rem var(--font-label);
+		color: var(--color-ink-muted);
+		gap: 0.5rem;
+		padding-bottom: 0.7rem;
+	}
+	.revenue-controls :global(.revenue-row) {
+		display: grid;
+		grid-template-columns: 1fr 100px 55px 24px;
+		gap: 0.5rem;
+		align-items: center;
+		padding: 0.8rem 0;
+		border-top: 1px solid var(--hairline);
+		transition: background-color 250ms ease;
+	}
+	.revenue-controls :global(.revenue-row[data-recent-sale]) {
+		background: color-mix(in oklab, #4d9b91 12%, transparent);
+	}
+	.revenue-controls :global(.revenue-name) {
+		display: flex;
+		gap: 0.5rem;
+		min-width: 0;
+		align-items: center;
+	}
+	.revenue-controls :global(input[type='color']) {
+		width: 19px;
+		height: 25px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		flex-shrink: 0;
+		cursor: pointer;
+	}
+	.revenue-controls :global(input[data-field='label']) {
+		background: transparent !important;
+		border-color: transparent !important;
+		padding-inline: 0 !important;
+	}
+	.revenue-controls :global(output) {
+		font: 0.7rem var(--font-label);
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+	.revenue-controls :global(button[data-remove]) {
+		padding: 0.15rem;
+		font-size: 0.9rem;
+		border-color: transparent;
+	}
+	.revenue-controls > button {
+		margin-top: 0.65rem;
+	}
+	.revenue-actions {
+		border-top: 1px solid var(--hairline);
+		padding-top: 1.2rem;
+		margin-top: 0.8rem;
+	}
+	.revenue-stream {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: 0.5rem 0.8rem;
+		margin-top: 1.4rem;
+	}
+	.revenue-stream strong {
+		font: 0.7rem/1.6 var(--font-label);
+		font-variant-numeric: tabular-nums;
+	}
+	.revenue-refresh {
+		margin-left: auto;
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+	}
+	.revenue-refresh select {
+		font: inherit;
+		padding: 0.35rem;
+		color: var(--color-ink);
+		background: var(--color-bg);
+		border: 1px solid var(--hairline);
+	}
+	@media (max-width: 800px) {
+		.revenue-layout {
 			grid-template-columns: 1fr;
+			gap: 1rem;
 		}
-
-		:global(.dyss-row output) {
-			text-align: left;
-		}
-
-		.dyss-pie {
-			--gap: 1.5rem;
-		}
-
-		.dyss-chart-wrap {
-			padding: 2rem 1.8rem 0.2rem;
+		.revenue-donut {
+			width: 250px;
 		}
 	}
-
-	@media (min-width: 1080px) {
-		.dyss-runtime {
-			inline-size: min(520px, 100%);
-			justify-content: space-between;
-			gap: 0.9rem;
+	@media (max-width: 480px) {
+		.revenue-controls :global(.revenue-row),
+		.revenue-column-labels {
+			grid-template-columns: minmax(0, 1fr) 80px 45px 20px;
+			gap: 0.3rem;
 		}
-
-		.dyss-runtime p {
-			margin-left: auto;
-			text-align: right;
+		.revenue-refresh {
+			margin-left: 0;
 		}
 	}
 </style>

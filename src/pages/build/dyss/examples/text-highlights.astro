@@ -1,186 +1,277 @@
 ---
-import DyssExample from '../../../../layouts/DyssExample.astro';
-
-const title = 'dyss: text highlights';
-const description = 'Mock OCR text highlighting with overlapping colors and live palette edits.';
+import DyssExample from '../../../../layouts/DyssExample.astro'
+import LiveCodeSection from '../../../../components/dyss/LiveCodeSection.astro'
+const title = 'dyss: text annotations'
+const description =
+	'A working document, overlapping annotations, and a palette that stays connected.'
 ---
 
-<DyssExample title={title} description={description}>
-	<p>
-		Each word below is wrapped like a pretend OCR output. Select text to apply the active highlight color. You
-		can edit colors at any time and highlights update instantly. Overlaps are visual: multiple translucent layers
-		stack on top of each other.
-	</p>
-
-	<div class="dyss-highlight-demo stack" data-dyss-highlight-demo>
-		<div class="dyss-highlight-toolbar">
-			<div class="dyss-palette" data-dyss-palette></div>
-			<div class="dyss-toolbar-actions">
-				<button type="button" data-dyss-add-color>Add color</button>
-				<button type="button" data-dyss-clear>Clear highlights</button>
-			</div>
+<DyssExample title={title} description={description} wide>
+	<div class="experiment-shell" data-dyss-highlight-demo>
+		<div class="experiment-heading">
+			<div>
+				<p class="experiment-kicker">Document review / shared selectors</p><h2>
+					Read between the lines.
+				</h2>
+			</div><span class="experiment-label" data-highlight-status role="status"></span>
 		</div>
-
-		<div class="dyss-ocr" data-dyss-words></div>
+		<div class="annotation-layout">
+			<aside class="annotation-tools experiment-controls" aria-label="Annotation palette">
+				<h3>Annotation groups</h3>
+				<p class="experiment-meta">
+					Choose a group and select a passage. Use ✓ to keep the stroke or × to cancel it.
+				</p>
+				<div class="dyss-palette" data-dyss-palette></div>
+				<div class="experiment-actions">
+					<button type="button" class="experiment-button" data-dyss-add-color>Add group</button
+					><button type="button" class="experiment-button" data-highlight-example
+						>Show example</button
+					>
+				</div>
+				<p class="experiment-meta">
+					Edit a group color to update every matching highlight, including overlaps.
+				</p>
+			</aside>
+			<article class="annotation-paper">
+				<header>
+					<p>FIELD NOTES / 07</p><h3>A quieter kind of progress</h3><span
+						>Research memo · 12 November 2026 · sample document</span
+					>
+				</header>
+				<div
+					class="dyss-ocr"
+					data-dyss-words
+					tabindex="-1"
+					aria-label="Document text for annotation"
+				>
+				</div>
+				<div
+					class="annotation-confirm"
+					data-highlight-confirm
+					role="toolbar"
+					aria-label="Confirm highlight"
+					hidden
+				>
+					<button
+						type="button"
+						data-highlight-apply
+						aria-label="Confirm highlight"
+						title="Confirm highlight"
+						disabled>✓</button
+					>
+					<button
+						type="button"
+						data-highlight-cancel
+						aria-label="Cancel highlight"
+						title="Cancel highlight">×</button
+					>
+				</div>
+				<footer>END OF MEMO <span>01 / 01</span></footer>
+			</article>
+		</div>
+		<div class="experiment-actions annotation-actions">
+			<span class="experiment-label" data-highlight-selection>No passage selected</span>
+			<button type="button" class="experiment-button" data-highlight-undo disabled
+				>Undo highlight</button
+			>
+			<button type="button" class="experiment-button" data-dyss-clear>Clear highlights</button>
+		</div>
+		<p class="experiment-meta">
+			Use your normal text selection, including touch selection on mobile. Adjacent highlighted
+			words join into one stroke on each line; overlapping groups keep their own translucent layers.
+		</p>
+		<details class="experiment-code">
+			<summary>Behind the annotations / live dyss rules</summary><LiveCodeSection />
+		</details>
 	</div>
-
 	<script src="../../../../scripts/dyss-text-highlights.js"></script>
 </DyssExample>
-
 <style>
-	.dyss-highlight-demo {
-		padding: 1rem;
-		border: 1px solid var(--hairline);
-		border-radius: 0.75rem;
-		background: color-mix(in oklab, var(--color-bg) 92%, white);
-	}
-
-	.dyss-highlight-toolbar {
+	.annotation-layout {
 		display: grid;
-		gap: 0.8rem;
+		grid-template-columns: minmax(230px, 0.7fr) minmax(0, 1.3fr);
+		gap: 1.5rem;
+		align-items: start;
 	}
-
+	.annotation-tools h3 {
+		font-size: 0.8rem;
+		margin: 0;
+	}
 	.dyss-palette {
-		display: grid;
-		gap: 0.6rem;
+		margin-block: 1rem;
 	}
-
-	:global(.dyss-color) {
+	.dyss-palette :global(.annotation-group) {
 		display: grid;
-		grid-template-columns: 32px minmax(120px, 160px) 154px auto;
-		gap: 0.5rem;
+		grid-template-columns: 22px minmax(0, 1fr) 28px 22px;
+		gap: 0.4rem;
+		padding-block: 0.75rem;
 		align-items: center;
+		border-top: 1px solid var(--hairline);
 	}
-
-	:global(.dyss-color input[data-field='label']) {
-		inline-size: 100%;
-	}
-
-	:global(.dyss-color-pair) {
-		--picker-size: 46px;
-		--hex-size: 108px;
-		display: grid;
-		grid-template-columns: var(--picker-size) var(--hex-size);
-		inline-size: calc(var(--picker-size) + var(--hex-size));
-		gap: 0;
-		align-items: center;
-	}
-
-	:global(.dyss-color-pair input[type='color']) {
-		inline-size: 46px;
-		block-size: 32px;
+	.dyss-palette :global(.annotation-swatch) {
+		width: 17px;
+		height: 17px;
+		border-radius: 50%;
 		padding: 0;
-		border: 1px solid var(--hairline);
-		border-right: 0;
-		border-radius: 0.35rem 0 0 0.35rem;
-		background: transparent;
+		border: 1px solid #0002;
 	}
-
-	:global(.dyss-hex-wrap) {
-		position: relative;
-		display: inline-flex;
-	}
-
-	:global(.dyss-hex-wrap)::before {
-		content: '#';
-		position: absolute;
-		inset-inline-start: 0.5rem;
-		inset-block-start: 50%;
-		transform: translateY(-50%);
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		color: var(--color-ink-muted);
-		pointer-events: none;
-	}
-
-	:global(.dyss-hex-wrap input[data-field='valueHex']) {
-		inline-size: 100%;
-		block-size: 32px;
-		padding-inline: 1.1rem 0.5rem;
-		border: 1px solid var(--hairline);
-		border-radius: 0 0.35rem 0.35rem 0;
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		letter-spacing: 0.06em;
-		text-transform: lowercase;
-	}
-
-	:global(.dyss-swatch) {
-		inline-size: 28px;
-		block-size: 28px;
-		border-radius: 999px;
-		border: 1px solid var(--hairline);
-		padding: 0;
-		background: transparent;
-	}
-
-	:global(.dyss-swatch[aria-pressed='true']) {
+	.dyss-palette :global(.annotation-swatch[aria-pressed='true']) {
 		outline: 2px solid var(--color-ink);
-		outline-offset: 2px;
+		outline-offset: 3px;
 	}
-
-	:global(.dyss-remove) {
-		padding: 0.35rem 0.6rem;
-		font-size: 0.62rem;
+	.dyss-palette :global(input[type='color']) {
+		width: 26px;
+		height: 28px;
+		padding: 0;
 		background: transparent;
-		color: var(--color-ink);
-		border: 1px solid var(--hairline);
+		border: 0;
+		cursor: pointer;
 	}
-
-	.dyss-toolbar-actions {
-		display: inline-flex;
-		gap: 0.6rem;
-		flex-wrap: wrap;
+	.dyss-palette :global(button[data-remove]) {
+		padding: 0.1rem;
+		border-color: transparent;
+		font-size: 0.9rem;
 	}
-
-	.dyss-toolbar-actions button {
-		padding: 0.45rem 0.75rem;
-		font-size: 0.62rem;
-		background: transparent;
-		color: var(--color-ink);
-		border: 1px solid var(--hairline);
-	}
-
-	.dyss-ocr {
-		padding: 1.1rem;
-		border: 1px dashed var(--hairline);
-		border-radius: 0.6rem;
-		min-height: 180px;
-		font-size: 1.15rem;
-		line-height: 1.7;
-	}
-
-	:global(.word) {
-		display: inline-flex;
+	.annotation-paper {
 		position: relative;
-		padding: 0 0.02rem;
-		margin-inline: -0.04rem;
+		margin: 0;
+		padding: clamp(1.2rem, 4vw, 2rem);
+		background: #f5f0e5;
+		color: #293448;
+		border: 1px solid #29344822;
+		box-shadow: 0 3px 0 #29344816;
 	}
-
-	:global(.word-layers) {
-		position: absolute;
-		inset: 0.06rem -0.12rem;
-		pointer-events: none;
-		display: block;
+	.annotation-paper header {
+		padding-bottom: 1rem;
+		border-bottom: 1px solid #29344833;
 	}
-
-	:global(.hl-layer) {
+	.annotation-paper header p,
+	.annotation-paper header span,
+	.annotation-paper footer {
+		font: 0.58rem/1.7 var(--font-label);
+		color: #586274;
+	}
+	.annotation-paper header p {
+		margin: 0 0 0.5rem;
+		letter-spacing: 0.12em;
+	}
+	.annotation-paper header h3 {
+		font-family: var(--font-reading);
+		font-size: 1.5rem;
+		line-height: 1.2;
+		margin: 0 0 0.65rem;
+		color: inherit;
+	}
+	.dyss-ocr {
+		position: relative;
+		isolation: isolate;
+		font: 1rem/1.9 var(--font-reading);
+		margin-block: 1.3rem;
+		user-select: text;
+	}
+	.dyss-ocr :global(p) {
+		font: inherit;
+		color: inherit;
+		margin: 0 0 1rem;
+	}
+	.dyss-ocr :global(.word) {
+		position: relative;
+		display: inline-block;
+		z-index: 1;
+	}
+	.dyss-ocr :global(.annotation-strokes) {
 		position: absolute;
 		inset: 0;
-		border-radius: 0;
-		opacity: 0.35;
-		transform: skewX(-6deg);
-		transform-origin: center;
+		pointer-events: none;
+		z-index: 0;
 	}
-
-	:global(.word-text) {
+	.dyss-ocr :global(.hl-layer) {
+		position: absolute;
+		opacity: 0.3;
+		transform: skewX(-4deg);
+		border-radius: 2px;
+	}
+	.dyss-ocr :global(.word-text) {
 		position: relative;
 		z-index: 1;
 	}
-
-	@media (min-width: 1080px) {
-		:global(.dyss-color) {
-			grid-template-columns: 32px minmax(160px, 220px) 154px auto;
+	.dyss-ocr[data-pending] :global(::selection) {
+		background: transparent;
+		color: inherit;
+	}
+	.annotation-confirm {
+		position: absolute;
+		z-index: 10;
+		display: flex;
+		gap: 3px;
+		padding: 4px;
+		border: 1px solid #29344835;
+		border-radius: 6px;
+		background: #fffdf7;
+		box-shadow: 0 3px 10px #29344826;
+		user-select: none;
+	}
+	.annotation-confirm[hidden] {
+		display: none;
+	}
+	.annotation-confirm::after {
+		content: '';
+		position: absolute;
+		bottom: -5px;
+		width: 8px;
+		height: 8px;
+		background: #fffdf7;
+		border-right: 1px solid #29344835;
+		border-bottom: 1px solid #29344835;
+		transform: translateX(-50%) rotate(45deg);
+	}
+	.annotation-confirm[data-placement='below']::after {
+		top: -5px;
+		bottom: auto;
+		transform: translateX(-50%) rotate(225deg);
+	}
+	.annotation-confirm button {
+		display: grid;
+		place-items: center;
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		border: 0;
+		border-radius: 3px;
+		background: transparent;
+		color: #586274;
+		font: 1.1rem/1 var(--font-label);
+		letter-spacing: 0;
+		cursor: pointer;
+	}
+	.annotation-confirm [data-highlight-apply] {
+		background: #e4efe6;
+		color: #286449;
+	}
+	.annotation-confirm button:hover {
+		background: #29344812;
+	}
+	.annotation-paper footer {
+		display: flex;
+		justify-content: space-between;
+		border-top: 1px solid #29344833;
+		padding-top: 0.75rem;
+	}
+	.annotation-actions {
+		margin-top: 1.3rem;
+	}
+	.annotation-actions [data-highlight-undo] {
+		margin-left: auto;
+	}
+	@media (max-width: 750px) {
+		.annotation-layout {
+			grid-template-columns: 1fr;
+		}
+		.annotation-paper {
+			padding: 1.2rem;
+		}
+		.annotation-actions [data-highlight-undo] {
+			margin-left: 0;
 		}
 	}
 </style>
