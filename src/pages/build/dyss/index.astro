@@ -114,10 +114,32 @@ const groups = [
 						{pageTitle}
 					</h1>
 					<p>{pageDescription}</p>
+					<nav class="dyss-project-links" aria-label="dyss project links">
+						<a href="https://www.npmjs.com/package/dyss">npm ↗</a>
+						<a href="https://github.com/brnrd/dyss">GitHub ↗</a>
+					</nav>
 				</header>
 
+				<section class="stack dyss-toolkit" aria-labelledby="dyss-toolkit-title">
+					<header>
+						<h2 id="dyss-toolkit-title">Documentation</h2><p>
+							API reference, practical examples, and performance measurements.
+						</p>
+					</header><div class="dyss-toolkit-grid">
+						<a href="/build/dyss/docs"
+							><span>REFERENCE ↗</span><h3>API reference</h3><p>
+								Methods, signatures, and practical examples for using dyss.
+							</p></a
+						><a href="/build/dyss/benchmark"
+							><span>MEASUREMENT ↗</span><h3>Benchmark lab</h3><p>
+								Compare eight update strategies on the same live surface, with measured timings.
+							</p></a
+						>
+					</div>
+				</section>
+
 				<div class="dyss-gallery-intro">
-					<span>07 studies / 01 toolkit</span><p>
+					<span>Experiments / 07 studies</span><p>
 						Small experiments with a clear purpose. Each one puts runtime styles to work, with the
 						rules available to inspect.
 					</p>
@@ -141,24 +163,6 @@ const groups = [
 						</section>
 					))
 				}
-				<section class="stack dyss-toolkit" aria-labelledby="dyss-toolkit-title">
-					<header>
-						<h2 id="dyss-toolkit-title">The toolkit</h2><p>
-							Reference and measurement, separate from the visual studies.
-						</p>
-					</header><div class="dyss-toolkit-grid">
-						<a href="/build/dyss/docs"
-							><span>REFERENCE ↗</span><h3>Documentation</h3><p>
-								Methods, signatures, and practical examples for using dyss.
-							</p></a
-						><a href="/build/dyss/benchmark"
-							><span>MEASUREMENT ↗</span><h3>Benchmark lab</h3><p>
-								Compare eight update strategies on the same live surface, with measured timings.
-							</p></a
-						>
-					</div>
-				</section>
-
 				<p>
 					<a href="https://github.com/brnrd/dyss">dyss</a> is a tiny runtime stylesheet utility I originally
 					built while working at Textensor, on products such as <a href="https://www.opus2.com/"
@@ -210,6 +214,13 @@ const groups = [
 	.dyss-gallery > header {
 		max-width: 64ch;
 	}
+	.dyss-project-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem 1.5rem;
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+	}
 	.dyss-gallery-intro {
 		border-block: 1px solid var(--hairline);
 		padding-block: 1.1rem;
@@ -255,6 +266,7 @@ const groups = [
 	}
 	.dyss-gallery-group:last-of-type .dyss-example-list {
 		max-width: calc(50% - 0.5rem);
+		grid-template-columns: minmax(0, 1fr);
 	}
 	.dyss-toolkit {
 		padding-block: 1.5rem;
