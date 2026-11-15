@@ -1,6 +1,7 @@
 ---
 title: Speed over perfection
 description: Delivery-first engineering, fast feedback, and shared ownership.
+tags: [engineering-leadership]
 pubDate: '2025-12-13'
 ---
 

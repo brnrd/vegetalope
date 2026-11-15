@@ -1,6 +1,7 @@
 ---
 title: 'L’IA au-delà du code'
 description: 'Faciliter l’adoption de l’IA en lui confiant davantage de tâches dont les développeurs se passeraient volontiers.'
+tags: [ai-at-work]
 pubDate: '2026-09-29'
 ---
 

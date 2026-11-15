@@ -28,6 +28,8 @@ const frHref = Astro.props.frHref ?? (locale === 'fr' ? Astro.url.pathname : '/f
 		</button>
 
 		<nav id="site-nav" class="site-nav" aria-label={strings.siteNavigation}>
+			<a href={getLocalePath(locale, '/write/')} aria-current={Astro.url.pathname.startsWith(getLocalePath(locale, '/write/')) ? 'location' : undefined}>{strings.writing}</a>
+			<a href={`${getLocalePath(locale)}#nav-build`} aria-current={Astro.url.pathname.startsWith('/build/') ? 'location' : undefined}>{strings.projects}</a>
 			<a href={getLocalePath(locale, '/about')} aria-current={Astro.url.pathname.replace(/\/$/, '') === getLocalePath(locale, '/about') ? 'page' : undefined}>{strings.about}</a>
 			<a href="https://www.linkedin.com/in/bernarddebecker/" target="_blank" rel="noreferrer">LinkedIn</a>
 			<a href="https://github.com/brnrd" target="_blank" rel="noreferrer">GitHub</a>

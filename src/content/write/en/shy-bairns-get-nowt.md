@@ -1,6 +1,7 @@
 ---
 title: 'Shy bairns get nowt'
 description: 'Why expressing what you want is a prerequisite for change, not a weakness.'
+tags: [careers]
 pubDate: '2026-02-09'
 ---
 Jesus says in the Gospel of Matthew 7:7: 

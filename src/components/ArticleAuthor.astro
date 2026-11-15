@@ -1,0 +1,57 @@
+---
+import { SITE_AUTHOR } from '../consts'
+import { getLocalePath, ui } from '../i18n'
+
+const { locale, originalHref } = Astro.props
+const strings = ui[locale]
+---
+
+<footer class="article-author" aria-label={SITE_AUTHOR}>
+	<p>{strings.authorIntro} <a href={getLocalePath(locale, '/about/')}>{strings.authorMore}</a>.</p>
+	<ul>
+		{
+			originalHref && (
+				<li>
+					<a href={originalHref} lang="en" hreflang="en">
+						Version originale en anglais
+					</a>
+				</li>
+			)
+		}
+		<li><a href={getLocalePath(locale, '/rss.xml')}>{strings.followWriting}</a></li>
+	</ul>
+</footer>
+
+<style>
+	.article-author {
+		display: grid;
+		gap: 1.5rem;
+		margin-block-start: var(--stack-4);
+	}
+	p {
+		margin: 0;
+		max-width: 60ch;
+		font-size: 0.95rem;
+	}
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem 1.25rem;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	li {
+		margin: 0;
+		font-family: var(--font-label);
+		font-size: 0.75rem;
+	}
+	li a {
+		color: var(--color-ink-muted);
+		text-decoration-color: var(--hairline);
+	}
+	li a:hover {
+		color: var(--color-accent);
+		text-decoration-color: currentColor;
+	}
+</style>

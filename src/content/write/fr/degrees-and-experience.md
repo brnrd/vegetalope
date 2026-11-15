@@ -1,6 +1,7 @@
 ---
 title: 'Un diplôme, est-ce important ?'
 description: 'Ce que les études, l’expérience pratique et l’ouverture aux autres peuvent nous apprendre.'
+tags: [careers]
 pubDate: '2026-11-10'
 ---
 

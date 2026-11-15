@@ -1,6 +1,7 @@
 ---
-title: 'Methodology'
+title: 'How engineering teams coordinate with fewer meetings'
 description: 'What happens to engineering coordination when developers own more of their work and recurring meetings become fewer.'
+tags: [engineering-leadership]
 pubDate: '2026-10-13'
 ---
 

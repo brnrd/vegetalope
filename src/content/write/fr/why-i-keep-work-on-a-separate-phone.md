@@ -1,6 +1,7 @@
 ---
 title: 'Pourquoi je garde le travail sur un téléphone séparé'
 description: 'Le travail reste accessible quand il le faut, mais ne vit pas dans ma poche.'
+tags: [careers]
 pubDate: '2026-08-02'
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: 'Same problems, different teams'
 description: 'Why familiar engineering challenges can be a reassuring sign of progress.'
+tags: [engineering-leadership]
 pubDate: '2026-10-06'
 updatedDate: '2026-10-07'
 ---

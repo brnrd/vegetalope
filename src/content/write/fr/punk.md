@@ -1,6 +1,7 @@
 ---
-title: 'PUNK'
+title: 'PUNK : des principes pour l’ingénierie et le management'
 description: 'Pragmatic (pragmatique), Unconventional (non conventionnel), Nimble (agile), Keen (enthousiaste).'
+tags: [engineering-leadership]
 pubDate: '2023-10-23'
 updatedDate: '2026-02-07'
 ---

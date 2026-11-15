@@ -1,6 +1,7 @@
 ---
 title: 'Le contexte l’emporte sur les prompts'
 description: 'Pourquoi le contexte compte davantage qu’un prompt astucieux.'
+tags: [ai-at-work, engineering-leadership]
 pubDate: '2026-02-08'
 ---
 

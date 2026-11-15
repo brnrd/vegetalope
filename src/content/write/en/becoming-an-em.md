@@ -1,6 +1,7 @@
 ---
-title: 'Becoming an EM'
+title: 'Becoming an engineering manager'
 description: 'Helping developers explore engineering management before they apply for the role.'
+tags: [careers, engineering-leadership]
 pubDate: '2026-11-03'
 ---
 

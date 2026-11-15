@@ -1,6 +1,7 @@
 ---
 title: 'Les mêmes problèmes, d’autres équipes'
 description: 'Pourquoi retrouver les mêmes défis dans d’autres équipes d’ingénierie peut être rassurant.'
+tags: [engineering-leadership]
 pubDate: '2026-10-06'
 updatedDate: '2026-10-07'
 ---

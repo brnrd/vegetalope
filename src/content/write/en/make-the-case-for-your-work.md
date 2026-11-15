@@ -1,6 +1,7 @@
 ---
 title: 'Make the case for your work'
 description: 'Keep a record of your contributions while the details and evidence are still fresh.'
+tags: [careers]
 pubDate: '2026-09-22'
 ---
 

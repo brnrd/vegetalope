@@ -1,6 +1,7 @@
 ---
 title: 'Context beats prompts'
 description: 'Why context matters more than a clever prompt.'
+tags: [ai-at-work, engineering-leadership]
 pubDate: '2026-02-08'
 ---
 

@@ -1,6 +1,7 @@
 ---
-title: 'Genchi genbutsu'
+title: 'Genchi genbutsu: understanding engineering work first-hand'
 description: 'Why first-hand experience of engineering work helps leaders understand what teams need.'
+tags: [engineering-leadership]
 pubDate: '2026-10-20'
 ---
 

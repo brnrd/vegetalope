@@ -1,6 +1,7 @@
 ---
 title: "L'Engineering Manager moderne"
 description: 'Utiliser l’IA pour réduire les frictions, pas les responsabilités.'
+tags: [engineering-leadership, ai-at-work]
 pubDate: '2025-12-14'
 ---
 

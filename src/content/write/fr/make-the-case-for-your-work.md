@@ -1,6 +1,7 @@
 ---
 title: 'Documentez votre travail'
 description: 'Gardez une trace de vos contributions pendant que les détails et les preuves sont encore frais.'
+tags: [careers]
 pubDate: '2026-09-22'
 ---
 

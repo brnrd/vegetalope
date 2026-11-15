@@ -1,0 +1,12 @@
+---
+import WritingIndex from '../../../layouts/WritingIndex.astro'
+import { articleTagIds } from '../../../data/articleTags'
+
+export function getStaticPaths() {
+	return articleTagIds.map(tag => ({ params: { tag } }))
+}
+
+const { tag } = Astro.params
+---
+
+<WritingIndex locale="en" {tag} />

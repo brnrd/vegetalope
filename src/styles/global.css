@@ -484,18 +484,6 @@ header.site-header a:hover {
 	color: color-mix(in oklab, var(--color-ink-muted) 80%, transparent);
 }
 
-.article-original-link {
-	margin-block-start: var(--stack-4);
-	padding-block-start: var(--stack-2);
-	border-top: 1px solid var(--hairline);
-}
-
-.article-original-link p {
-	font-family: var(--font-label);
-	font-size: 0.8rem;
-	letter-spacing: 0.08em;
-}
-
 :where(a) {
 	color: var(--color-accent);
 	text-decoration: underline;

@@ -100,15 +100,26 @@ Preview deployments are automatically created for pull requests.
 - The site is built in static mode.
 - Assets use long-lived cache headers.
 - Compression and edge caching are handled by the Cloudflare platform.
-- Both Atkinson weights are served as WOFF2 and preloaded in `BaseHead.astro`, so
-  font downloads do not wait for the shared stylesheet. Keep preload URLs and
-  `@font-face` URLs in `src/styles/global.css` in sync.
-- The original WOFF files are retained as conversion sources. To regenerate the
-  WOFF2 assets with FontTools (`fonttools[woff]`), run
-  `fonttools ttLib.woff2 compress public/fonts/atkinson-regular.woff` and
-  `fonttools ttLib.woff2 compress public/fonts/atkinson-bold.woff`.
+- Typography uses local system fonts, so reading does not depend on downloaded
+  font assets.
 
 No additional runtime or edge functions are required.
+
+## Writing
+
+Articles live in `src/content/write/en/` and `src/content/write/fr/`. Keep the
+same filename for translations so language switching and related reading stay
+aligned. Titles can change without changing the article URL.
+
+Every article needs at least one `tags` value in its frontmatter:
+`engineering-leadership`, `ai-at-work`, or `careers`. Use the same tags for both
+translations. Topic labels and descriptions live in `src/data/articleTags.js`;
+their English and French archives are generated automatically.
+
+Choose related articles in `src/data/relatedArticles.js`. When a recommendation
+is missing, the site fills the two slots using shared tags, then recency, within
+the reader's language. Run `node --test src/data/relatedArticles.test.js` when
+changing this selection logic.
 
 ## Contributing
 

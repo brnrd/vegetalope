@@ -1,6 +1,7 @@
 ---
 title: 'Sharing my 1:1 notes'
 description: 'Why I share my 1:1 notes, and how AI helps me stay present and improve as a manager.'
+tags: [engineering-leadership, ai-at-work]
 pubDate: '2026-09-15'
 ---
 

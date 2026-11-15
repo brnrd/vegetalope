@@ -1,6 +1,7 @@
 ---
 title: 'Shy bairns get nowt'
 description: 'Pourquoi exprimer ce que l’on veut est une condition du changement, pas une faiblesse.'
+tags: [careers]
 pubDate: '2026-02-09'
 ---
 

@@ -1,6 +1,7 @@
 ---
-title: 'Exceptionnel'
+title: 'Reconnaître les contributions exceptionnelles en ingénierie'
 description: 'Comment reconnaître les contributions qui dépassent les attentes liées à un poste.'
+tags: [engineering-leadership, careers]
 pubDate: '2026-10-27'
 ---
 

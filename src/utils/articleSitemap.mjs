@@ -3,6 +3,8 @@ import { parse } from 'yaml'
 
 // Use the same Markdown metadata as the rendered article, never the build date.
 export async function serializeArticleSitemap(item) {
+	// Topic archives have their own metadata, not an article Markdown source.
+	if (/^\/(?:fr\/)?write\/tags\//.test(new URL(item.url).pathname)) return item
 	const match = new URL(item.url).pathname.match(/^\/(fr\/)?write\/(.+?)\/?$/)
 	if (!match) return item
 	const locale = match[1] ? 'fr' : 'en'

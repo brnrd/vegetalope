@@ -9,7 +9,6 @@ import { pageContentTransition, viewTransitionNameFromPath } from '../../utils/v
 
 const locale = 'fr'
 const strings = ui[locale]
-const description = 'Réflexions sur l’ingénierie logicielle et la vie, ainsi que de petits outils créés pour le plaisir.'
 const writeArticles = (await getCollection('write'))
 	.filter((entry) => getArticleParts(entry.id).locale === locale)
 	.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
@@ -19,7 +18,7 @@ const latestWriteArticles = writeArticles.slice(0, 3)
 <!DOCTYPE html>
 <html lang={locale}>
 	<head>
-		<BaseHead title="vegetalope" {description} image={SITE_IMAGE} {locale} alternateUrls={{ en: '/', fr: '/fr/' }} />
+		<BaseHead title={strings.homeTitle} description={strings.homeDescription} image={SITE_IMAGE} {locale} alternateUrls={{ en: '/', fr: '/fr/' }} />
 	</head>
 	<body>
 		<Header title={SITE_TITLE} {locale} enHref="/" frHref="/fr/" />

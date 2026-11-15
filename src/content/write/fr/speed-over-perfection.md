@@ -1,6 +1,7 @@
 ---
 title: 'La vitesse plutôt que la perfection'
 description: 'Livrer d’abord, obtenir rapidement du feedback et partager la responsabilité.'
+tags: [engineering-leadership]
 pubDate: '2025-12-13'
 ---
 

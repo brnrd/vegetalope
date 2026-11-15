@@ -1,6 +1,7 @@
 ---
 title: 'AI beyond coding'
 description: 'Making AI easier to embrace by removing more of the work developers would happily give up.'
+tags: [ai-at-work]
 pubDate: '2026-09-29'
 ---
 

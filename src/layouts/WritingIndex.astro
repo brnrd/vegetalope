@@ -1,0 +1,136 @@
+---
+import { getCollection } from 'astro:content'
+import BaseHead from '../components/BaseHead.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import ArticleTags from '../components/ArticleTags.astro'
+import { articleTags, getArticleTagUrl } from '../data/articleTags'
+import { getArticleParts, getLocalePath, ui } from '../i18n'
+import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName'
+
+const { locale, tag } = Astro.props
+const strings = ui[locale]
+const topic = tag ? articleTags[tag][locale] : undefined
+const title = topic?.label ?? strings.write
+const description = topic?.description ?? strings.writeDescription
+const alternateUrls = Object.fromEntries(
+	['en', 'fr'].map(language => [
+		language,
+		tag ? getArticleTagUrl(tag, language) : getLocalePath(language, '/write/'),
+	]),
+)
+const entries = (await getCollection('write'))
+	.filter(entry => getArticleParts(entry.id).locale === locale)
+	.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+const articles = tag ? entries.filter(entry => entry.data.tags.includes(tag)) : entries
+const topics = Object.entries(articleTags).map(([id, translations]) => ({
+	id,
+	label: translations[locale].label,
+	count: entries.filter(entry => entry.data.tags.includes(id)).length,
+}))
+---
+
+<!doctype html>
+<html lang={locale}>
+	<head>
+		<BaseHead
+			title={topic ? `${title} — ${strings.writing}` : strings.writeTitle}
+			{description}
+			{locale}
+			{alternateUrls}
+		/>
+	</head>
+	<body>
+		<Header {locale} enHref={alternateUrls.en} frHref={alternateUrls.fr} />
+		<main
+			id="main-content"
+			tabindex="-1"
+			class="content stack site-index writing-index"
+			transition:name="page-content"
+			transition:animate={pageContentTransition}
+		>
+			<header class="stack">
+				<h1>{title}</h1>
+				<p>{description}</p>
+			</header>
+			<nav aria-label={strings.browseTopics} class="topic-navigation">
+				<ul>
+					<li>
+						<a href={getLocalePath(locale, '/write/')} aria-current={!tag ? 'page' : undefined}
+							>{strings.allArticles} <span>({entries.length})</span></a
+						>
+					</li>
+					{
+						topics
+							.filter(topic => topic.count > 0)
+							.map(topic => (
+								<li>
+									<a
+										href={getArticleTagUrl(topic.id, locale)}
+										aria-current={tag === topic.id ? 'page' : undefined}
+									>
+										{topic.label} <span>({topic.count})</span>
+									</a>
+								</li>
+							))
+					}
+				</ul>
+			</nav>
+			<ul class="card-list">
+				{
+					articles.map(article => {
+						const url = getLocalePath(locale, `/write/${getArticleParts(article.id).slug}/`)
+						return (
+							<li>
+								<a
+									href={url}
+									class="transition-title-link"
+									style={`--view-transition-name: ${viewTransitionNameFromPath(url)};`}
+									transition:name={viewTransitionNameFromPath(url)}
+								>
+									{article.data.title}
+								</a>
+								<p>{article.data.description}</p>
+								<ArticleTags tags={article.data.tags} {locale} />
+							</li>
+						)
+					})
+				}
+			</ul>
+		</main>
+		<Footer {locale} />
+	</body>
+</html>
+
+<style>
+	.topic-navigation ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.topic-navigation li {
+		margin: 0;
+		font-size: 0.9rem;
+	}
+	.topic-navigation a {
+		display: block;
+		padding: 0.5rem 0.8rem;
+		border: 1px solid var(--hairline);
+		border-radius: 0.3rem;
+		text-decoration: none;
+	}
+	.topic-navigation a:hover {
+		text-decoration: underline;
+	}
+	.topic-navigation a[aria-current='page'] {
+		background: var(--color-wash);
+		border-color: var(--color-accent);
+		color: var(--color-ink);
+	}
+	.topic-navigation span {
+		font-variant-numeric: tabular-nums;
+	}
+</style>

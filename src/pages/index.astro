@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content'
 import BaseHead from '../components/BaseHead.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_IMAGE } from '../consts'
+import { SITE_TITLE, SITE_IMAGE } from '../consts'
 import { getArticleParts, ui } from '../i18n'
 import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName'
 
@@ -19,8 +19,8 @@ const latestWriteArticles = writeArticles.slice(0, 3)
 <html lang={locale}>
 	<head>
 		<BaseHead
-			title="vegetalope"
-			description={SITE_DESCRIPTION}
+			title={strings.homeTitle}
+			description={strings.homeDescription}
 			image={SITE_IMAGE}
 			{locale}
 			alternateUrls={{ en: '/', fr: '/fr/' }}

@@ -1,6 +1,7 @@
 ---
-title: 'Méthodologie'
+title: 'Coordonner une équipe technique avec moins de réunions'
 description: 'Réflexions sur l’autonomie des développeurs, la coordination et les routines d’équipe.'
+tags: [engineering-leadership]
 pubDate: '2026-10-13'
 ---
 

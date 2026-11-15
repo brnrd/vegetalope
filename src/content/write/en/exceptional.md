@@ -1,6 +1,7 @@
 ---
-title: 'Exceptional'
+title: 'Recognising exceptional engineering contributions'
 description: 'How to recognise contributions that go beyond the expectations of a role.'
+tags: [engineering-leadership, careers]
 pubDate: '2026-10-27'
 ---
 

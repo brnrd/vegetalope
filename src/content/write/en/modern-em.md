@@ -1,6 +1,7 @@
 ---
 title: The Modern Engineering Manager
 description: Use AI to remove friction, not responsibility.
+tags: [engineering-leadership, ai-at-work]
 pubDate: '2025-12-14'
 ---
 

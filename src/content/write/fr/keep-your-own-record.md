@@ -1,6 +1,7 @@
 ---
 title: 'Gardez votre propre historique'
 description: 'Pourquoi suivre ses réalisations relève du professionnalisme, pas de l’autopromotion.'
+tags: [careers]
 pubDate: '2026-02-09'
 updatedDate: '2026-10-07'
 ---

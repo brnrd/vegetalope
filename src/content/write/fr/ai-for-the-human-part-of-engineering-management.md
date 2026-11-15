@@ -1,6 +1,7 @@
 ---
 title: 'Plus présent grâce à l’IA'
 description: 'Des routines d’IA pour consacrer plus de temps à la dimension humaine de l’engineering management.'
+tags: [ai-at-work, engineering-leadership]
 pubDate: '2026-09-09'
 ---
 

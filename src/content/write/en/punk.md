@@ -1,6 +1,7 @@
 ---
-title: 'PUNK'
+title: 'PUNK: principles for engineering and leadership'
 description: 'Pragmatic, Unconventional, Nimble, Keen.'
+tags: [engineering-leadership]
 pubDate: '2023-10-23'
 updatedDate: '2026-02-07'
 ---

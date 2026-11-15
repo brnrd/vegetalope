@@ -1,6 +1,7 @@
 ---
 title: 'Partager mes notes de 1:1'
 description: 'Pourquoi je partage mes notes de 1:1 et comment l’IA m’aide à être plus présent et à progresser comme manager.'
+tags: [engineering-leadership, ai-at-work]
 pubDate: '2026-09-15'
 ---
 

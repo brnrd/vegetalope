@@ -1,6 +1,7 @@
 ---
 title: 'More present with AI'
 description: 'Using AI routines to make more room for the human part of engineering management.'
+tags: [ai-at-work, engineering-leadership]
 pubDate: '2026-09-09'
 ---
 

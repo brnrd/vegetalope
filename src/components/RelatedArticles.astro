@@ -1,33 +1,31 @@
 ---
 import { getCollection } from 'astro:content'
-import { relatedArticles } from '../data/relatedArticles'
+import { getRelatedArticles } from '../data/relatedArticles'
 import { getArticleParts, getLocalePath } from '../i18n'
 
 const { slug, locale } = Astro.props
-const entries = await getCollection('write', entry => getArticleParts(entry.id).locale === locale)
-const bySlug = new Map(entries.map(entry => [getArticleParts(entry.id).slug, entry]))
-const articles = [...new Set(relatedArticles[slug] ?? [])]
-	.filter(relatedSlug => relatedSlug !== slug)
-	.flatMap(relatedSlug => {
-		const entry = bySlug.get(relatedSlug)
-		// Never send readers to a different language when a translation is missing.
-		return entry ? [{ ...entry.data, href: getLocalePath(locale, `/write/${relatedSlug}/`) }] : []
-	})
+const entries = await getCollection('write')
+const articles = getRelatedArticles(entries, slug, locale).map(entry => ({
+	...entry.data,
+	href: getLocalePath(locale, `/write/${getArticleParts(entry.id).slug}/`),
+}))
 ---
 
-{articles.length > 0 && (
-	<nav class="related-articles" aria-labelledby="related-articles-title">
-		<h2 id="related-articles-title">{locale === 'fr' ? 'À lire aussi' : 'Related articles'}</h2>
-		<ul class="card-list">
-			{articles.map(article => (
-				<li>
-					<a href={article.href}>{article.title}</a>
-					<p>{article.description}</p>
-				</li>
-			))}
-		</ul>
-	</nav>
-)}
+{
+	articles.length > 0 && (
+		<nav class="related-articles" aria-labelledby="related-articles-title">
+			<h2 id="related-articles-title">{locale === 'fr' ? 'À lire aussi' : 'Related articles'}</h2>
+			<ul class="related-list">
+				{articles.map(article => (
+					<li>
+						<a href={article.href}>{article.title}</a>
+						<p>{article.description}</p>
+					</li>
+				))}
+			</ul>
+		</nav>
+	)
+}
 
 <style>
 	.related-articles {
@@ -36,13 +34,43 @@ const articles = [...new Set(relatedArticles[slug] ?? [])]
 		border-top: 1px solid var(--hairline);
 	}
 	h2 {
+		margin: 0 0 1.5rem;
 		font-family: var(--font-label);
 		font-size: 0.8rem;
 		font-weight: 400;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
 	}
+	.related-list {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 2rem;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	li {
+		margin: 0;
+	}
 	a {
+		display: inline-block;
 		font-family: var(--font-reading);
+		font-size: 1.35rem;
+		line-height: 1.3;
+		text-decoration: none;
+		overflow-wrap: anywhere;
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+	p {
+		margin: 0.6rem 0 0;
+		font-size: 0.95rem;
+		line-height: 1.6;
+	}
+	@media (max-width: 640px) {
+		.related-list {
+			grid-template-columns: minmax(0, 1fr);
+		}
 	}
 </style>

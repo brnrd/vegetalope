@@ -4,6 +4,8 @@ import Header from '../components/Header.astro'
 import FormattedDate from '../components/FormattedDate.astro'
 import Footer from '../components/Footer.astro'
 import RelatedArticles from '../components/RelatedArticles.astro'
+import ArticleAuthor from '../components/ArticleAuthor.astro'
+import ArticleTags from '../components/ArticleTags.astro'
 import { SITE_AUTHOR, SITE_IMAGE } from '../consts'
 import { getLocaleFromPath } from '../i18n'
 import { pageContentTransition, viewTransitionNameFromPath } from '../utils/viewTransitionName'
@@ -135,23 +137,14 @@ const jsonLd = isNotFound
 							</p>
 						)
 					}
+					{isWriting && <ArticleTags tags={frontmatter.tags} {locale} />}
 				</header>
 
 				<section class="stack">
 					<slot />
 				</section>
 
-				{
-					locale === 'fr' && isWriting && enHref !== '/' && (
-						<footer class="article-original-link">
-							<p>
-								<a href={enHref} lang="en" hreflang="en">
-									Lire la version originale en anglais
-								</a>
-							</p>
-						</footer>
-					)
-				}
+				{articleSlug && <ArticleAuthor {locale} originalHref={locale === 'fr' && enHref !== '/' ? enHref : undefined} />}
 				{articleSlug && <RelatedArticles slug={articleSlug} {locale} />}
 			</article>
 		</main>

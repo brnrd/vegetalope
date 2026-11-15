@@ -1,6 +1,7 @@
 ---
-title: 'Genchi genbutsu'
+title: 'Genchi genbutsu : comprendre le travail des équipes techniques'
 description: 'Aller voir le travail des équipes par soi-même pour mieux comprendre ce qui les aide et ce qui les freine.'
+tags: [engineering-leadership]
 pubDate: '2026-10-20'
 ---
 

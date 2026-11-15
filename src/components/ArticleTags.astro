@@ -1,0 +1,42 @@
+---
+import { articleTags, getArticleTagUrl } from '../data/articleTags'
+import { ui } from '../i18n'
+
+const { tags, locale } = Astro.props
+---
+
+<ul class="article-tags" aria-label={ui[locale].articleTopics}>
+	{
+		tags.map(tag => (
+			<li>
+				<a href={getArticleTagUrl(tag, locale)} rel="tag">
+					{articleTags[tag][locale].label}
+				</a>
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.article-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1rem;
+		list-style: none;
+		padding: 0;
+		margin-block: 0.75rem 0;
+	}
+	.article-tags li {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.article-tags a {
+		font-family: var(--font-label);
+		font-size: 0.75rem;
+		font-weight: 400;
+		letter-spacing: 0;
+		line-height: 1.6;
+		text-decoration: underline;
+	}
+</style>

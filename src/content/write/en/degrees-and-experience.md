@@ -1,6 +1,7 @@
 ---
 title: 'Does a degree matter?'
 description: 'What formal education, practical experience and openness to other perspectives can teach us.'
+tags: [careers]
 pubDate: '2026-11-10'
 ---
 
