@@ -5,7 +5,7 @@ tags: [ai-at-work]
 pubDate: '2026-11-17'
 ---
 
-Je me suis intéressé à Exact et à Modern Web Guidance d’Expo, et je me demande si nous ne sommes pas en train de créer une nouvelle couche de programmation : des instructions pour l’IA qui écrit le code. Un « langage des agents », peut-être. Apparemment, la prochaine abstraction arrive avec des listes à puces.
+Je me suis intéressé à Exact d’Expo et à Modern Web Guidance de l’équipe Chrome de Google, et je me demande si nous ne sommes pas en train de créer une nouvelle couche de programmation : des instructions pour l’IA qui écrit le code. Un « langage des agents », peut-être. Apparemment, la prochaine abstraction arrive avec des listes à puces.
 
 Exact fournit à un agent d’IA un environnement de travail dans lequel il peut construire une application, l’exécuter, examiner le résultat et la tester sur plusieurs plateformes. Modern Web Guidance lui apporte des pratiques actuelles de développement web et l’aide à éviter les approches dépassées. Un agent est une IA capable d’accomplir des tâches à l’aide d’outils, au lieu de simplement répondre à des questions. L’un des projets lui donne un endroit où travailler, l’autre lui apporte une expertise.
 

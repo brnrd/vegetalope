@@ -5,7 +5,7 @@ tags: [ai-at-work]
 pubDate: '2026-11-17'
 ---
 
-I’ve been looking at Expo’s Exact and Modern Web Guidance, and wondering whether we’re building another layer of programming: instructions for the AI that writes the code. “Agent language”, perhaps. Apparently, the next abstraction comes with bullet points.
+I’ve been looking at Expo’s Exact and Google’s Modern Web Guidance, and wondering whether we’re building another layer of programming: instructions for the AI that writes the code. “Agent language”, perhaps. Apparently, the next abstraction comes with bullet points.
 
 Exact gives an AI agent a working environment where it can build an application, run it, inspect the result and test it across several platforms. Modern Web Guidance supplies current web development practices, helping it avoid outdated approaches. An agent is AI that can carry out tasks using tools, rather than just answer questions. One project provides somewhere to work, the other supplies expertise.
 
